@@ -1,0 +1,36 @@
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 260px;
+  background: #1976d2;
+  color: white;
+  padding: 24px;
+}
+
+.sidebar h2 {
+  margin-bottom: 40px;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar a {
+  color: white;
+  text-decoration: none;
+  padding: 12px 0;
+  font-size: 18px;
+}
+
+.sidebar a.active {
+  font-weight: bold;
+}
+
+.content {
+  flex: 1;
+  padding: 32px;
+}
