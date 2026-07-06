@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -10,13 +11,24 @@ import { FormsModule } from '@angular/forms';
 })
 
 export class Login {
-
+  private authService = inject(AuthService);
   email = '';
   password = '';
 
   login() {
-    console.log(this.email);
-    console.log(this.password);
+    this.authService.login({
+      email: this.email,
+      password: this.password
+    }).subscribe({
+      next: (response) => {
+        console.log('Login Successful');
+        this.authService.saveToken(response.token);
+        console.log(response);
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
   }
 
 }
