@@ -25,25 +25,17 @@ export const routes: Routes = [
       }
     ]
   },
-
   {
     path: 'login',
     component: Login
   },
-
   {
     path: 'register',
     component: Register
   },
-
   {
     path: '',
     redirectTo: 'dashboard',
     pathMatch: 'full'
-  },
-
-  {
-    path: '**',
-    redirectTo: 'dashboard'
   }
 ];
