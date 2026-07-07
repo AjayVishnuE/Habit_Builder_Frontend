@@ -26,7 +26,7 @@ export class Login {
         console.log(response);
       },
       error: (error) => {
-        console.error(err or);
+        console.error(error);
       }
     });
   }
