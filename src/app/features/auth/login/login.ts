@@ -13,7 +13,7 @@ import { AuthService } from '../../../core/services/auth.service';
 export class Login {
   private authService = inject(AuthService);
   email = '';
-  password = '';
+  password = ''; 
 
   login() {
     this.authService.login({
@@ -26,7 +26,7 @@ export class Login {
         console.log(response);
       },
       error: (error) => {
-        console.error(error);
+        console.error(err or);
       }
     });
   }
