@@ -5,6 +5,7 @@ import { Dashboard } from './features/dashboard/pages/dashboard/dashboard';
 import { Habits } from './features/habits/pages/habits/habits';
 import { Profile } from './features/profile/pages/profile/profile';
 import { MainLayout } from './layouts/main-layout/main-layout';
+import { authGuard } from './core/guards/auth-guard';
 
 export const routes: Routes = [
   {
@@ -13,15 +14,18 @@ export const routes: Routes = [
     children: [
       {
         path: 'dashboard',
-        component: Dashboard
+        component: Dashboard,
+        canActivate: [authGuard]
       },
       {
         path: 'habits',
-        component: Habits
+        component: Habits,
+        canActivate: [authGuard]
       },
       {
         path: 'profile',
-        component: Profile
+        component: Profile,
+        canActivate: [authGuard]
       }
     ]
   },
