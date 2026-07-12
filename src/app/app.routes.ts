@@ -9,9 +9,22 @@ import { authGuard } from './core/guards/auth-guard';
 
 export const routes: Routes = [
   {
+    path: 'login',
+    component: Login
+  },
+  {
+    path: 'register',
+    component: Register
+  },
+  {
     path: '',
     component: MainLayout,
     children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      },
       {
         path: 'dashboard',
         component: Dashboard,
@@ -30,16 +43,7 @@ export const routes: Routes = [
     ]
   },
   {
-    path: 'login',
-    component: Login
-  },
-  {
-    path: 'register',
-    component: Register
-  },
-  {
-    path: '',
-    redirectTo: 'dashboard',
-    pathMatch: 'full'
+    path: '**',
+    redirectTo: 'login'
   }
 ];

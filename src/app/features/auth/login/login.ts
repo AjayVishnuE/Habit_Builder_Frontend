@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -12,6 +13,7 @@ import { AuthService } from '../../../core/services/auth.service';
 
 export class Login {
   private authService = inject(AuthService);
+  private router = inject(Router);
   email = '';
   password = ''; 
 
@@ -21,9 +23,9 @@ export class Login {
       password: this.password
     }).subscribe({
       next: (response) => {
-        console.log('Login Successful');
         this.authService.saveToken(response.token);
         console.log(response);
+        this.router.navigate(['/dashboard']);
       },
       error: (error) => {
         console.error(error);
