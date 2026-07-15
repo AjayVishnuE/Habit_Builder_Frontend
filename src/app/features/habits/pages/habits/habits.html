@@ -1,9 +1,6 @@
-<h2>My Habits</h2>
+<h2 class="mb-4">My Habits</h2>
 @for (habit of habits; track habit._id) {
-  <div class="card mb-3 p-3">
-    <h4>{{ habit.title }}</h4>
-    <p>{{ habit.description }}</p>
-    <small>{{ habit.frequency }}</small>
-  </div>
-
+    <app-habit-card
+        [habit]="habit">
+    </app-habit-card>
 }

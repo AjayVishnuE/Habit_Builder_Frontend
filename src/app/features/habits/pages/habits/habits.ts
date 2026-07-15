@@ -1,12 +1,14 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 import { Habit } from '../../../../core/models/habit.model';
 import { HabitService } from '../../../../core/services/habit';
+import { HabitCard } from '../../components/habit-card/habit-card';
 
 @Component({
   selector: 'app-habits',
-  imports: [],
+  imports: [
+    HabitCard
+  ],
   templateUrl: './habits.html',
   styleUrl: './habits.sass',
 })
