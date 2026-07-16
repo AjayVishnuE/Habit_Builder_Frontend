@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { Habit } from '../../../../core/models/habit.model';
@@ -15,4 +15,12 @@ export class HabitCard {
   @Input({ required: true })
   habit!: Habit;
 
+  @Output()
+  delete = new EventEmitter<string>();
+
+  @Output()
+  edit = new EventEmitter<string>();
+
+  @Output()
+  complete = new EventEmitter<string>();
 }

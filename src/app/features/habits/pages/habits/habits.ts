@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 
 import { Habit } from '../../../../core/models/habit.model';
-import { HabitService } from '../../../../core/services/habit';
+import { HabitService } from '../../../../core/services/habit.service';
 import { HabitCard } from '../../components/habit-card/habit-card';
 
 @Component({
@@ -31,6 +31,27 @@ export class Habits implements OnInit {
         console.error(err);
       }
     });
+  }
+
+  deleteHabit(id: string) {
+    this.habitService.deleteHabit(id).subscribe({
+      next: () => {
+        this.habits = this.habits.filter(
+          habit => habit._id !== id
+        );
+        console.log('Habit deleted successfully');
+      },error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+  
+  editHabit(id: string) {
+    console.log('Edit:', id);
+  }
+
+  completeHabit(id: string) {
+    console.log('Complete:', id);
   }
 }
 

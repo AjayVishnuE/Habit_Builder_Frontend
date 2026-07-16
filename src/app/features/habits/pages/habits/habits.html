@@ -1,6 +1,9 @@
 <h2 class="mb-4">My Habits</h2>
 @for (habit of habits; track habit._id) {
     <app-habit-card
-        [habit]="habit">
+        [habit]="habit"
+        (delete)="deleteHabit($event)"
+        (edit)="editHabit($event)"
+        (complete)="completeHabit($event)">
     </app-habit-card>
 }

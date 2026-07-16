@@ -13,5 +13,8 @@ export class HabitService {
   getHabits(): Observable<Habit[]> {
     return this.api.get<Habit[]>(API_ENDPOINTS.HABITS);
   }
-
+  
+  deleteHabit(id: string) {
+    return this.api.delete(`${API_ENDPOINTS.HABITS}/${id}`);
+  }
 }
