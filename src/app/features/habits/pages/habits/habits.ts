@@ -1,14 +1,16 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 import { Habit } from '../../../../core/models/habit.model';
 import { HabitService } from '../../../../core/services/habit.service';
 import { HabitCard } from '../../components/habit-card/habit-card';
+import { HabitForm } from '../../components/habit-form/habit-form';
 
 @Component({
   selector: 'app-habits',
-  imports: [
-    HabitCard
-  ],
+  imports: [HabitCard, MatDialogModule, MatButtonModule],
   templateUrl: './habits.html',
   styleUrl: './habits.sass',
 })
@@ -16,6 +18,7 @@ import { HabitCard } from '../../components/habit-card/habit-card';
 export class Habits implements OnInit {
   habits: Habit[] = [];
   private habitService = inject(HabitService);
+  private dialog = inject(MatDialog);
 
   ngOnInit() {
     this.loadHabits();
@@ -52,6 +55,12 @@ export class Habits implements OnInit {
 
   completeHabit(id: string) {
     console.log('Complete:', id);
+  }
+
+  openAddHabitDialog() {
+    this.dialog.open(HabitForm, {
+      width: '500px'
+    });
   }
 }
 
