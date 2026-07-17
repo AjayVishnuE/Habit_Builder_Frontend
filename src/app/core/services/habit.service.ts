@@ -17,4 +17,8 @@ export class HabitService {
   deleteHabit(id: string) {
     return this.api.delete(`${API_ENDPOINTS.HABITS}/${id}`);
   }
+
+  createHabit(habit: Partial<Habit>) {
+    return this.api.post<Habit>(API_ENDPOINTS.HABITS,habit);
+  }
 }
