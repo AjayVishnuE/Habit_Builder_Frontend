@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Add Habit</h2>
+<h2 mat-dialog-title>{{ data ? 'Edit Habit' : 'Add Habit' }}</h2>
 <form [formGroup]="habitForm" (ngSubmit)="saveHabit()">
     <mat-dialog-content>
         <mat-form-field appearance="outline" class="w-100">

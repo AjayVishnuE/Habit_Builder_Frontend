@@ -50,7 +50,16 @@ export class Habits implements OnInit {
   }
   
   editHabit(id: string) {
-    console.log('Edit:', id);
+    const habit = this.habits.find(h => h._id === id);
+    const dialogRef = this.dialog.open(HabitForm, {
+        width: '500px',
+        data: habit
+    });
+    dialogRef.afterClosed().subscribe(updatedHabit => {
+    if (!updatedHabit) return;
+    const index = this.habits.findIndex(h => h._id === updatedHabit._id);
+    this.habits[index] = updatedHabit;
+});
   }
 
   completeHabit(id: string) {

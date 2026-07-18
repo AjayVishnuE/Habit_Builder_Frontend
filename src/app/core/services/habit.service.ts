@@ -21,4 +21,8 @@ export class HabitService {
   createHabit(habit: Partial<Habit>) {
     return this.api.post<Habit>(API_ENDPOINTS.HABITS,habit);
   }
+
+  updateHabit(id: string, habit: Partial<Habit>) {
+    return this.api.put<Habit>(`${API_ENDPOINTS.HABITS}/${id}`,habit);
+  }
 }
