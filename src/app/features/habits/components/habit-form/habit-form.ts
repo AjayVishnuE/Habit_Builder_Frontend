@@ -5,10 +5,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { HabitService } from '../../../../core/services/habit.service';
-
 
 @Component({
   selector: 'app-habit-form',
@@ -19,7 +20,8 @@ imports: [
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSnackBarModule
   ],  
   templateUrl: './habit-form.html',
   styleUrl: './habit-form.scss'
@@ -29,11 +31,12 @@ export class HabitForm {
   private fb = inject(FormBuilder);
   private dialogRef = inject(MatDialogRef<HabitForm>);
   private habitService = inject(HabitService);
+  private snackBar = inject(MatSnackBar);
 
-  habitForm = this.fb.group({
+  habitForm = this.fb.nonNullable.group({
     title: ['', Validators.required],
     description: [''],
-    frequency: ['Daily', Validators.required]
+    frequency: ['Daily']
   });
 
   saveHabit() {
@@ -44,12 +47,27 @@ export class HabitForm {
       this.habitForm.value
     ).subscribe({
       next: (habit) => {
-        console.log(habit);
-      }, error: (err) => {
+        this.snackBar.open(
+          'Habit created successfully!',
+          'Close',
+          {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top'
+          }
+        );
+        this.dialogRef.close(habit);
+      },error: (err) => {
+        this.snackBar.open(
+          'Failed to create habit!',
+          'Close',
+          {
+            duration: 3000
+          }
+        );
         console.error(err);
       }
     });
-
 }
 
   close() {

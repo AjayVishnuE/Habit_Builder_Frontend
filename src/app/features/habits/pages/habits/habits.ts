@@ -58,9 +58,16 @@ export class Habits implements OnInit {
   }
 
   openAddHabitDialog() {
-    this.dialog.open(HabitForm, {
+    const dialogRef = this.dialog.open(HabitForm, {
       width: '500px'
     });
+    dialogRef.afterClosed().subscribe((newHabit) => {
+    if (newHabit) {
+      this.habits.unshift(newHabit);
+      console.log("Habit Added Successfully");
+    }
+
+  });
   }
 }
 
