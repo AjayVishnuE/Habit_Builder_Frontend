@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit} from '@angular/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,7 +25,7 @@ imports: [
   templateUrl: './habit-form.html',
   styleUrl: './habit-form.scss'
 })
-export class HabitForm {
+export class HabitForm implements OnInit {
 
   private fb = inject(FormBuilder);
   private dialogRef = inject(MatDialogRef<HabitForm>);
@@ -35,10 +35,10 @@ export class HabitForm {
   habitForm = this.fb.nonNullable.group({
     title: ['', Validators.required],
     description: [''],
-    frequency: ['Daily']
+    frequency: ['Daily', Validators.required]
   });
 
-  ngOninit(){
+  ngOnInit(){
     if (this.data) {
       this.habitForm.patchValue({
         title: this.data.title,
@@ -55,44 +55,22 @@ export class HabitForm {
     if (this.data) {
       this.habitService.updateHabit(this.data._id, this.habitForm.getRawValue()).subscribe({
         next: (updatedHabit) => {
-          this.snackBar.open(
-            'Habit updated successfully!',
-            'Close',
-            { duration: 3000 }
-          );
+          this.showMessage('Habit updated successfully!');
           this.dialogRef.close(updatedHabit);
         },
         error: (err) => {
-          this.snackBar.open(
-            'Failed to update habit!',
-            'Close',
-            { duration: 3000 }
-          );
+          this.showMessage('Failed to update habit!');
           console.error(err);
         }
       });
     }
     else {
-      this.habitService.createHabit(this.habitForm.value).subscribe({
+      this.habitService.createHabit(this.habitForm.getRawValue()).subscribe({
         next: (habit) => {
-          this.snackBar.open(
-            'Habit created successfully!',
-            'Close',
-            {
-              duration: 3000,
-              horizontalPosition: 'right',
-              verticalPosition: 'top'
-            }
-          );
+          this.showMessage('Habit created successfully!');
           this.dialogRef.close(habit);
         },error: (err) => {
-          this.snackBar.open(
-            'Failed to create habit!',
-            'Close',
-            {
-              duration: 3000
-            }
-          );
+          this.showMessage('Failed to create habit!');
           console.error(err);
         }
       });
@@ -101,5 +79,17 @@ export class HabitForm {
 
   close() {
       this.dialogRef.close();
+  }
+
+  private showMessage(message: string) {
+    this.snackBar.open(
+      message,
+      'Close',
+      {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top'
+      }
+    );
   }
 }

@@ -51,15 +51,23 @@ export class Habits implements OnInit {
   
   editHabit(id: string) {
     const habit = this.habits.find(h => h._id === id);
+    if (!habit) {
+      return;
+    }
     const dialogRef = this.dialog.open(HabitForm, {
-        width: '500px',
-        data: habit
+      width: '500px',
+      data: habit
     });
-    dialogRef.afterClosed().subscribe(updatedHabit => {
-    if (!updatedHabit) return;
-    const index = this.habits.findIndex(h => h._id === updatedHabit._id);
-    this.habits[index] = updatedHabit;
-});
+    dialogRef.afterClosed().subscribe((updatedHabit) => {
+      if (!updatedHabit) {
+        return;
+      }
+      const index = this.habits.findIndex(h => h._id === updatedHabit._id);
+      if (index !== -1) {
+        this.habits[index] = updatedHabit;
+      }
+    });
+
   }
 
   completeHabit(id: string) {
@@ -71,12 +79,11 @@ export class Habits implements OnInit {
       width: '500px'
     });
     dialogRef.afterClosed().subscribe((newHabit) => {
-    if (newHabit) {
-      this.habits.unshift(newHabit);
-      console.log("Habit Added Successfully");
-    }
-
-  });
+      if (newHabit) {
+        this.habits.unshift(newHabit);
+        console.log("Habit Added Successfully");
+      }
+    });
   }
 }
 

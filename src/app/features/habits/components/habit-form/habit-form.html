@@ -24,7 +24,7 @@
             Cancel
         </button>
         <button mat-raised-button color="primary" type="submit">
-            Save Habit
+            {{ data ? 'Update Habit' : 'Save Habit' }}
         </button>
     </mat-dialog-actions>
 </form>
