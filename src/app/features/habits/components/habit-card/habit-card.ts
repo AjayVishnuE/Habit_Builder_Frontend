@@ -11,7 +11,12 @@ import { Habit } from '../../../../core/models/habit.model';
   styleUrl: './habit-card.scss'
 })
 export class HabitCard {
-
+  isCompletedToday(): boolean {
+    const today = new Date().toDateString();
+    return this.habit.completedDates.some(
+      date => new Date(date).toDateString() === today
+    );
+  }
   @Input({ required: true })
   habit!: Habit;
 

@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 
 import { Habit } from '../../../../core/models/habit.model';
 import { HabitService } from '../../../../core/services/habit.service';
@@ -10,7 +10,7 @@ import { HabitForm } from '../../components/habit-form/habit-form';
 
 @Component({
   selector: 'app-habits',
-  imports: [HabitCard, MatDialogModule, MatButtonModule],
+  imports: [HabitCard, MatDialogModule, MatButtonModule, MatSnackBarModule],
   templateUrl: './habits.html',
   styleUrl: './habits.sass',
 })
@@ -19,12 +19,13 @@ export class Habits implements OnInit {
   habits: Habit[] = [];
   private habitService = inject(HabitService);
   private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
 
-  ngOnInit() {
-    this.loadHabits();
+  async ngOnInit() {
+    await this.loadHabits();
   }
 
-  loadHabits() {
+  async loadHabits() {
     this.habitService.getHabits().subscribe({
       next: (response) => {
         this.habits = response;
@@ -71,7 +72,18 @@ export class Habits implements OnInit {
   }
 
   completeHabit(id: string) {
-    console.log('Complete:', id);
+    this.habitService.completeHabit(id).subscribe({
+      next: (updatedHabit) => {
+        const index = this.habits.findIndex(h => h._id === updatedHabit._id);
+        if (index !== -1) {
+          this.habits[index] = updatedHabit;
+        }
+        this.showMessage('Habit completed! 🎉');
+      },
+      error: (err) => {
+        this.showMessage(err.error?.message || 'Unable to complete habit.');
+      }
+    });
   }
 
   openAddHabitDialog() {
@@ -84,6 +96,18 @@ export class Habits implements OnInit {
         console.log("Habit Added Successfully");
       }
     });
+  }
+
+  private showMessage(message: string) {
+    this.snackBar.open(
+      message,
+      'Close',
+      {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top'
+      }
+    );
   }
 }
 

@@ -1,13 +1,15 @@
-<div class="card shadow-sm mb-3">
+<div class="card shadow-sm mb-3" [class.completed]="isCompletedToday()">
     <div class="card-body">
-        <h4>{{ habit.title }}</h4>
-        <p>{{ habit.description }}</p>
-        <span class="badge bg-primary">
-            {{ habit.frequency }}
-        </span>
-        <hr>
-        <button class="btn btn-success me-2" (click)="complete.emit(habit._id)">
-            Complete
+        <h5 class="mb-1"> {{ habit.title }} </h5>
+        <p class="text-muted mb-3"> {{ habit.description }} </p>
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <span class="badge bg-primary"> {{ habit.frequency }} </span>
+            @if (isCompletedToday()) {
+                <span class="badge bg-success"> ✓ Completed </span>
+            }
+        </div>
+        <button class="btn btn-success me-2" [disabled]="isCompletedToday()" (click)="complete.emit(habit._id)">
+            {{ isCompletedToday() ? 'Completed' : 'Complete' }}        
         </button>
         <button class="btn btn-warning me-2" (click)="edit.emit(habit._id)">
             Edit
