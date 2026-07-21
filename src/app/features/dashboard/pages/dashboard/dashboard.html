@@ -1,20 +1,11 @@
 <div class="row">
-  <div class="col-md-4">
-    <div class="card shadow-sm text-center p-4">
-      <h5>Total Habits</h5>
-      <h1>{{ totalHabits }}</h1>
+    <div class="col-md-4">
+        <app-stat-card title="Total Habits" [value]="totalHabits" icon="📚"> </app-stat-card>
     </div>
-  </div>
-  <div class="col-md-4">
-    <div class="card shadow-sm text-center p-4">
-      <h5>Completed Today</h5>
-      <h1>{{ completedToday }}</h1>
+    <div class="col-md-4">
+        <app-stat-card title="Completed Today" [value]="completedToday" icon="✅"> </app-stat-card>
     </div>
-  </div>
-  <div class="col-md-4">
-    <div class="card shadow-sm text-center p-4">
-      <h5>Current Streak</h5>
-      <h1>🔥 {{ currentStreak }}</h1>
+    <div class="col-md-4">
+        <app-stat-card title="Current Streak" [value]="currentStreak" icon="🔥"> </app-stat-card>
     </div>
-  </div>
 </div>
