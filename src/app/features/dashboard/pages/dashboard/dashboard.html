@@ -9,3 +9,12 @@
         <app-stat-card title="Current Streak" [value]="currentStreak" icon="🔥"> </app-stat-card>
     </div>
 </div>
+<div class="card shadow-sm mt-4 p-4">
+    <h4 class="mb-4">Weekly Progress</h4>
+    <canvas
+        baseChart
+        [data]="barChartData"
+        [options]="barChartOptions"
+        [type]="barChartType">
+    </canvas>
+</div>
