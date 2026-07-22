@@ -30,7 +30,7 @@ export class HabitForm implements OnInit {
   private dialogRef = inject(MatDialogRef<HabitForm>);
   private habitService = inject(HabitService);
   private snackBar = inject(MatSnackBar);
-  private data = inject(MAT_DIALOG_DATA, {optional: true });
+  public data = inject(MAT_DIALOG_DATA, {optional: true });
   habitForm = this.fb.nonNullable.group({
     title: ['', Validators.required],
     description: [''],

@@ -1,4 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
@@ -21,20 +22,21 @@ export class Habits implements OnInit {
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
 
+  private cdr = inject(ChangeDetectorRef);
+
   async ngOnInit() {
     await this.loadHabits();
   }
 
-  async loadHabits() {
-    this.habitService.getHabits().subscribe({
-      next: (response) => {
-        this.habits = response;
-        console.log(response);
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
+  async loadHabits(): Promise<void> {
+    try {
+      const response = await firstValueFrom(this.habitService.getHabits());
+      this.habits = response;
+
+      this.cdr.detectChanges();
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   deleteHabit(id: string) {
@@ -77,6 +79,7 @@ export class Habits implements OnInit {
         const index = this.habits.findIndex(h => h._id === updatedHabit._id);
         if (index !== -1) {
           this.habits[index] = updatedHabit;
+          this.cdr.detectChanges();
         }
         this.showMessage('Habit completed! 🎉');
       },
