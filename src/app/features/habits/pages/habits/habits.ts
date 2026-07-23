@@ -8,6 +8,7 @@ import { Habit } from '../../../../core/models/habit.model';
 import { HabitService } from '../../../../core/services/habit.service';
 import { HabitCard } from '../../components/habit-card/habit-card';
 import { HabitForm } from '../../components/habit-form/habit-form';
+import { calculateCurrentStreak } from '../../../../core/utils/streak.util';
 
 @Component({
   selector: 'app-habits',
@@ -30,8 +31,12 @@ export class Habits implements OnInit {
 
   async loadHabits(): Promise<void> {
     try {
-      const response = await firstValueFrom(this.habitService.getHabits());
-      this.habits = response;
+      const habits = await firstValueFrom(this.habitService.getHabits());
+      this.habits = habits.map(habit => ({
+      ...habit,
+      currentStreak: calculateCurrentStreak(habit.completedDates)
+    }));
+
 
       this.cdr.detectChanges();
     } catch (err) {

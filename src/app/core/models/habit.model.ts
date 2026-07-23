@@ -6,4 +6,6 @@ export interface Habit {
   completedDates: string[];
   createdAt: string;
   updatedAt: string;
+  currentStreak?: number;
+  longestStreak?: number;
 }
