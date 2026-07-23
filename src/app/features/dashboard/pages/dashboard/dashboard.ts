@@ -7,6 +7,7 @@ import { ChartConfiguration, ChartType } from 'chart.js';
 import { Habit } from '../../../../core/models/habit.model';
 import { HabitService } from '../../../../core/services/habit.service';
 import { StatCard } from '../../components/stat-card/stat-card';
+import { calculateLongestStreak } from '../../../../core/utils/streak.util';
 
 @Component({
   selector: 'app-dashboard',
@@ -34,11 +35,15 @@ export class Dashboard {
   async loadDashboard(): Promise<void> {
     try {
       const habits = await firstValueFrom(this.habitService.getHabits());
-      this.habits = habits;
+      this.habits = habits.map(habit => ({
+        ...habit,
+        longestStreak: calculateLongestStreak(habit.completedDates)
+      }));   
       this.totalHabits = habits.length;
 
       const today = new Date().toDateString();
-
+      this.currentStreak = Math.max(...this.habits.map(h => h.longestStreak ?? 0), 0 );
+      
       this.completedToday = habits.filter(habit =>
         habit.completedDates.some(date =>
           new Date(date).toDateString() === today

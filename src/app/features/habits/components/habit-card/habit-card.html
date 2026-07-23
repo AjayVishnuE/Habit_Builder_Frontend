@@ -11,6 +11,11 @@
         <div class="mt-2 mb-3">
             🔥 {{ habit.currentStreak }} day streak
         </div>
+        <div class="text-muted">
+            🏆 Best Streak:
+            {{ habit.longestStreak }}
+            {{ habit.longestStreak === 1 ? 'day' : 'days' }}
+        </div>
         <button class="btn btn-success me-2" [disabled]="isCompletedToday()" (click)="complete.emit(habit._id)">
             {{ isCompletedToday() ? 'Completed' : 'Complete' }}        
         </button>
