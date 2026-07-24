@@ -25,7 +25,7 @@ export class Habits implements OnInit {
 
   private cdr = inject(ChangeDetectorRef);
 
-  async ngOnInit() {
+  async ngOnInit () {
     await this.loadHabits();
   }
 
@@ -37,9 +37,7 @@ export class Habits implements OnInit {
       currentStreak: calculateCurrentStreak(habit.completedDates),
       longestStreak: calculateLongestStreak(habit.completedDates)
     }));
-
-
-      this.cdr.detectChanges();
+    this.cdr.detectChanges();
     } catch (err) {
       console.error(err);
     }
@@ -67,7 +65,8 @@ export class Habits implements OnInit {
       width: '500px',
       data: habit
     });
-    dialogRef.afterClosed().subscribe((updatedHabit) => {
+
+    dialogRef.afterClosed().subscribe(updatedHabit => {
       if (!updatedHabit) {
         return;
       }
@@ -76,7 +75,6 @@ export class Habits implements OnInit {
         this.habits[index] = updatedHabit;
       }
     });
-
   }
 
   completeHabit(id: string) {

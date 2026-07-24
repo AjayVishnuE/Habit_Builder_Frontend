@@ -38,7 +38,10 @@ export class HabitForm implements OnInit {
   });
 
   ngOnInit(){
+    console.log('Dialog Data:', this.data);
+
     if (this.data) {
+      console.log('Frequency from data:', this.data.frequency);
       this.habitForm.patchValue({
         title: this.data.title,
         description: this.data.description,
