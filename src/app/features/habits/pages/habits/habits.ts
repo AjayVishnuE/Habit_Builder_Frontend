@@ -65,14 +65,24 @@ export class Habits implements OnInit {
       width: '500px',
       data: habit
     });
-
-    dialogRef.afterClosed().subscribe(updatedHabit => {
-      if (!updatedHabit) {
-        return;
-      }
-      const index = this.habits.findIndex(h => h._id === updatedHabit._id);
-      if (index !== -1) {
-        this.habits[index] = updatedHabit;
+    dialogRef.afterClosed().subscribe(
+      { next: (updatedHabit) => {
+        if (!updatedHabit) {
+          return;
+        }
+        this.habits = this.habits.map(h => h._id === updatedHabit._id ? {
+          ...updatedHabit,
+          currentStreak: calculateCurrentStreak(updatedHabit.completedDates),
+          longestStreak: calculateLongestStreak(updatedHabit.completedDates)
+        } : h );
+        this.cdr.detectChanges();
+        console.log('Updated Habits Array:', this.habits);
+      },
+      error: (err) => {
+        console.error('Dialog Error:', err);
+      },
+      complete: () => {
+        console.log('afterClosed() completed');
       }
     });
   }
