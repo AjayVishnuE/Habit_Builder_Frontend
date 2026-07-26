@@ -8,6 +8,7 @@ import { Habit } from '../../../../core/models/habit.model';
 import { HabitService } from '../../../../core/services/habit.service';
 import { HabitCard } from '../../components/habit-card/habit-card';
 import { HabitForm } from '../../components/habit-form/habit-form';
+import { DeleteConfirmDialog } from '../../components/delete-confirm-dialog/delete-confirm-dialog';
 import { calculateCurrentStreak, calculateLongestStreak } from '../../../../core/utils/streak.util';
 
 @Component({
@@ -44,18 +45,32 @@ export class Habits implements OnInit {
   }
 
   deleteHabit(id: string) {
-    this.habitService.deleteHabit(id).subscribe({
-      next: () => {
-        this.habits = this.habits.filter(
-          habit => habit._id !== id
-        );
-        console.log('Habit deleted successfully');
-      },error: (err) => {
-        console.error(err);
-      }
+    const habit = this.habits.find(h => h._id === id);
+    if (!habit) {
+      return;
+    }
+    const dialogRef = this.dialog.open(DeleteConfirmDialog, {
+      width: '400px',
+      data: habit
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }this.habitService.deleteHabit(id).subscribe({
+        next: () => {
+          this.habits = this.habits.filter(
+            h => h._id !== id
+          );
+          this.showMessage('Habit deleted successfully');
+          this.cdr.detectChanges();
+        },error: (err) => {
+          console.error(err);
+          this.showMessage('Failed to delete habit');
+        }
+      });
     });
   }
-  
+
   editHabit(id: string) {
     const habit = this.habits.find(h => h._id === id);
     if (!habit) {
