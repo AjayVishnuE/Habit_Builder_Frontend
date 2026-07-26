@@ -1,8 +1,29 @@
-<button mat-raised-button color="primary" (click)="openAddHabitDialog()">
-    + Add Habit
-</button>
+<div class="row mb-4">
+    <div class="col-md-6">
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Search Habits</mat-label>
+            <input matInput [(ngModel)]="searchText" (ngModelChange)="onSearchChange($event)" placeholder="Search by title or description"/>
+        </mat-form-field>
+    </div>
+    <div class="col-md-3">
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Frequency</mat-label>
+            <mat-select [(ngModel)]="selectedFrequency" (selectionChange)="onFrequencyChange($event.value)">
+                <mat-option value="All">All</mat-option>
+                <mat-option value="Daily">Daily</mat-option>
+                <mat-option value="Weekly">Weekly</mat-option>
+                <mat-option value="Monthly">Monthly</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div class="col-md-3 d-flex align-items-start justify-content-end">
+        <button mat-raised-button color="primary" (click)="openAddHabitDialog()">
+            + Add Habit
+        </button>
+    </div>
+</div>
 <hr>
-@for (habit of habits; track habit._id) {
+@for (habit of filteredHabits; track habit._id) {
     <app-habit-card
         [habit]="habit"
         (delete)="deleteHabit($event)"

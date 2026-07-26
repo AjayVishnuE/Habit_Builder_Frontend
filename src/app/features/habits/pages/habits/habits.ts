@@ -1,6 +1,10 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 
@@ -8,18 +12,22 @@ import { Habit } from '../../../../core/models/habit.model';
 import { HabitService } from '../../../../core/services/habit.service';
 import { HabitCard } from '../../components/habit-card/habit-card';
 import { HabitForm } from '../../components/habit-form/habit-form';
+
 import { DeleteConfirmDialog } from '../../components/delete-confirm-dialog/delete-confirm-dialog';
 import { calculateCurrentStreak, calculateLongestStreak } from '../../../../core/utils/streak.util';
 
 @Component({
   selector: 'app-habits',
-  imports: [HabitCard, MatDialogModule, MatButtonModule, MatSnackBarModule],
+  imports: [HabitCard, MatDialogModule, MatButtonModule, MatSnackBarModule, FormsModule, MatFormFieldModule, MatInputModule, MatSelectModule],
   templateUrl: './habits.html',
   styleUrl: './habits.sass',
 })
 
 export class Habits implements OnInit {
   habits: Habit[] = [];
+  filteredHabits: Habit[] = [];
+  searchText = '';
+  selectedFrequency = 'All';
   private habitService = inject(HabitService);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
@@ -38,6 +46,8 @@ export class Habits implements OnInit {
       currentStreak: calculateCurrentStreak(habit.completedDates),
       longestStreak: calculateLongestStreak(habit.completedDates)
     }));
+
+    this.applyFilters();
     this.cdr.detectChanges();
     } catch (err) {
       console.error(err);
@@ -58,9 +68,8 @@ export class Habits implements OnInit {
         return;
       }this.habitService.deleteHabit(id).subscribe({
         next: () => {
-          this.habits = this.habits.filter(
-            h => h._id !== id
-          );
+          this.habits = this.habits.filter( h => h._id !== id );
+          this.applyFilters();
           this.showMessage('Habit deleted successfully');
           this.cdr.detectChanges();
         },error: (err) => {
@@ -90,6 +99,7 @@ export class Habits implements OnInit {
           currentStreak: calculateCurrentStreak(updatedHabit.completedDates),
           longestStreak: calculateLongestStreak(updatedHabit.completedDates)
         } : h );
+        this.applyFilters();
         this.cdr.detectChanges();
         console.log('Updated Habits Array:', this.habits);
       },
@@ -108,6 +118,7 @@ export class Habits implements OnInit {
         const index = this.habits.findIndex(h => h._id === updatedHabit._id);
         if (index !== -1) {
           this.habits[index] = updatedHabit;
+          this.applyFilters();
           this.cdr.detectChanges();
         }
         this.showMessage('Habit completed! 🎉');
@@ -125,6 +136,8 @@ export class Habits implements OnInit {
     dialogRef.afterClosed().subscribe((newHabit) => {
       if (newHabit) {
         this.habits.unshift(newHabit);
+        this.applyFilters();
+        this.cdr.detectChanges();
         console.log("Habit Added Successfully");
       }
     });
@@ -140,6 +153,28 @@ export class Habits implements OnInit {
         verticalPosition: 'top'
       }
     );
+  }
+
+  applyFilters() {
+    this.filteredHabits = this.habits.filter(habit => {
+      const matchesSearch =
+        habit.title.toLowerCase().includes(this.searchText.toLowerCase()) ||
+        habit.description.toLowerCase().includes(this.searchText.toLowerCase());
+      const matchesFrequency =
+        this.selectedFrequency === 'All' ||
+        habit.frequency === this.selectedFrequency;
+      return matchesSearch && matchesFrequency;
+    });
+  }
+
+  onSearchChange(value: string) {
+    this.searchText = value;
+    this.applyFilters();
+  }
+
+  onFrequencyChange(value: string) {
+    this.selectedFrequency = value;
+    this.applyFilters();
   }
 }
 
