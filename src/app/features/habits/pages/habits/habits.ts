@@ -43,8 +43,8 @@ export class Habits implements OnInit {
       const habits = await firstValueFrom(this.habitService.getHabits());
       this.habits = habits.map(habit => ({
       ...habit,
-      currentStreak: calculateCurrentStreak(habit.completedDates),
-      longestStreak: calculateLongestStreak(habit.completedDates)
+      currentStreak: calculateCurrentStreak(habit.completedHistory),
+      longestStreak: calculateLongestStreak(habit.completedHistory)
     }));
 
     this.applyFilters();
@@ -96,8 +96,8 @@ export class Habits implements OnInit {
         }
         this.habits = this.habits.map(h => h._id === updatedHabit._id ? {
           ...updatedHabit,
-          currentStreak: calculateCurrentStreak(updatedHabit.completedDates),
-          longestStreak: calculateLongestStreak(updatedHabit.completedDates)
+          currentStreak: calculateCurrentStreak(updatedHabit.completedHistory),
+          longestStreak: calculateLongestStreak(updatedHabit.completedHistory)
         } : h );
         this.applyFilters();
         this.cdr.detectChanges();
@@ -117,7 +117,11 @@ export class Habits implements OnInit {
       next: (updatedHabit) => {
         const index = this.habits.findIndex(h => h._id === updatedHabit._id);
         if (index !== -1) {
-          this.habits[index] = updatedHabit;
+          this.habits[index] = {
+            ...updatedHabit,
+            currentStreak: calculateCurrentStreak(updatedHabit.completedHistory),
+            longestStreak: calculateLongestStreak(updatedHabit.completedHistory)
+          };
           this.applyFilters();
           this.cdr.detectChanges();
         }
@@ -135,7 +139,11 @@ export class Habits implements OnInit {
     });
     dialogRef.afterClosed().subscribe((newHabit) => {
       if (newHabit) {
-        this.habits.unshift(newHabit);
+        this.habits.unshift({
+          ...newHabit,
+          currentStreak: calculateCurrentStreak(newHabit.completedHistory),
+          longestStreak: calculateLongestStreak(newHabit.completedHistory)
+        });        
         this.applyFilters();
         this.cdr.detectChanges();
         console.log("Habit Added Successfully");

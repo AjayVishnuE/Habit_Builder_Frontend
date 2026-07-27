@@ -12,11 +12,13 @@ import { Habit } from '../../../../core/models/habit.model';
 })
 export class HabitCard {
   isCompleted(): boolean {
-    if (!this.habit.completedDates.length) {
+    if (!this.habit.completedHistory.length) {
       return false;
     }
     const lastCompleted = new Date(
-      this.habit.completedDates[this.habit.completedDates.length - 1]
+      this.habit.completedHistory[
+        this.habit.completedHistory.length - 1
+      ].completedAt
     );
     const today = new Date();
     switch (this.habit.frequency) {
@@ -26,8 +28,8 @@ export class HabitCard {
         return this.isSameWeek(lastCompleted, today);
       case 'Monthly':
         return (
-            lastCompleted.getMonth() === today.getMonth() &&
-            lastCompleted.getFullYear() === today.getFullYear()
+          lastCompleted.getMonth() === today.getMonth() &&
+          lastCompleted.getFullYear() === today.getFullYear()
         );
       default:
         return false;

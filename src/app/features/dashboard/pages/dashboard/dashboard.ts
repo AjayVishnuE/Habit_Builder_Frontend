@@ -43,7 +43,7 @@ export class Dashboard {
       const habits = await firstValueFrom(this.habitService.getHabits());
       this.habits = habits.map(habit => ({
         ...habit,
-        longestStreak: calculateLongestStreak(habit.completedDates)
+        longestStreak: calculateLongestStreak(habit.completedHistory)      
       }));   
       this.totalHabits = habits.length;
 
@@ -51,8 +51,8 @@ export class Dashboard {
       this.currentStreak = Math.max(...this.habits.map(h => h.longestStreak ?? 0), 0 );
       
       this.completedToday = habits.filter(habit =>
-        habit.completedDates.some(date =>
-          new Date(date).toDateString() === today
+        habit.completedHistory.some(entry =>
+            new Date(entry.completedAt).toDateString() === today
         )
       ).length;
       await this.loadWeeklyChart();
@@ -73,7 +73,8 @@ export class Dashboard {
       );
       let count = 0;
       this.habits.forEach(habit => {
-        habit.completedDates.forEach(date => {
+        habit.completedHistory.forEach(entry => {
+          const date = entry.completedAt;
           if (
             new Date(date).toDateString() ===
             day.toDateString()
@@ -134,29 +135,31 @@ export class Dashboard {
     this.cdr.detectChanges();
   }
 
-  isCompleted(habit: Habit, today: Date): boolean {
-    if (!habit.completedDates.length) {
-      return false;
-    }
-    const lastCompleted = new Date(
-      habit.completedDates[habit.completedDates.length - 1]
-    );
-    switch (habit.frequency) {
-      case 'Daily':
-        return lastCompleted.toDateString() === today.toDateString();
-      case 'Weekly':
-        return this.isSameWeek(lastCompleted, today);
-      case 'Monthly':
-        return (
-          lastCompleted.getMonth() === today.getMonth() &&
-          lastCompleted.getFullYear() === today.getFullYear()
-        );
-      default:
-        return false;
-    }
+  async isCompleted(habit: Habit, today: Date): Promise <boolean>  {
+      if (!habit.completedHistory.length) {
+          return false;
+      }
+      const lastCompleted = new Date(
+          habit.completedHistory[
+              habit.completedHistory.length - 1
+          ].completedAt
+      );
+      switch (habit.frequency) {
+          case 'Daily':
+              return lastCompleted.toDateString() === today.toDateString();
+          case 'Weekly':
+              return await this.isSameWeek(lastCompleted, today);
+          case 'Monthly':
+              return (
+                  lastCompleted.getMonth() === today.getMonth() &&
+                  lastCompleted.getFullYear() === today.getFullYear()
+              );
+          default:
+              return false;
+      }
   }
 
-  private isSameWeek(date1: Date, date2: Date): boolean {
+  private async isSameWeek(date1: Date, date2: Date): Promise <boolean> {
     const startOfWeek = (date: Date) => {
       const d = new Date(date);
       const day = d.getDay();
