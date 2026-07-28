@@ -111,7 +111,6 @@ export class Dashboard {
       const dailyHabits = this.habits.filter(h => h.frequency === 'Daily');
       const weeklyHabits = this.habits.filter(h => h.frequency === 'Weekly');
       const monthlyHabits = this.habits.filter(h => h.frequency === 'Monthly');
-
       const completedDaily = dailyHabits.filter(h => this.isCompleted(h, today)).length;
       const completedWeekly = weeklyHabits.filter(h => this.isCompleted(h, today)).length;
       const completedMonthly = monthlyHabits.filter(h => this.isCompleted(h, today)).length;
