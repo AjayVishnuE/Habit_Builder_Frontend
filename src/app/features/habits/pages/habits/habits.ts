@@ -13,12 +13,13 @@ import { HabitService } from '../../../../core/services/habit.service';
 import { HabitCard } from '../../components/habit-card/habit-card';
 import { HabitForm } from '../../components/habit-form/habit-form';
 
+import { CompleteHabitDialog } from '../../components/complete-habit-dialog/complete-habit-dialog';
 import { DeleteConfirmDialog } from '../../components/delete-confirm-dialog/delete-confirm-dialog';
 import { calculateCurrentStreak, calculateLongestStreak } from '../../../../core/utils/streak.util';
 
 @Component({
   selector: 'app-habits',
-  imports: [HabitCard, MatDialogModule, MatButtonModule, MatSnackBarModule, FormsModule, MatFormFieldModule, MatInputModule, MatSelectModule],
+  imports: [HabitCard, MatDialogModule, MatButtonModule, MatSnackBarModule, FormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, CompleteHabitDialog],
   templateUrl: './habits.html',
   styleUrl: './habits.sass',
 })
@@ -113,23 +114,36 @@ export class Habits implements OnInit {
   }
 
   completeHabit(id: string) {
-    this.habitService.completeHabit(id).subscribe({
-      next: (updatedHabit) => {
-        const index = this.habits.findIndex(h => h._id === updatedHabit._id);
-        if (index !== -1) {
-          this.habits[index] = {
-            ...updatedHabit,
-            currentStreak: calculateCurrentStreak(updatedHabit.completedHistory),
-            longestStreak: calculateLongestStreak(updatedHabit.completedHistory)
-          };
-          this.applyFilters();
-          this.cdr.detectChanges();
-        }
-        this.showMessage('Habit completed! 🎉');
-      },
-      error: (err) => {
-        this.showMessage(err.error?.message || 'Unable to complete habit.');
+    const dialogRef = this.dialog.open(CompleteHabitDialog, {
+      width: '500px'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
       }
+      this.habitService.completeHabit(id, result).subscribe({
+        next: (updatedHabit) => {
+          const index = this.habits.findIndex(
+            h => h._id === updatedHabit._id
+          );
+          if (index !== -1) {
+            this.habits[index] = {
+              ...updatedHabit,
+              currentStreak: calculateCurrentStreak(updatedHabit.completedHistory),
+              longestStreak: calculateLongestStreak(updatedHabit.completedHistory)
+            };
+            this.applyFilters();
+            this.cdr.detectChanges();
+          }
+          this.showMessage('Habit completed! 🎉');
+        },
+        error: (err) => {
+          this.showMessage(
+            err.error?.message ||
+            'Unable to complete habit.'
+          );
+        }
+      });
     });
   }
 
