@@ -106,60 +106,47 @@ export class Dashboard {
     }
   };
 
-  async calculateCompletionPercentage() {
-    const today = new Date();
-    const dailyHabits = this.habits.filter(h => h.frequency === 'Daily');
-    const weeklyHabits = this.habits.filter(h => h.frequency === 'Weekly');
-    const monthlyHabits = this.habits.filter(h => h.frequency === 'Monthly');
-    const completedDaily = dailyHabits.filter(h =>
-      this.isCompleted(h, today)
-    ).length;
-    const completedWeekly = weeklyHabits.filter(h =>
-      this.isCompleted(h, today)
-    ).length;
-    const completedMonthly = monthlyHabits.filter(h =>
-      this.isCompleted(h, today)
-    ).length;
-    this.dailyPercentage =
-      dailyHabits.length
-        ? Math.round((completedDaily / dailyHabits.length) * 100)
-        : 0;
-    this.weeklyPercentage =
-      weeklyHabits.length
-        ? Math.round((completedWeekly / weeklyHabits.length) * 100)
-        : 0;
-    this.monthlyPercentage =
-      monthlyHabits.length
-        ? Math.round((completedMonthly / monthlyHabits.length) * 100)
-        : 0;
-    this.cdr.detectChanges();
+  calculateCompletionPercentage() {
+      const today = new Date();
+      const dailyHabits = this.habits.filter(h => h.frequency === 'Daily');
+      const weeklyHabits = this.habits.filter(h => h.frequency === 'Weekly');
+      const monthlyHabits = this.habits.filter(h => h.frequency === 'Monthly');
+
+      const completedDaily = dailyHabits.filter(h => this.isCompleted(h, today)).length;
+      const completedWeekly = weeklyHabits.filter(h => this.isCompleted(h, today)).length;
+      const completedMonthly = monthlyHabits.filter(h => this.isCompleted(h, today)).length;
+
+      this.dailyPercentage = dailyHabits.length ? Math.round(completedDaily * 100 / dailyHabits.length) : 0;
+      this.weeklyPercentage = weeklyHabits.length ? Math.round(completedWeekly * 100 / weeklyHabits.length) : 0;
+      this.monthlyPercentage = monthlyHabits.length ? Math.round(completedMonthly * 100 / monthlyHabits.length) : 0;
+
+      this.cdr.detectChanges();
   }
 
-  async isCompleted(habit: Habit, today: Date): Promise <boolean>  {
-      if (!habit.completedHistory.length) {
-          return false;
-      }
-      const lastCompleted = new Date(
-          habit.completedHistory[
-              habit.completedHistory.length - 1
-          ].completedAt
-      );
-      switch (habit.frequency) {
-          case 'Daily':
-              return lastCompleted.toDateString() === today.toDateString();
-          case 'Weekly':
-              return await this.isSameWeek(lastCompleted, today);
-          case 'Monthly':
-              return (
-                  lastCompleted.getMonth() === today.getMonth() &&
-                  lastCompleted.getFullYear() === today.getFullYear()
-              );
-          default:
-              return false;
-      }
+  isCompleted(habit: Habit, today: Date): boolean {
+    switch (habit.frequency) {
+      case 'Daily':
+        return habit.completedHistory.some(entry =>
+          new Date(entry.completedAt).toDateString() === today.toDateString()
+        );
+      case 'Weekly':
+        return habit.completedHistory.some(entry =>
+          this.isSameWeek(new Date(entry.completedAt), today)
+        );
+      case 'Monthly':
+        return habit.completedHistory.some(entry => {
+          const completed = new Date(entry.completedAt);
+          return (
+            completed.getMonth() === today.getMonth() &&
+            completed.getFullYear() === today.getFullYear()
+          );
+        });
+      default:
+        return false;
+    }
   }
 
-  private async isSameWeek(date1: Date, date2: Date): Promise <boolean> {
+  private isSameWeek(date1: Date, date2: Date): boolean {
     const startOfWeek = (date: Date) => {
       const d = new Date(date);
       const day = d.getDay();
@@ -169,10 +156,8 @@ export class Dashboard {
       return d;
     };
     return (
-      startOfWeek(date1).getTime() ===
-      startOfWeek(date2).getTime()
+      startOfWeek(date1).getTime() === startOfWeek(date2).getTime()
     );
-
   }
 }
 
