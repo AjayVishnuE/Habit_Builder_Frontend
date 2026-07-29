@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
+import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -32,7 +33,7 @@ export class Habits implements OnInit {
   private habitService = inject(HabitService);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
-
+  private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
 
   async ngOnInit () {
@@ -197,6 +198,10 @@ export class Habits implements OnInit {
   onFrequencyChange(value: string) {
     this.selectedFrequency = value;
     this.applyFilters();
+  }
+
+  viewDetails(id: string) {
+    this.router.navigate(['/habits', id]);
   }
 }
 

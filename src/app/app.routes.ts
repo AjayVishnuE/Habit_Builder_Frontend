@@ -1,11 +1,12 @@
 import { Routes } from '@angular/router';
 import { Login } from './features/auth/login/login';
+import { authGuard } from './core/guards/auth-guard';
 import { Register } from './features/auth/register/register';
-import { Dashboard } from './features/dashboard/pages/dashboard/dashboard';
+import { MainLayout } from './layouts/main-layout/main-layout';
 import { Habits } from './features/habits/pages/habits/habits';
 import { Profile } from './features/profile/pages/profile/profile';
-import { MainLayout } from './layouts/main-layout/main-layout';
-import { authGuard } from './core/guards/auth-guard';
+import { Dashboard } from './features/dashboard/pages/dashboard/dashboard';
+import { HabitDetails } from './features/habits/pages/habit-details/habit-details';
 
 export const routes: Routes = [
   {
@@ -39,7 +40,12 @@ export const routes: Routes = [
         path: 'profile',
         component: Profile,
         canActivate: [authGuard]
-      }
+      },
+      {
+        path: 'habits/:id',
+        component: HabitDetails,
+        canActivate: [authGuard]
+      },
     ]
   },
   {

@@ -57,4 +57,7 @@ export class HabitCard {
 
   @Output()
   complete = new EventEmitter<string>();
+
+  @Output()
+  details = new EventEmitter<string>();
 }

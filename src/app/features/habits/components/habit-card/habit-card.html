@@ -37,6 +37,11 @@
         <button class="btn btn-warning me-2" (click)="edit.emit(habit._id)">
             Edit
         </button>
+        <button
+            class="btn btn-info me-2"
+            (click)="details.emit(habit._id)">
+            View Details
+        </button>
         <button class="btn btn-danger" (click)="delete.emit(habit._id)">
             Delete
         </button>

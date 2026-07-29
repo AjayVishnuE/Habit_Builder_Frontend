@@ -29,4 +29,8 @@ export class HabitService {
   completeHabit(id: string, completionData: any) {
     return this.api.put<Habit>( `${API_ENDPOINTS.HABITS}/${id}/complete`, completionData );
   }
+
+  getHabitById(id: string) {
+    return this.api.get<Habit>(`${API_ENDPOINTS.HABITS}/${id}`);
+  }
 }
