@@ -44,8 +44,8 @@ export class Habits implements OnInit {
       const habits = await firstValueFrom(this.habitService.getHabits());
       this.habits = habits.map(habit => ({
       ...habit,
-      currentStreak: calculateCurrentStreak(habit.completedHistory),
-      longestStreak: calculateLongestStreak(habit.completedHistory)
+      currentStreak: calculateCurrentStreak( habit.completedHistory, habit.frequency ),
+      longestStreak: calculateLongestStreak( habit.completedHistory, habit.frequency ),
     }));
 
     this.applyFilters();
@@ -97,8 +97,8 @@ export class Habits implements OnInit {
         }
         this.habits = this.habits.map(h => h._id === updatedHabit._id ? {
           ...updatedHabit,
-          currentStreak: calculateCurrentStreak(updatedHabit.completedHistory),
-          longestStreak: calculateLongestStreak(updatedHabit.completedHistory)
+          currentStreak: calculateCurrentStreak( habit.completedHistory, habit.frequency ),
+          longestStreak: calculateLongestStreak( habit.completedHistory, habit.frequency ),
         } : h );
         this.applyFilters();
         this.cdr.detectChanges();
@@ -129,8 +129,8 @@ export class Habits implements OnInit {
           if (index !== -1) {
             this.habits[index] = {
               ...updatedHabit,
-              currentStreak: calculateCurrentStreak(updatedHabit.completedHistory),
-              longestStreak: calculateLongestStreak(updatedHabit.completedHistory)
+              currentStreak: calculateCurrentStreak( updatedHabit.completedHistory, updatedHabit.frequency ),
+              longestStreak: calculateLongestStreak( updatedHabit.completedHistory, updatedHabit.frequency ),
             };
             this.applyFilters();
             this.cdr.detectChanges();
@@ -155,8 +155,8 @@ export class Habits implements OnInit {
       if (newHabit) {
         this.habits.unshift({
           ...newHabit,
-          currentStreak: calculateCurrentStreak(newHabit.completedHistory),
-          longestStreak: calculateLongestStreak(newHabit.completedHistory)
+          currentStreak: calculateCurrentStreak( newHabit.completedHistory, newHabit.frequency ),
+          longestStreak: calculateLongestStreak( newHabit.completedHistory, newHabit.frequency ),
         });        
         this.applyFilters();
         this.cdr.detectChanges();

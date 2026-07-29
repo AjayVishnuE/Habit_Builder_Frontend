@@ -9,12 +9,27 @@
             }
         </div>
         <div class="mt-2 mb-3">
-            🔥 {{ habit.currentStreak }} day streak
+            🔥 {{ habit.currentStreak }}
+            {{
+                habit.frequency === 'Daily'
+                    ? (habit.currentStreak === 1 ? 'day' : 'days')
+                    : habit.frequency === 'Weekly'
+                        ? (habit.currentStreak === 1 ? 'week' : 'weeks')
+                        : (habit.currentStreak === 1 ? 'month' : 'months')
+            }}
+            streak
         </div>
         <div class="text-muted">
             🏆 Best Streak:
             {{ habit.longestStreak }}
-            {{ habit.longestStreak === 1 ? 'day' : 'days' }}
+
+            {{
+                habit.frequency === 'Daily'
+                    ? (habit.longestStreak === 1 ? 'day' : 'days')
+                    : habit.frequency === 'Weekly'
+                        ? (habit.longestStreak === 1 ? 'week' : 'weeks')
+                        : (habit.longestStreak === 1 ? 'month' : 'months')
+            }}
         </div>
         <button class="btn btn-success me-2" [disabled]="isCompleted()" (click)="complete.emit(habit._id)">
             {{ isCompleted() ? 'Completed' : 'Complete' }}        

@@ -43,7 +43,7 @@ export class Dashboard {
       const habits = await firstValueFrom(this.habitService.getHabits());
       this.habits = habits.map(habit => ({
         ...habit,
-        longestStreak: calculateLongestStreak(habit.completedHistory)      
+        longestStreak: calculateLongestStreak( habit.completedHistory, habit.frequency ),
       }));   
       this.totalHabits = habits.length;
 
