@@ -9,7 +9,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Habit } from '../../../../core/models/habit.model';
 import { HabitService } from '../../../../core/services/habit.service';
 import { StatCard } from '../../components/stat-card/stat-card';
-import { calculateLongestStreak } from '../../../../core/utils/streak.util';
+import { calculateLongestStreak, calculateOverallStreak } from '../../../../core/utils/streak.util';
 
 @Component({
   selector: 'app-dashboard',
@@ -48,8 +48,7 @@ export class Dashboard {
       this.totalHabits = habits.length;
 
       const today = new Date().toDateString();
-      this.currentStreak = Math.max(...this.habits.map(h => h.longestStreak ?? 0), 0 );
-      
+      this.currentStreak = calculateOverallStreak(this.habits);      
       this.completedToday = habits.filter(habit =>
         habit.completedHistory.some(entry =>
             new Date(entry.completedAt).toDateString() === today

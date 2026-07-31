@@ -37,13 +37,17 @@ export class HabitCard {
   }
 
   private isSameWeek(date1: Date, date2: Date): boolean {
-    const first = new Date(date1);
-    const second = new Date(date2);
-    first.setHours(0,0,0,0);
-    second.setHours(0,0,0,0);
-    const firstWeek = Math.floor(first.getTime() / (7 * 24 * 60 * 60 * 1000));
-    const secondWeek = Math.floor(second.getTime() / (7 * 24 * 60 * 60 * 1000));
-    return firstWeek === secondWeek;
+    const startOfWeek = (date: Date) => {
+        const d = new Date(date);
+        const day = d.getDay();
+        const diff = day === 0 ? -6 : 1 - day;
+        d.setDate(d.getDate() + diff);
+        d.setHours(0, 0, 0, 0);
+        return d;
+    };
+    return (
+        startOfWeek(date1).getTime() === startOfWeek(date2).getTime()
+    );
   }
 
   @Input({ required: true })

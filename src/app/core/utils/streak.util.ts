@@ -94,3 +94,28 @@ export function calculateLongestStreak( completedHistory: CompletedHistory[], fr
     }
     return longest;
 }
+
+export function calculateOverallStreak( habits: { completedHistory: { completedAt: string }[] }[] ): number {
+    const completedDays = new Set<string>();
+    habits.forEach(habit => {
+        habit.completedHistory?.forEach(entry => {
+            const date = new Date(entry.completedAt);
+            date.setHours(0, 0, 0, 0);
+            completedDays.add(date.toDateString());
+        });
+    });
+    if (completedDays.size === 0) {
+        return 0;
+    }
+    let streak = 0;
+    const current = new Date();
+    current.setHours(0, 0, 0, 0);
+    if (!completedDays.has(current.toDateString())) {
+        current.setDate(current.getDate() - 1);
+    }
+    while (completedDays.has(current.toDateString())) {
+        streak++;
+        current.setDate(current.getDate() - 1);
+    }
+    return streak;
+}
