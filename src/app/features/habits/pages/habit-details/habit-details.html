@@ -37,5 +37,51 @@
                 </div>
             </div>
         </div>
+        <div class="card shadow mt-4">
+            <div class="card-header">
+                <h4 class="mb-0">
+                    📜 Completion History
+                </h4>
+            </div>
+            <div class="card-body">
+                @if (habit?.completedHistory?.length) {
+                    @for (
+                        entry of habit!.completedHistory.slice().reverse();
+                        track entry._id
+                    ) {
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <h6>
+                                    {{ entry.completedAt | date:'medium' }}
+                                </h6>
+                                <p>
+                                    😊
+                                    <strong>Mood:</strong>
+                                    {{ entry.mood }}
+                                </p>
+                                <p>
+                                    ⏱
+                                    <strong>Duration:</strong>
+                                    {{ entry.duration }} mins
+                                </p>
+                                @if (entry.remark) {
+                                    <p>
+                                        📝
+                                        <strong>Remark:</strong>
+                                        {{ entry.remark }}
+                                    </p>
+                                }
+                            </div>
+                        </div>
+                    }
+                }
+                @else {
+                    <p class="text-muted">
+                        No completions yet.
+                    </p>
+                }
+            </div>
+        </div>
     </div>
 }
