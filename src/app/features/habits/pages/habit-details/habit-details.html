@@ -1,12 +1,41 @@
-<h2>sss</h2>
-@if(habit){
-
-<h2>{{ habit.title }}</h2>
-
-<p>{{ habit.description }}</p>
-
-<p>Frequency : {{ habit.frequency }}</p>
-
-<p>History Entries : {{ habit.completedHistory.length }}</p>
-
+@if (habit) {
+    <div class="container mt-4">
+        <button
+            class="btn btn-outline-secondary mb-4"
+            routerLink="/habits">
+            ← Back to Habits
+        </button>
+        <div class="card shadow">
+            <div class="card-body">
+                <h2>{{ habit.title }}</h2>
+                <p class="text-muted">
+                    {{ habit.description }}
+                </p>
+                <span class="badge bg-primary">
+                    {{ habit.frequency }}
+                </span>
+                <hr>
+                <div class="row mt-3">
+                    <div class="col-md-3">
+                        <h6>🔥 Current Streak</h6>
+                        <h4>{{ habit.currentStreak }}</h4>
+                    </div>
+                    <div class="col-md-3">
+                        <h6>🏆 Best Streak</h6>
+                        <h4>{{ habit.longestStreak }}</h4>
+                    </div>
+                    <div class="col-md-3">
+                        <h6>✅ Total Completions</h6>
+                        <h4>{{ habit.completedHistory.length }}</h4>
+                    </div>
+                    <div class="col-md-3">
+                        <h6>📅 Created</h6>
+                        <h4>
+                            {{ habit.createdAt | date:'mediumDate' }}
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 }
