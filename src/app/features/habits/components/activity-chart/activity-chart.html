@@ -1,0 +1,20 @@
+<div class="mt-3">
+    hi there
+    @for(point of points; track point.label){
+        <div class="border rounded p-2 mb-2">
+            <strong>{{ point.label }}</strong>
+            <br>
+            Completed :
+            {{ point.completed }}
+            <br>
+            Duration :
+            {{ point.duration }}
+            <br>
+            Mood :
+            {{ point.mood }}
+            <br>
+            Remark :
+            {{ point.remark }}
+        </div>
+    }
+</div>

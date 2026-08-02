@@ -4,14 +4,11 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 
 import { Habit } from '../../../../core/models/habit.model';
 import { HabitService } from '../../../../core/services/habit.service';
-
+import { ActivityChart } from '../../components/activity-chart/activity-chart';
 @Component({
     selector: 'app-habit-details',
     standalone: true,
-    imports: [
-        CommonModule,
-        RouterModule
-    ],
+    imports: [ CommonModule, RouterModule, ActivityChart ],
     templateUrl: './habit-details.html',
     styleUrl: './habit-details.scss'
 })
