@@ -83,5 +83,49 @@
                 }
             </div>
         </div>
+        <div class="row mt-4">
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h6>Total Completions</h6>
+                        <h3>{{ totalCompletions }}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h6>Completion Rate</h6>
+                        <h3>{{ completionRate }}%</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h6>Average Duration</h6>
+                        <h3>{{ averageDuration }} mins</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h6>Most Common Mood</h6>
+                        <h4>{{ mostCommonMood }}</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h6>Last Completed</h6>
+                        <h5> {{ lastCompleted | date:'mediumDate' }} </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 }
