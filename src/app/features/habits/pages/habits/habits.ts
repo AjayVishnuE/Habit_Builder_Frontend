@@ -20,7 +20,7 @@ import { calculateCurrentStreak, calculateLongestStreak } from '../../../../core
 
 @Component({
   selector: 'app-habits',
-  imports: [HabitCard, MatDialogModule, MatButtonModule, MatSnackBarModule, FormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, CompleteHabitDialog],
+  imports: [HabitCard, MatDialogModule, MatButtonModule, MatSnackBarModule, FormsModule, MatFormFieldModule, MatInputModule, MatSelectModule],
   templateUrl: './habits.html',
   styleUrl: './habits.sass',
 })
