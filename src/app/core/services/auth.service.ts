@@ -4,6 +4,7 @@ import { ApiService } from './api.service';
 import { API_ENDPOINTS } from '../constants/api-endpoints';
 import { LoginRequest } from '../models/login-request.model';
 import { LoginResponse } from '../models/login-response.model';
+import { RegisterRequest } from '../models/register-request.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,13 @@ export class AuthService {
   login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.api.post<LoginResponse>(
       API_ENDPOINTS.LOGIN,
+      credentials
+    );
+  }
+
+  register(credentials: RegisterRequest): Observable<LoginResponse> {
+    return this.api.post<LoginResponse>(
+      API_ENDPOINTS.REGISTER,
       credentials
     );
   }
