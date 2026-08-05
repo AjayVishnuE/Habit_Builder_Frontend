@@ -31,7 +31,7 @@ export class Dashboard {
 
   private habitService = inject(HabitService);
   private cdr = inject(ChangeDetectorRef);
-  public barChartType: ChartType = 'bar';
+  public barChartType: 'bar' = 'bar';
 
   async ngOnInit(): Promise<void> {
     await this.loadDashboard();
