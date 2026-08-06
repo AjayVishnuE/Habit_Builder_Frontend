@@ -1,0 +1,27 @@
+.empty-history{
+    color:#666;
+
+    h4{
+        font-weight:600;
+    }
+
+    p{
+        max-width:400px;
+        margin:auto;
+    }
+}
+
+.chart-toolbar{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:20px;
+    margin:25px 0;
+}
+
+.period-title{
+    margin:0;
+    width:220px;
+    text-align:center;
+    font-weight:600;
+}
