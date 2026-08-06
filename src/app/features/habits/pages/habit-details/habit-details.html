@@ -1,134 +1,145 @@
-@if (habit) {
-    <div class="container mt-4">
-        <button
-            class="btn btn-outline-secondary mb-4"
-            routerLink="/habits">
-            ← Back to Habits
-        </button>
-        <div class="card shadow">
-            <div class="card-body">
-                <h2>{{ habit.title }}</h2>
-                <p class="text-muted">
-                    {{ habit.description }}
-                </p>
-                <span class="badge bg-primary">
-                    {{ habit.frequency }}
-                </span>
-                <hr>
-                <div class="row mt-3">
-                    <div class="col-md-3">
-                        <h6>🔥 Current Streak</h6>
-                        <h4>{{ habit.currentStreak }}</h4>
-                    </div>
-                    <div class="col-md-3">
-                        <h6>🏆 Best Streak</h6>
-                        <h4>{{ habit.longestStreak }}</h4>
-                    </div>
-                    <div class="col-md-3">
-                        <h6>✅ Total Completions</h6>
-                        <h4>{{ habit.completedHistory.length }}</h4>
-                    </div>
-                    <div class="col-md-3">
-                        <h6>📅 Created</h6>
-                        <h4>
-                            {{ habit.createdAt | date:'mediumDate' }}
-                        </h4>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card shadow mt-4">
-            <div class="card-header">
-                <h4 class="mb-0">
-                    📜 Completion History
-                </h4>
-            </div>
-            <div class="card-body">
-                @if (habit?.completedHistory?.length) {
-                    @for (
-                        entry of habit!.completedHistory.slice().reverse();
-                        track $index
-                    ) {
-                        <div class="timeline-item">
-                            <div class="timeline-dot"></div>
-                            <div class="timeline-content">
-                                <h6>
-                                    {{ entry.completedAt | date:'medium' }}
-                                </h6>
-                                <p>
-                                    😊
-                                    <strong>Mood:</strong>
-                                    {{ entry.mood }}
-                                </p>
-                                <p>
-                                    ⏱
-                                    <strong>Duration:</strong>
-                                    {{ entry.duration }} mins
-                                </p>
-                                @if (entry.remark) {
-                                    <p>
-                                        📝
-                                        <strong>Remark:</strong>
-                                        {{ entry.remark }}
-                                    </p>
-                                }
-                            </div>
-                        </div>
-                    }
-                }
-                @else {
-                    <p class="text-muted">
-                        No completions yet.
-                    </p>
-                }
-            </div>
-        </div>
-        <div class="row mt-4">
-            <div class="col-md-4 mb-3">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h6>Total Completions</h6>
-                        <h3>{{ totalCompletions }}</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h6>Completion Rate</h6>
-                        <h3>{{ completionRate }}%</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h6>Average Duration</h6>
-                        <h3>{{ averageDuration }} mins</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h6>Most Common Mood</h6>
-                        <h4>{{ mostCommonMood }}</h4>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 mb-3">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h6>Last Completed</h6>
-                        <h5> {{ lastCompleted | date:'mediumDate' }} </h5>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <app-activity-chart
-            [habit]="habit">
-        </app-activity-chart>
+@if (habit && habit.completedHistory.length === 0) {
+    <div class="empty-history text-center py-5">
+        <div class="display-1 mb-3">📋</div>
+        <h4>No history yet</h4>
+        <p class="text-muted">
+            Complete this habit once and your progress will appear here.
+        </p>
     </div>
+}
+@else {
+    @if (habit) {
+        <div class="container mt-4">
+            <button
+                class="btn btn-outline-secondary mb-4"
+                routerLink="/habits">
+                ← Back to Habits
+            </button>
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2>{{ habit.title }}</h2>
+                    <p class="text-muted">
+                        {{ habit.description }}
+                    </p>
+                    <span class="badge bg-primary">
+                        {{ habit.frequency }}
+                    </span>
+                    <hr>
+                    <div class="row mt-3">
+                        <div class="col-md-3">
+                            <h6>🔥 Current Streak</h6>
+                            <h4>{{ habit.currentStreak }}</h4>
+                        </div>
+                        <div class="col-md-3">
+                            <h6>🏆 Best Streak</h6>
+                            <h4>{{ habit.longestStreak }}</h4>
+                        </div>
+                        <div class="col-md-3">
+                            <h6>✅ Total Completions</h6>
+                            <h4>{{ habit.completedHistory.length }}</h4>
+                        </div>
+                        <div class="col-md-3">
+                            <h6>📅 Created</h6>
+                            <h4>
+                                {{ habit.createdAt | date:'mediumDate' }}
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card shadow mt-4">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        📜 Completion History
+                    </h4>
+                </div>
+                <div class="card-body">
+                    @if (habit?.completedHistory?.length) {
+                        @for (
+                            entry of habit!.completedHistory.slice().reverse();
+                            track $index
+                        ) {
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-content">
+                                    <h6>
+                                        {{ entry.completedAt | date:'medium' }}
+                                    </h6>
+                                    <p>
+                                        😊
+                                        <strong>Mood:</strong>
+                                        {{ entry.mood }}
+                                    </p>
+                                    <p>
+                                        ⏱
+                                        <strong>Duration:</strong>
+                                        {{ entry.duration }} mins
+                                    </p>
+                                    @if (entry.remark) {
+                                        <p>
+                                            📝
+                                            <strong>Remark:</strong>
+                                            {{ entry.remark }}
+                                        </p>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                    @else {
+                        <p class="text-muted">
+                            No completions yet.
+                        </p>
+                    }
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-4 mb-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h6>Total Completions</h6>
+                            <h3>{{ totalCompletions }}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h6>Completion Rate</h6>
+                            <h3>{{ completionRate }}%</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h6>Average Duration</h6>
+                            <h3>{{ averageDuration }} mins</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h6>Most Common Mood</h6>
+                            <h4>{{ mostCommonMood }}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h6>Last Completed</h6>
+                            <h5> {{ lastCompleted | date:'mediumDate' }} </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <app-activity-chart
+                [habit]="habit">
+            </app-activity-chart>
+        </div>
+    }
 }
