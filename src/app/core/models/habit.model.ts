@@ -3,7 +3,7 @@ export interface Habit {
   title: string;
   description: string;
   frequency: string;
-    completedHistory: CompletedHistory[];
+  completedHistory: CompletedHistory[];
   createdAt: string;
   updatedAt: string;
   currentStreak?: number;

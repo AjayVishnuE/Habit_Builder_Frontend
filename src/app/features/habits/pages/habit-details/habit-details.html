@@ -54,11 +54,58 @@
                     ▶
                 </button>
             </div>
-            <mat-button-toggle-group [(ngModel)]="viewMode" class="mt-3">
+            <mat-button-toggle-group [(ngModel)]="viewMode" (change)="onViewChanged()" class="mt-3">
                 <mat-button-toggle value="week"> Week </mat-button-toggle>
                 <mat-button-toggle value="month"> Month </mat-button-toggle>
                 <mat-button-toggle value="year"> Year </mat-button-toggle>
             </mat-button-toggle-group>
+            <div class="card shadow mt-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        📊 Progress
+                    </h5>
+                    <span class="text-muted">
+                        {{ periodTitle }}
+                    </span>
+                </div>
+                <div class="card-body">
+                    <app-progress-visualization
+                        [data]="visualizationData"
+                        [viewMode]="viewMode"
+                        (barSelected)="selectedEntry = $event">
+                    </app-progress-visualization>
+                    @if(selectedEntry){
+                        <div class="card mt-4 border-success">
+                            <div class="card-body">
+                                <h5>
+                                    {{ selectedEntry.date | date:'fullDate' }}
+                                </h5>
+                                <hr>
+                                <p>
+                                    ✅
+                                    <strong>Status:</strong>
+                                    {{ selectedEntry.completed ? 'Completed' : 'Missed' }}
+                                </p>
+                                <p>
+                                    😊
+                                    <strong>Mood:</strong>
+                                    {{ selectedEntry.mood || '-' }}
+                                </p>
+                                <p>
+                                    ⏱
+                                    <strong>Duration:</strong>
+                                    {{ selectedEntry.duration || 0 }} mins
+                                </p>
+                                <p>
+                                    📝
+                                    <strong>Remark:</strong>
+                                    {{ selectedEntry.remark || 'No remarks' }}
+                                </p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
             <div class="card shadow mt-4">
                 <div class="card-header">
                     <h4 class="mb-0">

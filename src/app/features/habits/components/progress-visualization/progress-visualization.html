@@ -1,0 +1,9 @@
+<div class="chart-container">
+    @for(item of data; track item.date){
+        <div class="bar-wrapper" (click)="select(item)">
+            <div class="bar" [class.completed]="item.completed" [style.height.%]="getHeight(item.mood)">
+            </div>
+            <small> {{ item.label }} </small>
+        </div>
+    }
+</div>

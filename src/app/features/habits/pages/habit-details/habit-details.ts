@@ -7,10 +7,12 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { Habit } from '../../../../core/models/habit.model';
 import { HabitService } from '../../../../core/services/habit.service';
 import { ActivityChart } from '../../components/activity-chart/activity-chart';
+import { ProgressVisualization } from '../../components/progress-visualization/progress-visualization';
+
 @Component({
     selector: 'app-habit-details',
     standalone: true,
-    imports: [ CommonModule, RouterModule, ActivityChart, MatButtonToggleModule, FormsModule ],
+    imports: [ CommonModule, RouterModule, ActivityChart, MatButtonToggleModule, FormsModule, ProgressVisualization ],
     templateUrl: './habit-details.html',
     styleUrl: './habit-details.scss'
 })
@@ -27,6 +29,8 @@ export class HabitDetails implements OnInit {
     public habit?: Habit;
     public viewMode: 'week' | 'month' | 'year' = 'week';
     public currentDate = new Date();
+    public visualizationData: any[] = [];
+    public selectedEntry: any = null;
 
     ngOnInit() {
         const id = this.route.snapshot.paramMap.get('id');
@@ -41,6 +45,11 @@ export class HabitDetails implements OnInit {
             },
             error: err => console.error(err)
         });
+        this.generateVisualizationData();
+    }
+
+    onViewChanged() {
+        this.generateVisualizationData();
     }
 
     calculateInsights() {
@@ -102,6 +111,7 @@ export class HabitDetails implements OnInit {
                 this.currentDate.setFullYear(this.currentDate.getFullYear() - 1);
                 break;
         }
+        this.generateVisualizationData();
     }
 
     nextPeriod() {
@@ -116,6 +126,7 @@ export class HabitDetails implements OnInit {
                 this.currentDate.setFullYear(this.currentDate.getFullYear() + 1);
                 break;
         }
+        this.generateVisualizationData();
     }
 
     get periodTitle(): string {
@@ -139,5 +150,74 @@ export class HabitDetails implements OnInit {
         const end = new Date(start);
         end.setDate(start.getDate() + 6);
         return `${start.toLocaleDateString( 'en-US', { month: 'short', day: 'numeric' } )} - ${end.toLocaleDateString( 'en-US', { month: 'short', day: 'numeric' } )}`;
+    }
+
+    generateVisualizationData() {
+        if (!this.habit) {
+            return;
+        }
+        switch (this.viewMode) {
+            case 'week':
+            this.visualizationData = this.generateWeekData();
+            break;
+            case 'month':
+            this.visualizationData = this.generateMonthData();
+            break;
+            case 'year':
+            this.visualizationData = this.generateYearData();
+            break;
+        }
+    }
+
+    generateWeekData() {
+        const data: any[] = [];
+        const start = new Date(this.currentDate);
+        const day = start.getDay();
+        const diff = day === 0 ? -6 : 1 - day;
+        start.setDate(start.getDate() + diff);
+        for (let i = 0; i < 7; i++) {
+            const date = new Date(start);
+            date.setDate(start.getDate() + i);
+            const history = this.habit?.completedHistory.find(entry => {
+                const completed = new Date(entry.completedAt);
+                return completed.toDateString() === date.toDateString();
+            });
+            data.push({
+                label: date.toLocaleDateString( 'en-US', { weekday: 'short' } ),
+                date,
+                completed: !!history,
+                mood: history?.mood ?? null,
+                duration: history?.duration ?? 0,
+                remark: history?.remark ?? ''
+            });
+        }
+        return data;
+
+    }
+
+    generateMonthData() {
+        const data: any[] = [];
+        const year = this.currentDate.getFullYear();
+        const month = this.currentDate.getMonth();
+        const totalDays = new Date(year, month + 1, 0).getDate();
+        for (let day = 1; day <= totalDays; day++) {
+            const date = new Date(year, month, day);
+            const history = this.habit?.completedHistory.find(entry => {
+                const completed = new Date(entry.completedAt);
+                return completed.toDateString() === date.toDateString();
+            });
+            data.push({
+                label: day,
+                date,
+                completed: !!history,
+                mood: history?.mood ?? null,
+                duration: history?.duration ?? 0,
+                remark: history?.remark ?? ''
+            });
+        }
+        return data;    
+    }
+    generateYearData() {
+        return [];  
     }
 }
