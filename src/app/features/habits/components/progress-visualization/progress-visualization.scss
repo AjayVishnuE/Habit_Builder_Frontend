@@ -1,35 +1,228 @@
-.chart-container{
-    display:flex;
-    align-items:flex-end;
-    gap:10px;
-    overflow-x:auto;
-    padding:20px 10px;
+/* =========================
+   WEEK - BAR CHART
+========================= */
+
+.bar-chart {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 28px;
+    min-height: 280px;
+    padding: 30px 20px 15px;
+    overflow-x: auto;
 }
 
-.bar-wrapper{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    cursor:pointer;
+.bar-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    min-width: 45px;
+    height: 250px;
+    cursor: pointer;
 }
 
-.bar{
-    width:22px;
-    min-height:15px;
-    border-radius:8px;
-    background:#d6d6d6;
-    transition:.3s;
+.bar-area {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    height: 210px;
+    width: 35px;
 }
 
-.bar.completed{
-    background:#4caf50;
+.bar {
+    width: 26px;
+    min-height: 6px;
+    border-radius: 6px 6px 2px 2px;
+    background: #d9d9d9;
+    transition: all 0.2s ease;
 }
 
-.bar:hover{
-    transform:scaleY(1.05);
+.bar.completed {
+    background: #4caf50;
 }
 
-small{
-    margin-top:8px;
-    font-size:12px;
+.bar-wrapper:hover .bar {
+    transform: scaleX(1.08);
+}
+
+.bar-wrapper small {
+    margin-top: 10px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+
+/* =========================
+   MONTH - HEATMAP
+========================= */
+
+.month-heatmap {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    padding: 20px;
+    max-width: 650px;
+    margin: auto;
+}
+
+.heat-cell {
+    aspect-ratio: 1;
+    min-width: 32px;
+    border-radius: 5px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 11px;
+    color: #777;
+
+    background: #eeeeee;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        opacity 0.15s ease;
+}
+
+.heat-cell:hover {
+    transform: scale(1.12);
+}
+
+
+/* Completed mood levels */
+
+.heat-cell.completed {
+    color: white;
+}
+
+.heat-cell.mood-excellent {
+    background: #087f23;
+}
+
+.heat-cell.mood-great {
+    background: #16a34a;
+}
+
+.heat-cell.mood-good {
+    background: #4caf50;
+}
+
+.heat-cell.mood-okay {
+    background: #84cc16;
+}
+
+.heat-cell.mood-bad {
+    background: #eab308;
+}
+
+
+/* =========================
+   YEAR - GITHUB STYLE
+========================= */
+
+.year-heatmap {
+    display: grid;
+
+    /*
+     * 7 rows representing days of the week.
+     * The grid automatically creates the
+     * required number of columns.
+     */
+    grid-template-rows: repeat(7, 12px);
+    grid-auto-flow: column;
+    gap: 3px;
+    overflow-x: auto;
+    padding: 20px;
+}
+
+.year-cell {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    background: #eeeeee;
+    cursor: pointer;
+    transition:
+        transform 0.15s ease,
+        opacity 0.15s ease;
+}
+
+.year-cell:hover {
+    transform: scale(1.35);
+}
+
+
+/* Year completed cells */
+
+.year-cell.completed {
+    background: #4caf50;
+}
+
+.year-cell.mood-excellent {
+    background: #087f23;
+}
+
+.year-cell.mood-great {
+    background: #16a34a;
+}
+
+.year-cell.mood-good {
+    background: #4caf50;
+}
+
+.year-cell.mood-okay {
+    background: #84cc16;
+}
+
+.year-cell.mood-bad {
+    background: #eab308;
+}
+
+
+/* =========================
+   EMPTY PERIOD
+========================= */
+
+.empty-period {
+    width: 100%;
+    min-height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-size: 14px;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+
+    .bar-chart {
+        justify-content: flex-start;
+        gap: 20px;
+    }
+
+    .month-heatmap {
+        gap: 5px;
+        padding: 10px;
+    }
+
+    .heat-cell {
+        min-width: 28px;
+        font-size: 10px;
+    }
+
+    .year-heatmap {
+        gap: 2px;
+    }
+
+    .year-cell {
+        width: 10px;
+        height: 10px;
+    }
 }

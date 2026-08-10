@@ -6,13 +6,12 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 import { Habit } from '../../../../core/models/habit.model';
 import { HabitService } from '../../../../core/services/habit.service';
-import { ActivityChart } from '../../components/activity-chart/activity-chart';
 import { ProgressVisualization } from '../../components/progress-visualization/progress-visualization';
 
 @Component({
     selector: 'app-habit-details',
     standalone: true,
-    imports: [ CommonModule, RouterModule, ActivityChart, MatButtonToggleModule, FormsModule, ProgressVisualization ],
+    imports: [ CommonModule, RouterModule, MatButtonToggleModule, FormsModule, ProgressVisualization ],
     templateUrl: './habit-details.html',
     styleUrl: './habit-details.scss'
 })
@@ -42,11 +41,11 @@ export class HabitDetails implements OnInit {
             next: habit => {
                 this.habit = habit;
                 this.calculateInsights();
+                this.generateVisualizationData();
                 this.cdr.detectChanges();
             },
             error: err => console.error(err)
         });
-        this.generateVisualizationData();
     }
 
     onViewChanged(): void {

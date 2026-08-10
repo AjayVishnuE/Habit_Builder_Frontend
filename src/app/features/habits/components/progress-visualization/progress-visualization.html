@@ -1,9 +1,64 @@
-<div class="chart-container">
-    @for(item of data; track item.date){
-        <div class="bar-wrapper" (click)="select(item)">
-            <div class="bar" [class.completed]="item.completed" [style.height.%]="getHeight(item.mood)">
+@if (viewMode === 'week') {
+    <div class="bar-chart">
+        @if (data.length === 0) {
+            <div class="empty-period">
+                No completion for this period.
             </div>
-            <small> {{ item.label }} </small>
-        </div>
-    }
-</div>
+        }
+        @for (item of data; track item.date) {
+            <div
+                class="bar-wrapper"
+                (click)="select(item)"
+            >
+                <div class="bar-area">
+                    <div
+                        class="bar"
+                        [class.completed]="item.completed"
+                        [style.height.%]="getHeight(item.mood)"
+                    >
+                    </div>
+                </div>
+                <small>
+                    {{ item.label }}
+                </small>
+            </div>
+        }
+    </div>
+}
+@else if (viewMode === 'month') {
+    <div class="month-heatmap">
+        @for (item of data; track item.date) {
+            <div
+                class="heat-cell"
+                [class.completed]="item.completed"
+                [class.mood-excellent]="item.mood === 'Excellent'"
+                [class.mood-great]="item.mood === 'Great'"
+                [class.mood-good]="item.mood === 'Good'"
+                [class.mood-okay]="item.mood === 'Okay'"
+                [class.mood-bad]="item.mood === 'Bad'"
+                (click)="select(item)"
+                [title]="getTooltip(item)"
+            >
+                {{ item.date | date:'d' }}
+            </div>
+        }
+    </div>
+}
+@else {
+    <div class="year-heatmap">
+        @for (item of data; track item.date) {
+            <div
+                class="year-cell"
+                [class.completed]="item.completed"
+                [class.mood-excellent]="item.mood === 'Excellent'"
+                [class.mood-great]="item.mood === 'Great'"
+                [class.mood-good]="item.mood === 'Good'"
+                [class.mood-okay]="item.mood === 'Okay'"
+                [class.mood-bad]="item.mood === 'Bad'"
+                (click)="select(item)"
+                [title]="getTooltip(item)"
+            >
+            </div>
+        }
+    </div>
+}
