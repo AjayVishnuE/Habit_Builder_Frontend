@@ -31,6 +31,7 @@ export class HabitDetails implements OnInit {
     public currentDate = new Date();
     public visualizationData: any[] = [];
     public selectedEntry: any = null;
+    public selectedDate = new Date();  
 
     ngOnInit() {
         const id = this.route.snapshot.paramMap.get('id');
@@ -48,7 +49,8 @@ export class HabitDetails implements OnInit {
         this.generateVisualizationData();
     }
 
-    onViewChanged() {
+    onViewChanged(): void {
+        this.selectedEntry = null;
         this.generateVisualizationData();
     }
 
@@ -99,33 +101,35 @@ export class HabitDetails implements OnInit {
         );
     }
 
-    previousPeriod() {
-        switch (this.viewMode) {
-            case 'week':
-                this.currentDate.setDate(this.currentDate.getDate() - 7);
-                break;
-            case 'month':
-                this.currentDate.setMonth(this.currentDate.getMonth() - 1);
-                break;
-            case 'year':
-                this.currentDate.setFullYear(this.currentDate.getFullYear() - 1);
-                break;
+    previousPeriod(): void {
+        if (this.viewMode === 'week') {
+        this.currentDate.setDate(this.currentDate.getDate() - 7);
         }
+        else if (this.viewMode === 'month') {
+        this.currentDate.setMonth(this.currentDate.getMonth() - 1);
+        }
+        else {
+        this.currentDate.setFullYear(
+            this.currentDate.getFullYear() - 1
+        );
+        }
+        this.currentDate = new Date(this.currentDate);
         this.generateVisualizationData();
     }
 
-    nextPeriod() {
-        switch (this.viewMode) {
-            case 'week':
-                this.currentDate.setDate(this.currentDate.getDate() + 7);
-                break;
-            case 'month':
-                this.currentDate.setMonth(this.currentDate.getMonth() + 1);
-                break;
-            case 'year':
-                this.currentDate.setFullYear(this.currentDate.getFullYear() + 1);
-                break;
+    nextPeriod(): void {
+        if (this.viewMode === 'week') {
+        this.currentDate.setDate(this.currentDate.getDate() + 7);
         }
+        else if (this.viewMode === 'month') {
+        this.currentDate.setMonth(this.currentDate.getMonth() + 1);
+        }
+        else {
+        this.currentDate.setFullYear(
+            this.currentDate.getFullYear() + 1
+        );
+        }
+        this.currentDate = new Date(this.currentDate);
         this.generateVisualizationData();
     }
 
@@ -152,72 +156,147 @@ export class HabitDetails implements OnInit {
         return `${start.toLocaleDateString( 'en-US', { month: 'short', day: 'numeric' } )} - ${end.toLocaleDateString( 'en-US', { month: 'short', day: 'numeric' } )}`;
     }
 
-    generateVisualizationData() {
+    generateVisualizationData(): void {
         if (!this.habit) {
+            this.visualizationData = [];
             return;
         }
-        switch (this.viewMode) {
-            case 'week':
-            this.visualizationData = this.generateWeekData();
-            break;
-            case 'month':
-            this.visualizationData = this.generateMonthData();
-            break;
-            case 'year':
-            this.visualizationData = this.generateYearData();
-            break;
+        if (this.viewMode === 'week') {
+            this.generateWeekData();
+        }
+        else if (this.viewMode === 'month') {
+            this.generateMonthData();
+        }
+        else {
+            this.generateYearData();
         }
     }
 
-    generateWeekData() {
-        const data: any[] = [];
-        const start = new Date(this.currentDate);
-        const day = start.getDay();
-        const diff = day === 0 ? -6 : 1 - day;
-        start.setDate(start.getDate() + diff);
-        for (let i = 0; i < 7; i++) {
-            const date = new Date(start);
-            date.setDate(start.getDate() + i);
-            const history = this.habit?.completedHistory.find(entry => {
-                const completed = new Date(entry.completedAt);
-                return completed.toDateString() === date.toDateString();
-            });
-            data.push({
-                label: date.toLocaleDateString( 'en-US', { weekday: 'short' } ),
-                date,
-                completed: !!history,
-                mood: history?.mood ?? null,
-                duration: history?.duration ?? 0,
-                remark: history?.remark ?? ''
-            });
+    private generateWeekData(): void {
+        const start = this.getWeekStart(this.currentDate);
+        // DAILY → 7 bars
+        if (this.habit?.frequency === 'Daily') {
+            this.visualizationData = [];
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(start);
+                date.setDate(start.getDate() + i);
+                const entry = this.getCompletionForDate(date);
+                this.visualizationData.push({
+                    date,
+                    label: date.toLocaleDateString('en-US', { weekday: 'short' }),
+                    completed: !!entry,
+                    mood: entry?.mood ?? null,
+                    remark: entry?.remark ?? '',
+                    duration: entry?.duration ?? 0,
+                    completedAt: entry?.completedAt ?? null
+                });
+            }
+            return;
         }
-        return data;
-
+        // WEEKLY → maximum ONE bar
+        if (this.habit?.frequency === 'Weekly') {
+            const entry = this.getCompletionInRange( start, this.getWeekEnd(start) );
+            this.visualizationData = entry ? [{
+                date: new Date(entry.completedAt),
+                label: 'Week',
+                completed: true,
+                mood: entry.mood,
+                remark: entry.remark,
+                duration: entry.duration,
+                completedAt: entry.completedAt
+                }]
+            : [];
+            return;
+        }
+        // MONTHLY → 0 or 1 bar
+        if (this.habit?.frequency === 'Monthly') {
+            const entry = this.getCompletionInRange( start, this.getWeekEnd(start) );
+            this.visualizationData = entry  ? [{
+                date: new Date(entry.completedAt),
+                label: 'Week',
+                completed: true,
+                mood: entry.mood,
+                remark: entry.remark,
+                duration: entry.duration,
+                completedAt: entry.completedAt
+                }]
+            : [];
+        }
     }
 
-    generateMonthData() {
-        const data: any[] = [];
+    private generateMonthData(): void {
         const year = this.currentDate.getFullYear();
         const month = this.currentDate.getMonth();
-        const totalDays = new Date(year, month + 1, 0).getDate();
-        for (let day = 1; day <= totalDays; day++) {
+        const numberOfDays = new Date(year, month + 1, 0).getDate();
+        this.visualizationData = [];
+        for (let day = 1; day <= numberOfDays; day++) {
             const date = new Date(year, month, day);
-            const history = this.habit?.completedHistory.find(entry => {
-                const completed = new Date(entry.completedAt);
-                return completed.toDateString() === date.toDateString();
-            });
-            data.push({
-                label: day,
+            const entry = this.getCompletionForDate(date);
+            this.visualizationData.push({
                 date,
-                completed: !!history,
-                mood: history?.mood ?? null,
-                duration: history?.duration ?? 0,
-                remark: history?.remark ?? ''
+                label: `${day}`,
+                completed: !!entry,
+                mood: entry?.mood ?? null,
+                remark: entry?.remark ?? '',
+                duration: entry?.duration ?? 0,
+                completedAt: entry?.completedAt ?? null
             });
         }
-        return data;    
     }
-    generateYearData() {
-        return [];  
+
+    private generateYearData(): void {
+        const year = this.currentDate.getFullYear();
+        const start = new Date(year, 0, 1);
+        const end = new Date(year + 1, 0, 1);
+        this.visualizationData = [];
+        let current = new Date(start);
+        while (current < end) {
+            const date = new Date(current);
+            const entry = this.getCompletionForDate(date);
+            this.visualizationData.push({
+                date,
+                label: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+                completed: !!entry,
+                mood: entry?.mood ?? null,
+                remark: entry?.remark ?? '',
+                duration: entry?.duration ?? 0,
+                completedAt: entry?.completedAt ?? null
+            });
+            current.setDate(current.getDate() + 1);
+        }
+    }
+
+    private getWeekStart(date: Date): Date {
+        const result = new Date(date);
+        const day = result.getDay();
+        const diff = day === 0 ? -6 : 1 - day;
+        result.setDate(result.getDate() + diff);
+        result.setHours(0, 0, 0, 0);
+        return result;
+    }
+
+    private getWeekEnd(date: Date): Date {
+        const end = new Date(date);
+        end.setDate(end.getDate() + 6);
+        end.setHours(23, 59, 59, 999);
+        return end;
+    }
+
+    private getCompletionForDate(date: Date): any | null {
+        const target = new Date(date);
+        target.setHours(0, 0, 0, 0);
+        const nextDay = new Date(target);
+        nextDay.setDate(nextDay.getDate() + 1);
+        return this.habit?.completedHistory.find(entry => {
+            const completedAt = new Date(entry.completedAt);
+            return ( completedAt >= target && completedAt < nextDay );
+        }) ?? null;
+    }
+
+    private getCompletionInRange( start: Date, end: Date ): any | null {
+        return this.habit?.completedHistory.find(entry => {
+            const completedAt = new Date(entry.completedAt);
+            return ( completedAt >= start && completedAt <= end );
+        }) ?? null;
     }
 }
