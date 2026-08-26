@@ -1,0 +1,240 @@
+.diary-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 30px 20px 50px;
+}
+
+
+/* ---------------- Header ---------------- */
+
+.diary-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 35px;
+
+    h2 {
+        margin: 0;
+        font-size: 30px;
+        font-weight: 600;
+    }
+
+    p {
+        margin: 6px 0 0;
+        color: #777;
+    }
+}
+
+
+/* ---------------- Buttons ---------------- */
+
+.new-diary-btn {
+    border: none;
+    background: #4f46e5;
+    color: white;
+    padding: 11px 18px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+
+    span {
+        font-size: 20px;
+        margin-right: 5px;
+    }
+
+    &:hover {
+        background: #4338ca;
+        transform: translateY(-1px);
+    }
+}
+
+
+.expand-btn {
+    border: none;
+    background: transparent;
+    color: #4f46e5;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 5px 0;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+
+/* ---------------- Diary List ---------------- */
+
+.diary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+
+/* ---------------- Diary Card ---------------- */
+
+.diary-card {
+    background: white;
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
+    transition: 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+    &:hover {
+        transform: translateY(-2px);
+
+        box-shadow:
+            0 6px 18px rgba(0, 0, 0, 0.08);
+    }
+}
+
+
+.diary-card-content {
+    padding: 20px 22px;
+}
+
+
+/* ---------------- Title ---------------- */
+
+.diary-title-row {
+
+    h4 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+        color: #222;
+        span {
+            color: #aaa;
+            margin: 0 5px;
+        }
+    }
+}
+
+
+/* ---------------- Preview ---------------- */
+
+.diary-preview {
+    margin: 12px 0;
+    color: #666;
+    line-height: 1.6;
+    font-size: 15px;
+    max-width: 850px;
+}
+
+
+/* ---------------- Footer ---------------- */
+
+.diary-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding-top: 12px;
+    border-top: 1px solid #f0f0f0;
+}
+
+
+.diary-time {
+    font-size: 13px;
+    color: #999;
+}
+
+
+/* ---------------- States ---------------- */
+
+.diary-state {
+    min-height: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #777;
+}
+
+
+.diary-state h3,
+.diary-state h4 {
+    color: #222;
+    margin: 10px 0;
+}
+
+
+.diary-state p {
+    max-width: 450px;
+    line-height: 1.6;
+}
+
+
+.empty-icon,
+.state-icon {
+    font-size: 65px;
+    margin-bottom: 10px;
+}
+
+
+.empty .new-diary-btn {
+    margin-top: 15px;
+}
+
+
+.retry-btn {
+    border: 1px solid #4f46e5;
+    background: transparent;
+    color: #4f46e5;
+    padding: 8px 16px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+
+/* ---------------- Loading ---------------- */
+
+.spinner {
+
+    width: 32px;
+    height: 32px;
+    border: 3px solid #e5e7eb;
+    border-top-color: #4f46e5;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 15px;
+}
+
+
+@keyframes spin {
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+
+/* ---------------- Responsive ---------------- */
+
+@media (max-width: 600px) {
+
+    .diary-page {
+        padding: 20px 15px;
+    }
+
+    .diary-header {
+        align-items: flex-start;
+        gap: 15px;
+
+        h2 {
+            font-size: 24px;
+        }
+    }
+
+    .diary-title-row h4 {
+        font-size: 16px;
+    }
+
+}

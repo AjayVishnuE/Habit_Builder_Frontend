@@ -1,0 +1,101 @@
+<div class="diary-page">
+    <!-- Header -->
+    <div class="diary-header">
+        <div>
+            <h2>📔 My Diary</h2>
+            <p>
+                Your thoughts, memories and moments.
+            </p>
+        </div>
+        <button
+            class="new-diary-btn"
+            routerLink="/diary/new">
+            <span>+</span>
+            New Diary
+        </button>
+    </div>
+    <!-- Loading -->
+    @if (loading) {
+        <div class="diary-state">
+            <div class="spinner"></div>
+            <p>
+                Loading your diary...
+            </p>
+        </div>
+    }
+    <!-- Error -->
+    @else if (error) {
+        <div class="diary-state error">
+            <div class="state-icon">
+                ⚠️
+            </div>
+            <h4>
+                Something went wrong
+            </h4>
+            <p>
+                {{ error }}
+            </p>
+            <button
+                class="retry-btn"
+                (click)="loadDiaries()">
+                Try Again
+            </button>
+        </div>
+    }
+    <!-- Empty State -->
+    @else if (diaries.length === 0) {
+        <div class="diary-state empty">
+            <div class="empty-icon">
+                📖
+            </div>
+            <h3>
+                Your diary is empty
+            </h3>
+            <p>
+                Start writing about your day,
+                your thoughts and the little things
+                you don't want to forget.
+            </p>
+            <button
+                class="new-diary-btn"
+                routerLink="/diary/new">
+                ✍️ Write your first diary
+            </button>
+        </div>
+    }
+    <!-- Diary List -->
+    @else {
+        <div class="diary-list">
+            @for (diary of diaries; track diary._id) {
+                <div class="diary-card">
+                    <div class="diary-card-content">
+                        <!-- Date + title -->
+                        <div class="diary-title-row">
+                            <h4>
+                                {{ diary.createdAt | date:'dd MMMM yyyy' }}
+                                <span>—</span>
+                                {{ diary.title }}
+                            </h4>
+                        </div>
+                        <!-- Preview -->
+                        <p class="diary-preview">
+                            {{ getPreview(diary.content) }}
+                        </p>
+                        <!-- Footer -->
+                        <div class="diary-card-footer">
+                            <span class="diary-time">
+
+                                {{ diary.createdAt | date:'shortTime' }}
+                            </span>
+                            <button
+                                class="expand-btn"
+                                [routerLink]="['/diary', diary._id]">
+                                Expand →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

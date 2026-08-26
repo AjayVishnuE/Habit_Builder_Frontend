@@ -7,6 +7,7 @@ import { Habits } from './features/habits/pages/habits/habits';
 import { Profile } from './features/profile/pages/profile/profile';
 import { Dashboard } from './features/dashboard/pages/dashboard/dashboard';
 import { HabitDetails } from './features/habits/pages/habit-details/habit-details';
+import { DiaryHome } from './features/diary/pages/diary-home/diary-home';
 
 export const routes: Routes = [
   {
@@ -46,6 +47,10 @@ export const routes: Routes = [
         component: HabitDetails,
         canActivate: [authGuard]
       },
+      {
+        path: 'diary',
+        component: DiaryHome
+      }
     ]
   },
   {
