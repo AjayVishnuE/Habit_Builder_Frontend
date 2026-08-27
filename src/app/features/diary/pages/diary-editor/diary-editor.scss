@@ -1,0 +1,264 @@
+.editor-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px 20px 60px;
+}
+
+
+/* Header */
+
+.editor-header {
+    margin-bottom: 25px;
+
+    h2 {
+        margin: 15px 0 5px;
+        font-size: 30px;
+        font-weight: 600;
+    }
+
+    p {
+        margin: 0;
+        color: #777;
+    }
+}
+
+
+.back-btn {
+    border: none;
+    background: transparent;
+    padding: 0;
+
+    color: #4f46e5;
+
+    font-size: 14px;
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+
+/* Editor */
+
+.editor-card {
+    background: white;
+
+    border: 1px solid #e5e5e5;
+
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 4px 18px rgba(0, 0, 0, 0.06);
+}
+
+
+/* Title */
+
+.title-input {
+    width: 100%;
+
+    border: none;
+    outline: none;
+
+    padding: 25px 28px 20px;
+
+    font-size: 26px;
+    font-weight: 600;
+
+    box-sizing: border-box;
+
+    border-bottom: 1px solid #eeeeee;
+
+    &::placeholder {
+        color: #b5b5b5;
+    }
+}
+
+
+/* Toolbar */
+
+.toolbar {
+    display: flex;
+
+    align-items: center;
+
+    gap: 4px;
+
+    padding: 10px 18px;
+
+    border-bottom: 1px solid #eeeeee;
+
+    background: #fafafa;
+}
+
+
+.toolbar button {
+    width: 36px;
+    height: 34px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background: transparent;
+
+    font-size: 15px;
+
+    cursor: pointer;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+        background: #e8e8e8;
+    }
+}
+
+
+.toolbar-divider {
+    width: 1px;
+
+    height: 22px;
+
+    background: #ddd;
+
+    margin: 0 5px;
+}
+
+
+/* Writing area */
+
+.writing-area {
+    min-height: 450px;
+
+    padding: 28px;
+
+    outline: none;
+
+    font-size: 16px;
+
+    line-height: 1.8;
+
+    color: #292929;
+}
+
+
+.writing-area:empty::before {
+    content: attr(data-placeholder);
+
+    color: #aaa;
+
+    pointer-events: none;
+}
+
+
+.writing-area h2 {
+    font-size: 24px;
+    margin: 20px 0 10px;
+}
+
+
+.writing-area ul,
+.writing-area ol {
+    padding-left: 30px;
+}
+
+
+.writing-area blockquote {
+    border-left: 4px solid #4f46e5;
+
+    padding-left: 15px;
+
+    color: #666;
+}
+
+
+/* Footer */
+
+.editor-footer {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    padding: 15px 20px;
+
+    border-top: 1px solid #eeeeee;
+
+    background: #fafafa;
+}
+
+
+.cancel-btn,
+.save-btn {
+    padding: 10px 18px;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+}
+
+
+.cancel-btn {
+    background: white;
+
+    border: 1px solid #ddd;
+
+    color: #555;
+
+    &:hover {
+        background: #f5f5f5;
+    }
+}
+
+
+.save-btn {
+    border: none;
+
+    background: #4f46e5;
+
+    color: white;
+
+    font-weight: 500;
+
+    &:hover {
+        background: #4338ca;
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
+
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+    .editor-page {
+        padding: 20px 12px 40px;
+    }
+
+    .toolbar {
+        flex-wrap: wrap;
+    }
+
+    .writing-area {
+        min-height: 350px;
+        padding: 20px;
+    }
+
+    .title-input {
+        font-size: 22px;
+    }
+
+}

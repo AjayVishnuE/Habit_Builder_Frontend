@@ -1,0 +1,132 @@
+<div class="editor-page">
+    <!-- Header -->
+    <div class="editor-header">
+        <div>
+            <button
+                class="back-btn"
+                (click)="cancel()">
+
+                ← Back to Diary
+            </button>
+            <h2>Write your diary</h2>
+            <p>
+                Capture what happened today.
+            </p>
+        </div>
+    </div>
+    <!-- Editor Card -->
+    <div class="editor-card">
+        <!-- Title -->
+        <input
+            type="text"
+            class="title-input"
+            [(ngModel)]="title"
+            placeholder="Give your diary a heading..."
+            maxlength="150"
+        />
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <!-- Text style -->
+            <button
+                type="button"
+                (click)="formatBlock('h2')"
+                title="Heading">
+                H
+            </button>
+            <button
+                type="button"
+                (click)="formatBlock('p')"
+                title="Paragraph">
+                ¶
+            </button>
+            <div class="toolbar-divider"></div>
+            <!-- Bold -->
+            <button
+                type="button"
+                (click)="format('bold')"
+                title="Bold">
+
+                <strong>B</strong>
+            </button>
+            <!-- Italic -->
+            <button
+                type="button"
+                (click)="format('italic')"
+                title="Italic">
+                <em>I</em>
+            </button>
+            <!-- Underline -->
+            <button
+                type="button"
+                (click)="format('underline')"
+                title="Underline">
+                <u>U</u>
+            </button>
+            <div class="toolbar-divider"></div>
+            <!-- Lists -->
+            <button
+                type="button"
+                (click)="format('insertUnorderedList')"
+                title="Bullet list">
+
+                •☰
+            </button>
+            <button
+                type="button"
+                (click)="format('insertOrderedList')"
+                title="Numbered list">
+                1☰
+            </button>
+            <div class="toolbar-divider"></div>
+            <!-- Alignment -->
+            <button
+                type="button"
+                (click)="format('justifyLeft')"
+                title="Align left">
+                ≡
+            </button>
+            <button
+                type="button"
+                (click)="format('justifyCenter')"
+                title="Align center">
+                ≡
+            </button>
+            <button
+                type="button"
+                (click)="format('justifyRight')"
+                title="Align right">
+                ≡
+            </button>
+        </div>
+        <!-- Writing area -->
+        <div
+            #editor
+            class="writing-area"
+            contenteditable="true"
+            spellcheck="true"
+            data-placeholder="Start writing about your day..."
+        ></div>
+        <!-- Footer -->
+        <div class="editor-footer">
+            <button
+                type="button"
+                class="cancel-btn"
+                (click)="cancel()">
+                Cancel
+            </button>
+            <button
+                type="button"
+                class="save-btn"
+                [disabled]="saving"
+                (click)="saveDiary()">
+                @if (saving) {
+
+                    Saving...
+                } @else {
+
+                    Save Diary
+                }
+            </button>
+        </div>
+    </div>
+</div>
