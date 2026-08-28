@@ -63,4 +63,27 @@ export class DiaryHome implements OnInit {
     return plainText.substring(0, 160) + '...';
   }
 
+  deleteDiary(id: string): void {
+    const confirmed = window.confirm(
+      'Are you sure you want to delete this diary?'
+    );
+    if (!confirmed) {
+      return;
+    }
+    this.diaryService.deleteDiary(id).subscribe({
+      next: () => {
+        this.diaries = this.diaries.filter(
+          diary => diary._id !== id
+        );
+        this.cdr.detectChanges();
+      },
+      error: error => {
+        console.error('Failed to delete diary:', error);
+        this.error = error?.error?.message ||
+          'Unable to delete diary.';
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
 }

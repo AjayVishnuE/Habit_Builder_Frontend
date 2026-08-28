@@ -9,6 +9,7 @@ import { Dashboard } from './features/dashboard/pages/dashboard/dashboard';
 import { HabitDetails } from './features/habits/pages/habit-details/habit-details';
 import { DiaryHome } from './features/diary/pages/diary-home/diary-home';
 import { DiaryEditor } from './features/diary/pages/diary-editor/diary-editor';
+import { DiaryDetails } from './features/diary/pages/diary-details/diary-details';
 
 export const routes: Routes = [
   {
@@ -50,11 +51,22 @@ export const routes: Routes = [
       },
       {
         path: 'diary',
-        component: DiaryHome
+        component: DiaryHome,
+        canActivate: [authGuard]
       },
       {
         path: 'diary/new',
         component: DiaryEditor,
+        canActivate: [authGuard]
+      },
+      {
+        path: 'diary/edit/:id',
+        component: DiaryEditor,
+        canActivate: [authGuard]
+      },
+      {
+        path: 'diary/:id',
+        component: DiaryDetails,
         canActivate: [authGuard]
       },
     ]

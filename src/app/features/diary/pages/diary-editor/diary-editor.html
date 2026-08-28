@@ -8,10 +8,17 @@
 
                 ← Back to Diary
             </button>
-            <h2>Write your diary</h2>
-            <p>
-                Capture what happened today.
-            </p>
+            @if (isEditMode) {
+                <h2>Edit your diary</h2>
+                <p>
+                    Update your thoughts from this day.
+                </p>
+            } @else {
+                <h2>Write your diary</h2>
+                <p>
+                    Capture what happened today.
+                </p>
+            }
         </div>
     </div>
     <!-- Editor Card -->
@@ -120,11 +127,13 @@
                 [disabled]="saving"
                 (click)="saveDiary()">
                 @if (saving) {
-
                     Saving...
                 } @else {
-
-                    Save Diary
+                    @if (isEditMode) {
+                        Update Diary
+                    } @else {
+                        Save Diary
+                    }
                 }
             </button>
         </div>

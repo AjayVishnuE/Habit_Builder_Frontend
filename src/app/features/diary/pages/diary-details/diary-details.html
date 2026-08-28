@@ -1,0 +1,52 @@
+<div class="container mt-4">
+    <div class="details-header">
+        <button class="btn btn-outline-secondary mb-4" routerLink="/diary">
+            ← Back to Diary
+        </button>
+        <button class="btn btn-primary" (click)="editDiary()">
+            ✏️ Edit Diary
+        </button>
+    </div>
+    @if (loading) {
+    <div class="text-center py-5">
+        <div class="spinner-border"></div>
+        <p class="text-muted mt-3">
+            Loading diary...
+        </p>
+    </div>  
+    }
+
+    @else if (error) {
+
+    <div class="alert alert-danger">
+        {{ error }}
+    </div>
+
+    }
+
+    @else if (diary) {
+
+    <div class="card shadow-sm">
+
+        <div class="card-body diary-details">
+
+            <div class="diary-date">
+                {{ diary.createdAt | date:'EEEE, MMMM d, y' }}
+            </div>
+
+            <h1 class="diary-title">
+                {{ diary.title }}
+            </h1>
+
+            <hr>
+
+            <div class="diary-content" [innerHTML]="diary.content">
+            </div>
+
+        </div>
+
+    </div>
+
+    }
+
+</div>

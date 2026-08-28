@@ -1,0 +1,44 @@
+.details-header{
+  display: flex;
+  align-items: self-start;
+  justify-content:space-between;
+}
+.diary-details {
+  max-width: 900px;
+  margin: auto;
+  padding: 40px;
+}
+
+.diary-date {
+  color: #777;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.diary-title {
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.diary-content {
+  font-size: 17px;
+  line-height: 1.8;
+  color: #333;
+}
+
+.diary-content p {
+  margin-bottom: 16px;
+}
+
+.diary-content ul,
+.diary-content ol {
+  padding-left: 25px;
+}
+
+.diary-content blockquote {
+  border-left: 4px solid #ccc;
+  padding-left: 15px;
+  color: #666;
+  margin: 20px 0;
+}

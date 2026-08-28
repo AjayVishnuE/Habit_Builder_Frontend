@@ -87,11 +87,18 @@
 
                                 {{ diary.createdAt | date:'shortTime' }}
                             </span>
-                            <button
-                                class="expand-btn"
-                                [routerLink]="['/diary', diary._id]">
-                                Expand →
-                            </button>
+                            <div style="display: flex; gap:30px;">
+                                <button
+                                    class="btn btn-outline-danger"
+                                    (click)="deleteDiary(diary._id)">
+                                    Delete
+                                </button>
+                                <button
+                                    class="expand-btn"
+                                    [routerLink]="['/diary', diary._id]">
+                                    Expand →
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
