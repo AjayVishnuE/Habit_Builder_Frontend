@@ -86,4 +86,27 @@ export class DiaryHome implements OnInit {
     });
   }
 
+  isToday(date: string | Date): boolean {
+    const diaryDate = new Date(date);
+    const today = new Date();
+    return (
+      diaryDate.getFullYear() === today.getFullYear() &&
+      diaryDate.getMonth() === today.getMonth() &&
+      diaryDate.getDate() === today.getDate()
+    );
+  }
+
+
+  getTodaysDiary(): Diary | undefined {
+    return this.diaries.find(diary =>
+      this.isToday(diary.createdAt)
+    );
+  }
+
+
+  canCreateToday(): boolean {
+
+    return !this.getTodaysDiary();
+  }
+
 }

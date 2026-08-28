@@ -7,66 +7,145 @@
                 Your thoughts, memories and moments.
             </p>
         </div>
-        <button
-            class="new-diary-btn"
-            routerLink="/diary/new">
-            <span>+</span>
-            New Diary
+        @if (canCreateToday()) {
+        <a routerLink="/diary/new" class="new-diary-btn">
+            + Write Today's Diary
+        </a>
+        } @else {
+        <button class="new-diary-btn disabled" disabled>
+            ✓ Today's Diary Written
         </button>
+        }
     </div>
     <!-- Loading -->
     @if (loading) {
-        <div class="diary-state">
-            <div class="spinner"></div>
-            <p>
-                Loading your diary...
-            </p>
-        </div>
+    <div class="diary-state">
+        <div class="spinner"></div>
+        <p>
+            Loading your diary...
+        </p>
+    </div>
     }
     <!-- Error -->
     @else if (error) {
-        <div class="diary-state error">
-            <div class="state-icon">
-                ⚠️
-            </div>
-            <h4>
-                Something went wrong
-            </h4>
-            <p>
-                {{ error }}
-            </p>
-            <button
-                class="retry-btn"
-                (click)="loadDiaries()">
-                Try Again
-            </button>
+    <div class="diary-state error">
+        <div class="state-icon">
+            ⚠️
         </div>
+        <h4>
+            Something went wrong
+        </h4>
+        <p>
+            {{ error }}
+        </p>
+        <button class="retry-btn" (click)="loadDiaries()">
+            Try Again
+        </button>
+    </div>
     }
-    <!-- Empty State -->
+    <!-- Completely empty diary -->
     @else if (diaries.length === 0) {
-        <div class="diary-state empty">
-            <div class="empty-icon">
-                📖
+    <div class="diary-state empty">
+        <div class="empty-icon">
+            📖
+        </div>
+        <h3>
+            Your diary is empty
+        </h3>
+        <p>
+            Start writing about your day,
+            your thoughts and the little things
+            you don't want to forget.
+        </p>
+        <button class="new-diary-btn" routerLink="/diary/new">
+            ✍️ Write your first diary
+        </button>
+    </div>
+    }
+    <!-- Diary content -->
+    @else {
+    <!-- =============================== -->
+    <!-- TODAY'S DIARY SECTION -->
+    <!-- =============================== -->
+    @if (getTodaysDiary(); as todayDiary) {
+    <div class="today-diary-section">
+        <div class="today-diary-header">
+            <div>
+                <span class="today-badge">
+                    TODAY
+                </span>
+
+                <h3>
+                    {{ todayDiary.title }}
+                </h3>
             </div>
+            <span class="today-date">
+                {{ todayDiary.createdAt | date:'EEEE, dd MMMM yyyy' }}
+            </span>
+        </div>
+        <p class="today-preview">
+            {{ getPreview(todayDiary.content) }}
+        </p>
+        <div class="today-diary-footer">
+            <span class="diary-time">
+                Written at
+                {{ todayDiary.createdAt | date:'shortTime' }}
+            </span>
+            <div class="today-actions">
+                <button class="view-btn" [routerLink]="['/diary', todayDiary._id]">
+                    View Diary
+                </button>
+                <button class="edit-btn" [routerLink]="['/diary/edit', todayDiary._id]">
+                    ✏️ Edit
+                </button>
+            </div>
+        </div>
+    </div>
+    }
+    <!-- =============================== -->
+    <!-- NO DIARY FOR TODAY -->
+    <!-- =============================== -->
+    @else {
+    <div class="today-empty">
+
+        <div class="today-empty-icon">
+            ✍️
+        </div>
+        <div class="today-empty-content">
+            <span class="today-badge">
+                TODAY
+            </span>
+
             <h3>
-                Your diary is empty
+                How was your day?
             </h3>
             <p>
-                Start writing about your day,
-                your thoughts and the little things
-                you don't want to forget.
+                You haven't written today's diary yet.
+                Take a moment to capture it.
             </p>
-            <button
-                class="new-diary-btn"
-                routerLink="/diary/new">
-                ✍️ Write your first diary
-            </button>
         </div>
+        <a routerLink="/diary/new" class="write-today-btn">
+            Write Today's Diary →
+        </a>
+    </div>
     }
+    <!-- =============================== -->
+    <!-- PREVIOUS DIARIES -->
+    <!-- =============================== -->
+    <div class="previous-diaries-header">
+        <div>
+            <h3>
+                Previous Diaries
+            </h3>
+            <p>
+                Your memories and moments from earlier days.
+            </p>
+        </div>
+    </div>
     <!-- Diary List -->
-    @else {
-        <div class="diary-list">
-            @for (diary of diaries; track diary._id) {
+    <div class="diary-list">
+        @for (diary of diaries; track diary._id) {
+            @if (!isToday(diary.createdAt)){
                 <div class="diary-card">
                     <div class="diary-card-content">
                         <!-- Date + title -->
@@ -84,18 +163,13 @@
                         <!-- Footer -->
                         <div class="diary-card-footer">
                             <span class="diary-time">
-
                                 {{ diary.createdAt | date:'shortTime' }}
                             </span>
-                            <div style="display: flex; gap:30px;">
-                                <button
-                                    class="btn btn-outline-danger"
-                                    (click)="deleteDiary(diary._id)">
+                            <div class="diary-card-actions">
+                                <button class="btn btn-outline-danger" (click)="deleteDiary(diary._id)">
                                     Delete
                                 </button>
-                                <button
-                                    class="expand-btn"
-                                    [routerLink]="['/diary', diary._id]">
+                                <button class="expand-btn" [routerLink]="['/diary', diary._id]">
                                     Expand →
                                 </button>
                             </div>
@@ -103,6 +177,7 @@
                     </div>
                 </div>
             }
-        </div>
+        }
+    </div>
     }
 </div>
