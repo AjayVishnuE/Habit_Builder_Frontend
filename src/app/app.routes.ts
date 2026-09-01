@@ -10,6 +10,7 @@ import { HabitDetails } from './features/habits/pages/habit-details/habit-detail
 import { DiaryHome } from './features/diary/pages/diary-home/diary-home';
 import { DiaryEditor } from './features/diary/pages/diary-editor/diary-editor';
 import { DiaryDetails } from './features/diary/pages/diary-details/diary-details';
+import { TasksAndNotes } from './features/tasks-and-notes/pages/tasks-and-notes/tasks-and-notes';
 
 export const routes: Routes = [
   {
@@ -67,6 +68,11 @@ export const routes: Routes = [
       {
         path: 'diary/:id',
         component: DiaryDetails,
+        canActivate: [authGuard]
+      },
+      {
+        path: 'tasks-notes',
+        component: TasksAndNotes,
         canActivate: [authGuard]
       },
     ]
