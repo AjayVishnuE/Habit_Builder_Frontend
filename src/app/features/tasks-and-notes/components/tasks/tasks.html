@@ -1,20 +1,323 @@
 <div class="tasks-container">
-    <div class="section-header">
-        <div>
-            <h3>Tasks</h3>
-            <p>Keep track of things you need to get done.</p>
-        </div>
-        <button class="add-btn">
-            + Add Task
-        </button>
+
+  @if (loading) {
+
+    <div class="loading-state">
+      <mat-icon>hourglass_empty</mat-icon>
+      <p>Loading tasks...</p>
     </div>
-    <div class="empty-state">
-        <div class="empty-icon">
-            ✓
+
+  } @else {
+
+    @for (day of taskDays; track trackDay($index, day)) {
+
+      <section
+        class="day-card"
+        [class.today]="isToday(day.date)"
+      >
+
+        <!-- DAY HEADER -->
+        <div class="day-header">
+
+          <div class="day-info">
+            <h3>{{ getDayLabel(day.date) }}</h3>
+
+            <span>
+              {{ getFullDate(day.date) }}
+            </span>
+          </div>
+
+          <button
+            mat-icon-button
+            class="add-task-button"
+            (click)="openAddTask(day.date)"
+            aria-label="Add task"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+
         </div>
-        <h4>No tasks yet</h4>
-        <p>
-            Add your first task and start getting things done.
-        </p>
-    </div>
+
+
+        <!-- ADD TASK -->
+        @if (addingTaskFor === getDateKey(day.date.toISOString())) {
+
+          <div class="add-task-box">
+
+            <div class="add-task-input">
+
+              <input
+                type="text"
+                [(ngModel)]="newTaskTitle"
+                placeholder="What needs to be done?"
+                (keyup.enter)="saveNewTask(day.date)"
+                autofocus
+              />
+
+            </div>
+
+            <div class="add-task-actions">
+
+              <select [(ngModel)]="newTaskPriority">
+                <option value="Low">Low priority</option>
+                <option value="Medium">Medium priority</option>
+                <option value="High">High priority</option>
+              </select>
+
+              <button
+                mat-icon-button
+                class="cancel-button"
+                (click)="cancelAddTask()"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+
+              <button
+                mat-icon-button
+                class="confirm-add-button"
+                [disabled]="!newTaskTitle.trim()"
+                (click)="saveNewTask(day.date)"
+              >
+                <mat-icon>check</mat-icon>
+              </button>
+
+            </div>
+
+          </div>
+
+        }
+
+
+        <!-- TASKS -->
+        <div class="task-list">
+
+          @for (task of day.tasks; track trackTask($index, task)) {
+
+            <div
+              class="task-wrapper"
+              [class.completed]="task.completed"
+              [class.expanded]="expandedTaskId === task._id"
+            >
+
+              <!-- COLLAPSED TASK ROW -->
+              <div class="task-row">
+
+                <mat-checkbox
+                  [checked]="task.completed"
+                  (change)="toggleTask(task)"
+                  class="task-checkbox"
+                >
+                </mat-checkbox>
+
+
+                <div class="task-title">
+                  {{ task.title }}
+                </div>
+
+
+                <span
+                  class="priority-dot"
+                  [class.high]="getPriorityClass(task.priority) === 'high'"
+                  [class.medium]="getPriorityClass(task.priority) === 'medium'"
+                  [class.low]="getPriorityClass(task.priority) === 'low'"
+                  [title]="task.priority + ' priority'"
+                >
+                </span>
+
+
+                <button
+                  mat-icon-button
+                  class="task-action delete-button"
+                  (click)="deleteTask(task)"
+                  aria-label="Delete task"
+                >
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+
+
+                <button
+                  mat-icon-button
+                  class="task-action expand-button"
+                  (click)="expandTask(task)"
+                  [attr.aria-label]="
+                    expandedTaskId === task._id
+                      ? 'Collapse task'
+                      : 'Expand task'
+                  "
+                >
+                  <mat-icon>
+                    {{ expandedTaskId === task._id
+                      ? 'expand_less'
+                      : 'expand_more' }}
+                  </mat-icon>
+                </button>
+
+              </div>
+
+
+              <!-- EXPANDED DETAILS -->
+              @if (expandedTaskId === task._id && editedTask) {
+
+                <div class="task-details">
+
+                  <div class="detail-field">
+
+                    <label>Task</label>
+
+                    <input
+                      type="text"
+                      [(ngModel)]="editedTask.title"
+                    />
+
+                  </div>
+
+
+                  <div class="detail-field">
+
+                    <label>Description</label>
+
+                    <textarea
+                      [(ngModel)]="editedTask.description"
+                      placeholder="Add a description..."
+                      rows="3"
+                    ></textarea>
+
+                  </div>
+
+
+                  <div class="details-row">
+
+                    <div class="detail-field">
+
+                      <label>Priority</label>
+
+                      <select
+                        [(ngModel)]="editedTask.priority"
+                      >
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                      </select>
+
+                    </div>
+
+
+                    <div class="detail-field">
+
+                      <label>Due date</label>
+
+                      <input
+                        type="date"
+                        [ngModel]="
+                          editedTask.dueDate | date:'yyyy-MM-dd'
+                        "
+                        (ngModelChange)="
+                          editedTask.dueDate = $event
+                        "
+                      />
+
+                    </div>
+
+                  </div>
+
+
+                  <div class="task-meta">
+
+                    <div>
+                      <span class="meta-label">
+                        Created on
+                      </span>
+
+                      <span>
+                        {{ task.createdAt | date:'dd MMM yyyy, hh:mm a' }}
+                      </span>
+                    </div>
+
+
+                    @if (task.completed && task.completedAt) {
+
+                      <div>
+                        <span class="meta-label">
+                          Completed on
+                        </span>
+
+                        <span>
+                          {{ task.completedAt | date:'dd MMM yyyy, hh:mm a' }}
+                        </span>
+                      </div>
+
+                    }
+
+                  </div>
+
+
+                  <!-- SAVE BUTTON APPEARS ONLY AFTER CHANGE -->
+                  @if (hasTaskChanges(task)) {
+
+                    <div class="save-area">
+
+                      <button
+                        mat-flat-button
+                        class="save-button"
+                        [disabled]="savingTaskId === task._id"
+                        (click)="saveTask(task)"
+                      >
+
+                        <mat-icon>
+                          {{ savingTaskId === task._id
+                            ? 'hourglass_empty'
+                            : 'save' }}
+                        </mat-icon>
+
+                        {{
+                          savingTaskId === task._id
+                            ? 'Saving...'
+                            : 'Save Changes'
+                        }}
+
+                      </button>
+
+                    </div>
+
+                  }
+
+                </div>
+
+              }
+
+            </div>
+
+          }
+
+
+          <!-- EMPTY DAY -->
+          @if (day.tasks.length === 0) {
+
+            <div class="empty-day">
+
+              <mat-icon>checklist</mat-icon>
+
+              <span>
+                No tasks for this day
+              </span>
+
+              <button
+                mat-button
+                (click)="openAddTask(day.date)"
+              >
+                Add a task
+              </button>
+
+            </div>
+
+          }
+
+        </div>
+
+      </section>
+
+    }
+
+  }
+
 </div>
