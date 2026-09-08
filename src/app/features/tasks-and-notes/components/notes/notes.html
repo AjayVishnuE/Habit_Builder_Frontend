@@ -1,32 +1,66 @@
 <div class="notes-container">
-
-    <div class="section-header">
-
-        <div>
-            <h3>Notes</h3>
+    <div class="notes-header">
+        <div class="header-content">
+            <h2>Notes</h2>
             <p>
-                Quickly capture ideas, reminders and important information.
+                Keep your thoughts, ideas and information organized.
             </p>
         </div>
-
-        <button class="add-btn">
-            + Add Note
+        <button mat-icon-button class="add-note-button" (click)="addNote()" aria-label="Add note">
+            <mat-icon>add</mat-icon>
         </button>
-
     </div>
-
-    <div class="empty-state">
-
-        <div class="empty-icon">
-            📝
+    @if (loading) {
+        <div class="loading-state">
+            <mat-icon>hourglass_empty</mat-icon>
+            <span>Loading notes...</span>
         </div>
-
-        <h4>No notes yet</h4>
-
-        <p>
-            Create your first note to keep something important handy.
-        </p>
-
-    </div>
-
+    } @else if (notes.length === 0) {
+        <div class="empty-state">
+            <mat-icon>description</mat-icon>
+            <h3>No notes yet</h3>
+            <p>
+                Start writing something you want to remember.
+            </p>
+            <button mat-flat-button (click)="addNote()">
+                <mat-icon>add</mat-icon>
+                Create Note
+            </button>
+        </div>
+    } @else {
+        <div class="notes-list">
+            @for (note of notes; track note._id) {
+                <article class="note-card" (click)="openNote(note)">
+                    <div class="note-content">
+                        <h3>
+                            {{ note.title }}
+                        </h3>
+                        <p>
+                            {{ getPreview(note.content) }}
+                        </p>
+                        <div class="note-date">
+                            @if (
+                            note.updatedAt &&
+                            note.updatedAt !== note.createdAt
+                            ) {
+                            <span>
+                                Updated
+                                {{ note.updatedAt | date:'dd MMM yyyy' }}
+                            </span>
+                            } @else {
+                            <span>
+                                Created
+                                {{ note.createdAt | date:'dd MMM yyyy' }}
+                            </span>
+                            }
+                        </div>
+                    </div>
+                    <button mat-icon-button class="delete-note-button" (click)="deleteNote($event, note)"
+                        aria-label="Delete note">
+                        <mat-icon>delete_outline</mat-icon>
+                    </button>
+                </article>
+            }
+        </div>
+    }
 </div>

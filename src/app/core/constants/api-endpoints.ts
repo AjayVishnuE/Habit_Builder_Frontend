@@ -3,5 +3,6 @@ export const API_ENDPOINTS = {
   REGISTER: '/users/register',
   HABITS: '/habits',
   DIARIES: '/diaries',
-  TASKS: '/tasks'
+  TASKS: '/tasks',
+  NOTES: '/notes',
 };

@@ -1,0 +1,196 @@
+.editor-page {
+  width: 100%;
+  min-height: 100%;
+}
+
+
+/* =========================
+   TOP BAR
+========================= */
+
+.editor-topbar {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.back-button {
+  color: #666666;
+  font-size: 13px;
+  padding-left: 4px;
+}
+
+.back-button mat-icon {
+  margin-right: 5px;
+}
+
+
+/* =========================
+   EDITORIAL WINDOW
+========================= */
+
+.editorial-window {
+  width: 100%;
+  max-width: 850px;
+
+  margin: 0 auto;
+
+  padding: 20px 30px 40px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================
+   TITLE
+========================= */
+
+.note-title {
+  width: 100%;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  padding: 0;
+
+  font-family: inherit;
+
+  font-size: 32px;
+  font-weight: 650;
+
+  color: #171717;
+
+  line-height: 1.25;
+
+  box-sizing: border-box;
+}
+
+.note-title::placeholder {
+  color: #b0b0b0;
+}
+
+
+/* =========================
+   META
+========================= */
+
+.note-meta {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 16px;
+
+  margin-top: 10px;
+  margin-bottom: 28px;
+
+  font-size: 11px;
+
+  color: #999999;
+}
+
+
+/* =========================
+   EDITOR
+========================= */
+
+.note-editor {
+  width: 100%;
+  min-height: 480px;
+
+  resize: vertical;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  padding: 0;
+
+  font-family: inherit;
+
+  font-size: 16px;
+
+  line-height: 1.8;
+
+  color: #252525;
+
+  box-sizing: border-box;
+}
+
+.note-editor::placeholder {
+  color: #b8b8b8;
+}
+
+
+/* =========================
+   SAVE
+========================= */
+
+.save-container {
+  display: flex;
+  justify-content: flex-end;
+
+  margin-top: 20px;
+
+  padding-top: 15px;
+
+  border-top: 1px solid #eeeeee;
+}
+
+.save-button {
+  border-radius: 7px;
+  font-size: 13px;
+}
+
+.save-button mat-icon {
+  margin-right: 5px;
+}
+
+
+/* =========================
+   LOADING
+========================= */
+
+.loading-state {
+  min-height: 350px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  gap: 10px;
+
+  color: #888888;
+
+  font-size: 13px;
+}
+
+.loading-state mat-icon {
+  width: 30px;
+  height: 30px;
+  font-size: 30px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+  .editorial-window {
+    padding: 15px 10px 30px;
+  }
+
+  .note-title {
+    font-size: 26px;
+  }
+
+  .note-editor {
+    min-height: 400px;
+    font-size: 15px;
+  }
+
+}

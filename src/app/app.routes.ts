@@ -11,6 +11,7 @@ import { DiaryHome } from './features/diary/pages/diary-home/diary-home';
 import { DiaryEditor } from './features/diary/pages/diary-editor/diary-editor';
 import { DiaryDetails } from './features/diary/pages/diary-details/diary-details';
 import { TasksAndNotes } from './features/tasks-and-notes/pages/tasks-and-notes/tasks-and-notes';
+import { NoteEditor } from './features/tasks-and-notes/pages/note-editor/note-editor';
 
 export const routes: Routes = [
   {
@@ -73,6 +74,16 @@ export const routes: Routes = [
       {
         path: 'tasks-notes',
         component: TasksAndNotes,
+        canActivate: [authGuard]
+      },
+      { 
+        path: 'notes/new',
+        component: NoteEditor,
+        canActivate: [authGuard]
+      },
+      { 
+        path: 'notes/:id',
+        component: NoteEditor,
         canActivate: [authGuard]
       },
     ]
