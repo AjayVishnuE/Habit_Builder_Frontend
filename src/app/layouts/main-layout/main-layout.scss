@@ -2,15 +2,274 @@
   height: 100vh;
 }
 
-mat-sidenav {
+/* =========================
+   DESKTOP SIDEBAR
+   ========================= */
+
+.desktop-sidenav {
   width: 260px;
   padding: 20px;
+  box-sizing: border-box;
+}
+
+.brand {
+  padding: 8px 8px 20px;
+}
+
+.brand h2 {
+  margin: 0;
+}
+
+.desktop-sidenav mat-nav-list {
+  padding-top: 10px;
+}
+
+.desktop-sidenav a {
+  border-radius: 10px;
+  margin-bottom: 6px;
+  transition: 0.2s ease;
+}
+
+.desktop-sidenav a mat-icon {
+  margin-right: 12px;
+}
+
+/* Desktop active item */
+
+.desktop-sidenav a.active {
+  font-weight: 600;
+}
+
+.desktop-sidenav a.active mat-icon {
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 600,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
+
+/* =========================
+   MAIN CONTENT
+   ========================= */
+
+.top-toolbar {
+  min-height: 64px;
 }
 
 .page {
   padding: 24px;
 }
 
-h2 {
-  margin-bottom: 20px;
+
+/* =========================
+   MOBILE BOTTOM NAV
+   ========================= */
+
+.mobile-bottom-nav {
+  display: none;
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 768px) {
+
+  .desktop-sidenav {
+    display: none;
+  }
+
+  .top-toolbar {
+    height: 56px;
+    min-height: 56px;
+  }
+
+  .page {
+    padding: 16px;
+
+    /*
+      Leave room for the fixed bottom navigation.
+    */
+    padding-bottom: 100px;
+  }
+
+  .mobile-bottom-nav {
+    position: fixed;
+
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+
+    height: 68px;
+
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    align-items: center;
+
+    background: white;
+
+    border-radius: 22px;
+
+    box-shadow:
+      0 6px 25px rgba(0, 0, 0, 0.12);
+
+    z-index: 1000;
+  }
+
+
+  /* Every navigation item */
+
+  .mobile-bottom-nav a {
+    position: relative;
+
+    height: 68px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-decoration: none;
+
+    color: #7b8490;
+
+    cursor: pointer;
+
+    -webkit-tap-highlight-color: transparent;
+  }
+
+
+  .mobile-bottom-nav mat-icon {
+    font-size: 25px;
+    width: 25px;
+    height: 25px;
+
+    transition:
+      transform 0.2s ease,
+      color 0.2s ease;
+  }
+
+
+  /* =========================
+     ACTIVE ICON
+     ========================= */
+
+  .mobile-bottom-nav a.active {
+    color: #263238;
+  }
+
+  .mobile-bottom-nav a.active mat-icon {
+    font-variation-settings:
+      'FILL' 1,
+      'wght' 600,
+      'GRAD' 0,
+      'opsz' 24;
+  }
+
+
+  /* =========================
+     HABITS CENTER BUTTON
+     ========================= */
+
+  .mobile-bottom-nav .habits-nav {
+    height: 68px;
+
+    z-index: 2;
+  }
+
+
+  /*
+    The white raised bump above the
+    navigation bar.
+  */
+
+  .mobile-bottom-nav .habits-nav::before {
+    content: '';
+
+    position: absolute;
+
+    width: 76px;
+    height: 76px;
+
+    top: -28px;
+
+    border-radius: 50%;
+
+    background: white;
+
+    box-shadow:
+      0 -4px 12px rgba(0, 0, 0, 0.04);
+
+    z-index: -1;
+  }
+
+
+  /*
+    The actual circular Habits icon.
+  */
+
+  .habits-icon {
+    width: 58px;
+    height: 58px;
+
+    margin-top: -30px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: white;
+
+    border: 2px solid #7b8490;
+
+    box-shadow:
+      0 5px 14px rgba(0, 0, 0, 0.10);
+
+    transition:
+      transform 0.2s ease,
+      background 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+
+  .habits-icon mat-icon {
+    font-size: 29px;
+    width: 29px;
+    height: 29px;
+  }
+
+
+  /*
+    Habits active state
+  */
+
+  .mobile-bottom-nav .habits-nav.active .habits-icon {
+    background: #263238;
+    border-color: #263238;
+    color: white;
+
+    transform: scale(1.04);
+  }
+
+
+  .mobile-bottom-nav .habits-nav.active mat-icon {
+    font-variation-settings:
+      'FILL' 1,
+      'wght' 600,
+      'GRAD' 0,
+      'opsz' 24;
+  }
+
+
+  /*
+    Small tap feedback
+  */
+
+  .mobile-bottom-nav a:active mat-icon {
+    transform: scale(0.9);
+  }
+
 }

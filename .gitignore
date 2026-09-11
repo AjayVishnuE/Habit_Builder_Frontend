@@ -38,3 +38,9 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+#Android
+/capacitor.config.ts
+/Habit Builder.apk
+/Android Update Setup.txt
+/android
