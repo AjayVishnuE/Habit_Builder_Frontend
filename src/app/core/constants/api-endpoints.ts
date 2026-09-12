@@ -5,4 +5,7 @@ export const API_ENDPOINTS = {
   DIARIES: '/diaries',
   TASKS: '/tasks',
   NOTES: '/notes',
+  PROFILE: '/users/profile',
+  PROFILE_STATS: '/users/profile/stats',
+  UPLOADTHING: '/uploadthing'
 };

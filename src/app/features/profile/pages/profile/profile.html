@@ -1,1 +1,578 @@
-<p>profile works!</p>
+<div class="profile-page">
+
+  @if (loading) {
+
+    <div class="profile-loading">
+      <mat-icon>hourglass_empty</mat-icon>
+      <p>Loading profile...</p>
+    </div>
+
+  } @else {
+
+    @if (errorMessage) {
+
+      <div class="profile-error">
+        {{ errorMessage }}
+      </div>
+
+    }
+
+
+    <!-- HEADER -->
+
+    <div class="profile-header">
+
+      <div class="username-section">
+
+        @if (!isEditingName) {
+
+          <h2>
+            {{ profile?.name }}
+          </h2>
+
+          <button
+            class="icon-button"
+            type="button"
+            aria-label="Edit username"
+            (click)="startEditingName()">
+
+            <mat-icon>edit</mat-icon>
+
+          </button>
+
+        } @else {
+
+          <input
+            class="username-input"
+            type="text"
+            [(ngModel)]="editedName"
+            maxlength="60"
+            autofocus>
+
+          <button
+            class="icon-button save-name-button"
+            type="button"
+            aria-label="Save username"
+            [disabled]="savingName"
+            (click)="saveName()">
+
+            <mat-icon>
+              {{ savingName ? 'hourglass_empty' : 'check' }}
+            </mat-icon>
+
+          </button>
+
+          <button
+            class="icon-button"
+            type="button"
+            aria-label="Cancel"
+            [disabled]="savingName"
+            (click)="cancelEditingName()">
+
+            <mat-icon>close</mat-icon>
+
+          </button>
+
+        }
+
+      </div>
+
+
+      <button
+        class="icon-button settings-button"
+        type="button"
+        aria-label="Settings"
+        (click)="openSettings()">
+
+        <mat-icon>settings</mat-icon>
+
+      </button>
+
+    </div>
+
+
+
+    <!-- PROFILE PICTURE -->
+
+    <section class="profile-intro">
+
+      <div class="avatar-wrapper">
+
+        <div class="avatar">
+
+          <img
+            [src]="getProfileImage()"
+            alt="Profile picture">
+
+        </div>
+
+
+        <label
+          class="avatar-edit"
+          [class.uploading]="uploadingImage"
+          for="profile-image-input">
+
+          <mat-icon>
+            {{ uploadingImage
+              ? 'hourglass_empty'
+              : 'edit' }}
+          </mat-icon>
+
+        </label>
+
+
+        <input
+          id="profile-image-input"
+          type="file"
+          accept="image/*"
+          hidden
+          (change)="onProfileImageSelected($event)">
+
+      </div>
+
+
+      <p class="member-since">
+        Member since
+        {{ profile?.createdAt | date:'MMMM yyyy' }}
+      </p>
+
+    </section>
+
+
+
+    <!-- GEEK STATS -->
+
+    <section class="profile-section">
+
+      <div class="section-heading">
+
+        <div>
+
+          <h3>Geek Stats</h3>
+
+          <p>
+            Your habit-building achievements.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="geek-stats">
+
+
+        <!-- OLDEST -->
+
+        @if (geekStats?.oldestHabit) {
+
+          <div
+            class="geek-stat"
+            [class.expanded]="expandedGeekStat === 'oldest'">
+
+            <button
+              class="geek-stat-header"
+              type="button"
+              (click)="toggleGeekStat('oldest')">
+
+              <div class="stat-icon">
+                <mat-icon>history</mat-icon>
+              </div>
+
+              <span class="stat-title">
+                Oldest Habit
+              </span>
+
+              <mat-icon class="expand-icon">
+                {{ expandedGeekStat === 'oldest'
+                  ? 'expand_less'
+                  : 'expand_more' }}
+              </mat-icon>
+
+            </button>
+
+
+            @if (expandedGeekStat === 'oldest') {
+
+              <div class="geek-stat-details">
+
+                <strong>
+                  {{ geekStats!.oldestHabit!.title }}
+                </strong>
+
+                <span>
+                  Started
+                  {{ geekStats!.oldestHabit!.startedAt
+                    | date:'dd MMMM yyyy' }}
+                  ·
+                  {{ geekStats!.oldestHabit!.durationDays }}
+                  days
+                </span>
+
+              </div>
+
+            }
+
+          </div>
+
+        }
+
+
+
+        <!-- MOST CONSISTENT -->
+
+        @if (geekStats?.mostConsistentHabit) {
+
+          <div
+            class="geek-stat"
+            [class.expanded]="expandedGeekStat === 'consistent'">
+
+            <button
+              class="geek-stat-header"
+              type="button"
+              (click)="toggleGeekStat('consistent')">
+
+              <div class="stat-icon">
+                <mat-icon>verified</mat-icon>
+              </div>
+
+              <span class="stat-title">
+                Most Consistent Habit
+              </span>
+
+              <mat-icon class="expand-icon">
+                {{ expandedGeekStat === 'consistent'
+                  ? 'expand_less'
+                  : 'expand_more' }}
+              </mat-icon>
+
+            </button>
+
+
+            @if (expandedGeekStat === 'consistent') {
+
+              <div class="geek-stat-details">
+
+                <strong>
+                  {{ geekStats!.mostConsistentHabit!.title }}
+                </strong>
+
+                <span>
+                  {{ geekStats!.mostConsistentHabit!.completionRate }}%
+                  consistency
+                  ·
+                  {{ geekStats!.mostConsistentHabit!.completions }}
+                  completions
+                  ·
+                  {{ geekStats!.mostConsistentHabit!.frequency }}
+                </span>
+
+              </div>
+
+            }
+
+          </div>
+
+        }
+
+
+
+        <!-- LONGEST -->
+
+        @if (geekStats?.longestMaintainedHabit) {
+
+          <div
+            class="geek-stat"
+            [class.expanded]="expandedGeekStat === 'longest'">
+
+            <button
+              class="geek-stat-header"
+              type="button"
+              (click)="toggleGeekStat('longest')">
+
+              <div class="stat-icon">
+                <mat-icon>timeline</mat-icon>
+              </div>
+
+              <span class="stat-title">
+                Longest Maintained Habit
+              </span>
+
+              <mat-icon class="expand-icon">
+                {{ expandedGeekStat === 'longest'
+                  ? 'expand_less'
+                  : 'expand_more' }}
+              </mat-icon>
+
+            </button>
+
+
+            @if (expandedGeekStat === 'longest') {
+
+              <div class="geek-stat-details">
+
+                <strong>
+                  {{ geekStats!.longestMaintainedHabit!.title }}
+                </strong>
+
+                <span>
+                  {{ geekStats!.longestMaintainedHabit!.durationDays }}
+                  days
+                  · started
+                  {{ geekStats!.longestMaintainedHabit!.startedAt
+                    | date:'dd MMM yyyy' }}
+                </span>
+
+              </div>
+
+            }
+
+          </div>
+
+        }
+
+
+
+        <!-- BEST STREAK -->
+
+        @if (geekStats?.bestStreak) {
+
+          <div
+            class="geek-stat"
+            [class.expanded]="expandedGeekStat === 'streak'">
+
+            <button
+              class="geek-stat-header"
+              type="button"
+              (click)="toggleGeekStat('streak')">
+
+              <div class="stat-icon">
+                <mat-icon>local_fire_department</mat-icon>
+              </div>
+
+              <span class="stat-title">
+                Best Habit Streak
+              </span>
+
+              <mat-icon class="expand-icon">
+                {{ expandedGeekStat === 'streak'
+                  ? 'expand_less'
+                  : 'expand_more' }}
+              </mat-icon>
+
+            </button>
+
+
+            @if (expandedGeekStat === 'streak') {
+
+              <div class="geek-stat-details">
+
+                <strong>
+                  {{ geekStats!.bestStreak!.title }}
+                </strong>
+
+                <span>
+                  {{ geekStats!.bestStreak!.days }}
+                  consecutive days
+                  ·
+                  {{ geekStats!.bestStreak!.startDate
+                    | date:'dd MMM' }}
+                  –
+                  {{ geekStats!.bestStreak!.endDate
+                    | date:'dd MMM yyyy' }}
+                </span>
+
+              </div>
+
+            }
+
+          </div>
+
+        }
+
+
+
+        <!-- MOST COMPLETED -->
+
+        @if (geekStats?.mostCompletedHabit) {
+
+          <div
+            class="geek-stat"
+            [class.expanded]="expandedGeekStat === 'completed'">
+
+            <button
+              class="geek-stat-header"
+              type="button"
+              (click)="toggleGeekStat('completed')">
+
+              <div class="stat-icon">
+                <mat-icon>check_circle</mat-icon>
+              </div>
+
+              <span class="stat-title">
+                Most Completed Habit
+              </span>
+
+              <mat-icon class="expand-icon">
+                {{ expandedGeekStat === 'completed'
+                  ? 'expand_less'
+                  : 'expand_more' }}
+              </mat-icon>
+
+            </button>
+
+
+            @if (expandedGeekStat === 'completed') {
+
+              <div class="geek-stat-details">
+
+                <strong>
+                  {{ geekStats!.mostCompletedHabit!.title }}
+                </strong>
+
+                <span>
+                  {{ geekStats!.mostCompletedHabit!.completions }}
+                  total completions
+                </span>
+
+              </div>
+
+            }
+
+          </div>
+
+        }
+
+
+
+        <!-- MOST ACTIVE DAY -->
+
+        @if (geekStats?.mostActiveDay) {
+
+          <div
+            class="geek-stat"
+            [class.expanded]="expandedGeekStat === 'active-day'">
+
+            <button
+              class="geek-stat-header"
+              type="button"
+              (click)="toggleGeekStat('active-day')">
+
+              <div class="stat-icon">
+                <mat-icon>calendar_today</mat-icon>
+              </div>
+
+              <span class="stat-title">
+                Most Active Day
+              </span>
+
+              <mat-icon class="expand-icon">
+                {{ expandedGeekStat === 'active-day'
+                  ? 'expand_less'
+                  : 'expand_more' }}
+              </mat-icon>
+
+            </button>
+
+
+            @if (expandedGeekStat === 'active-day') {
+
+              <div class="geek-stat-details">
+
+                <strong>
+                  {{ geekStats!.mostActiveDay!.day }}
+                </strong>
+
+                <span>
+                  {{ geekStats!.mostActiveDay!.completions }}
+                  habit completions
+                </span>
+
+              </div>
+
+            }
+
+          </div>
+
+        }
+
+      </div>
+
+    </section>
+
+
+
+    <!-- SUMMARY -->
+
+    @if (summary) {
+
+      <section class="profile-section summary-section">
+
+        <div class="section-heading">
+
+          <div>
+
+            <h3>Your Summary</h3>
+
+            <p>
+              A quick look at your activity.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="summary-grid">
+
+          <div class="summary-card">
+            <strong>
+              {{ summary.totalHabits }}
+            </strong>
+            <span>Total Habits</span>
+          </div>
+
+          <div class="summary-card">
+            <strong>
+              {{ summary.totalCompletions }}
+            </strong>
+            <span>Completions</span>
+          </div>
+
+          <div class="summary-card">
+            <strong>
+              {{ summary.totalDiaries }}
+            </strong>
+            <span>Diaries</span>
+          </div>
+
+          <div class="summary-card">
+            <strong>
+              {{ summary.completedTasks }}
+            </strong>
+            <span>Tasks Done</span>
+          </div>
+
+          <div class="summary-card">
+            <strong>
+              {{ summary.totalTasks }}
+            </strong>
+            <span>Total Tasks</span>
+          </div>
+
+          <div class="summary-card">
+            <strong>
+              {{ summary.totalNotes }}
+            </strong>
+            <span>Notes</span>
+          </div>
+
+        </div>
+
+      </section>
+
+    }
+
+  }
+
+</div>
