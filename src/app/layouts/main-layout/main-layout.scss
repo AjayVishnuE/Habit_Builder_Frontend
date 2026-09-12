@@ -108,8 +108,7 @@
     grid-template-columns: repeat(5, 1fr);
     align-items: center;
 
-    background: white;
-
+    background: var(--background);
     border-radius: 22px;
 
     box-shadow:
@@ -196,8 +195,7 @@
 
     border-radius: 50%;
 
-    background: white;
-
+    background: var(--background);
     box-shadow:
       0 -4px 12px rgba(0, 0, 0, 0.04);
 
@@ -221,7 +219,7 @@
     align-items: center;
     justify-content: center;
 
-    background: white;
+    background: var(--background);
 
     border: 2px solid #7b8490;
 
