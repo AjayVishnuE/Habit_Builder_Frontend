@@ -44,8 +44,8 @@ export class ThemeService {
       localStorage.getItem(this.storageKey);
 
     if (
-      savedTheme === 'light' ||
-      savedTheme === 'dark'
+      savedTheme === 'dark' ||
+      savedTheme === 'light'
     ) {
       this.currentTheme = savedTheme;
     }
