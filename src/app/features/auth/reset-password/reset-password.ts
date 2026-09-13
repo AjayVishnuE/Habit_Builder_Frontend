@@ -103,7 +103,7 @@ export class ResetPassword {
           response.message || 'Password reset successfully.',
           'Close',
           {
-            duration: 4000
+            duration: 10000
           }
         );
       },

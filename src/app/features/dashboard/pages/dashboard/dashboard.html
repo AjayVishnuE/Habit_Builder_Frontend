@@ -1,55 +1,215 @@
-<div class="row">
-    <div class="col-md-4">
-        <app-stat-card title="Total Habits" [value]="totalHabits" icon="📚"> </app-stat-card>
-    </div>
-    <div class="col-md-4">
-        <app-stat-card title="Completed Today" [value]="completedToday" icon="✅"> </app-stat-card>
-    </div>
-    <div class="col-md-4">
-        <app-stat-card title="Current Streak" [value]="currentStreak" icon="🔥"> </app-stat-card>
-    </div>
-</div>
-<div class="row mt-4">
-    <div class="col-md-4 mb-3">
-        <mat-card>
-            <mat-card-header>
-                <mat-card-title> 📅 Daily Progress </mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-                <h2>{{ dailyPercentage }}%</h2>
-                <mat-progress-bar mode="determinate" [value]="dailyPercentage"></mat-progress-bar>
-            </mat-card-content>
-        </mat-card>
-    </div>
-    <div class="col-md-4 mb-3">
-        <mat-card>
-            <mat-card-header>
-                <mat-card-title> 📖 Weekly Progress </mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-                <h2>{{ weeklyPercentage }}%</h2>
-                <mat-progress-bar mode="determinate" [value]="weeklyPercentage"> </mat-progress-bar>
-            </mat-card-content>
-        </mat-card>
-    </div>
-    <div class="col-md-4 mb-3">
-        <mat-card>
-            <mat-card-header>
-                <mat-card-title> 🗓️ Monthly Progress </mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-                <h2>{{ monthlyPercentage }}%</h2>
-                <mat-progress-bar mode="determinate" [value]="monthlyPercentage"> </mat-progress-bar>
-            </mat-card-content>
-        </mat-card>
-    </div>
-</div>
-<div class="card shadow-sm mt-4 p-4">
-    <h4 class="mb-4">Weekly Progress</h4>
-    <canvas
-        baseChart
-        [data]="barChartData"
-        [options]="barChartOptions"
-        [type]="barChartType">
-    </canvas>
+<div class="dashboard">
+    <!-- Header -->
+    <section class="dashboard-header">
+        <div>
+            <p class="eyebrow">YOUR HABIT JOURNEY</p>
+            <h1>
+                Keep going<span class="wave">👋</span>
+            </h1>
+            <p class="dashboard-subtitle">
+                Small steps every day turn into meaningful change.
+            </p>
+        </div>
+        <div class="quote-card">
+            <mat-icon>format_quote</mat-icon>
+            <span>
+                Consistency beats perfection.
+            </span>
+        </div>
+    </section>
+    <!-- Loading -->
+    @if (isLoading) {
+        <div class="dashboard-loader">
+            <div class="hourglass">
+                ⌛
+            </div>
+            <p>Loading your progress...</p>
+        </div>
+    } @else {
+        <!-- Stats -->
+        <section class="stats-grid">
+            <app-stat-card
+                title="Total Habits"
+                [value]="totalHabits"
+                icon="📚">
+            </app-stat-card>
+            <app-stat-card
+                title="Completed Today"
+                [value]="completedToday"
+                icon="✅">
+            </app-stat-card>
+            <app-stat-card
+                title="Current Streak"
+                [value]="currentStreak"
+                icon="🔥">
+            </app-stat-card>
+        </section>
+        <!-- Progress -->
+        <section class="progress-section">
+            <div class="section-heading">
+                <div>
+                    <p class="section-eyebrow">YOUR PROGRESS</p>
+                    <h2>How are you doing?</h2>
+                </div>
+                <span class="section-description">
+                    Keep building your momentum
+                </span>
+            </div>
+            <div class="progress-grid">
+                <!-- Daily -->
+                <mat-card class="progress-card daily-card">
+                    <mat-card-content>
+                        <div class="progress-card-top">
+                            <div class="progress-icon">
+                                <mat-icon>today</mat-icon>
+                            </div>
+                            <span>Daily</span>
+                        </div>
+                        <div class="progress-value">
+                            {{ dailyPercentage }}<small>%</small>
+                        </div>
+
+                        <p class="progress-label">
+                            Today's completion
+                        </p>
+
+                        <mat-progress-bar
+                            mode="determinate"
+                            [value]="dailyPercentage">
+                        </mat-progress-bar>
+
+                    </mat-card-content>
+
+                </mat-card>
+
+
+                <!-- Weekly -->
+                <mat-card class="progress-card weekly-card">
+
+                    <mat-card-content>
+
+                        <div class="progress-card-top">
+
+                            <div class="progress-icon">
+                                <mat-icon>date_range</mat-icon>
+                            </div>
+
+                            <span>Weekly</span>
+
+                        </div>
+
+                        <div class="progress-value">
+                            {{ weeklyPercentage }}<small>%</small>
+                        </div>
+
+                        <p class="progress-label">
+                            This week's completion
+                        </p>
+
+                        <mat-progress-bar
+                            mode="determinate"
+                            [value]="weeklyPercentage">
+                        </mat-progress-bar>
+
+                    </mat-card-content>
+
+                </mat-card>
+
+
+                <!-- Monthly -->
+                <mat-card class="progress-card monthly-card">
+
+                    <mat-card-content>
+
+                        <div class="progress-card-top">
+
+                            <div class="progress-icon">
+                                <mat-icon>calendar_month</mat-icon>
+                            </div>
+
+                            <span>Monthly</span>
+
+                        </div>
+
+                        <div class="progress-value">
+                            {{ monthlyPercentage }}<small>%</small>
+                        </div>
+
+                        <p class="progress-label">
+                            This month's completion
+                        </p>
+
+                        <mat-progress-bar
+                            mode="determinate"
+                            [value]="monthlyPercentage">
+                        </mat-progress-bar>
+
+                    </mat-card-content>
+
+                </mat-card>
+
+            </div>
+
+        </section>
+
+
+        <!-- Weekly chart -->
+        <section class="weekly-section">
+
+            <div class="section-heading">
+
+                <div>
+                    <p class="section-eyebrow">ACTIVITY</p>
+                    <h2>Weekly progress</h2>
+                </div>
+
+                <span class="section-description">
+                    Last 7 days
+                </span>
+
+            </div>
+
+
+            <div class="chart-card">
+
+                <div class="chart-summary">
+
+                    <div>
+                        <span class="chart-label">
+                            Completed habits
+                        </span>
+
+                        <strong>
+                            {{ completedToday }}
+                        </strong>
+
+                        <span class="chart-caption">
+                            today
+                        </span>
+                    </div>
+
+                    <div class="chart-icon">
+                        <mat-icon>insights</mat-icon>
+                    </div>
+
+                </div>
+
+
+                <div class="chart-wrapper">
+
+                    <canvas
+                        baseChart
+                        [data]="barChartData"
+                        [options]="barChartOptions"
+                        [type]="barChartType">
+                    </canvas>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    }
+
 </div>

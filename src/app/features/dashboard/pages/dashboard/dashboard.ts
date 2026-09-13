@@ -5,6 +5,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import { MatCardModule } from '@angular/material/card';
 import { ChartConfiguration, ChartType } from 'chart.js';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatIconModule } from '@angular/material/icon';
 
 import { Habit } from '../../../../core/models/habit.model';
 import { HabitService } from '../../../../core/services/habit.service';
@@ -13,9 +14,7 @@ import { calculateLongestStreak, calculateOverallStreak } from '../../../../core
 
 @Component({
   selector: 'app-dashboard',
-  imports: [
-    StatCard, CommonModule,  BaseChartDirective, MatCardModule, MatProgressBarModule
-  ],
+  imports: [ StatCard, CommonModule,  BaseChartDirective, MatCardModule, MatProgressBarModule, MatIconModule ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
@@ -28,16 +27,22 @@ export class Dashboard {
   public weeklyPercentage = 0;
   public monthlyPercentage = 0;
   public habits: Habit[] = [];
+  public isLoading = true;
 
   private habitService = inject(HabitService);
   private cdr = inject(ChangeDetectorRef);
   public barChartType: 'bar' = 'bar';
 
   async ngOnInit(): Promise<void> {
-    await this.loadDashboard();
-    await this.calculateCompletionPercentage();
+    this.isLoading = true;
+    try {
+      await this.loadDashboard();
+      await this.calculateCompletionPercentage();
+    } finally {
+      this.isLoading = false;
+      this.cdr.detectChanges();
+    }
   }
-
   async loadDashboard(): Promise<void> {
     try {
       const habits = await firstValueFrom(this.habitService.getHabits());
@@ -85,22 +90,97 @@ export class Dashboard {
       });
       values.push(count);
     }
-    this.barChartData = {
-      labels,
-      datasets: [
-        {
-          label: 'Completed Habits',
-          data: values
-        }
-      ]
-    };
+  this.barChartData = {
+    labels,
+    datasets: [
+      {
+        label: 'Completed Habits',
+        data: values,
+        backgroundColor: 'rgba(91, 91, 214, 0.78)',
+        hoverBackgroundColor: 'rgba(91, 91, 214, 1)',
+        borderRadius: 8,
+        borderSkipped: false,
+        barPercentage: 0.58,
+        categoryPercentage: 0.72
+      }
+    ]
+  };
   }
 
   public barChartOptions: ChartConfiguration<'bar'>['options'] = {
     responsive: true,
+    maintainAspectRatio: false,
+    animation: {
+      duration: 700,
+      easing: 'easeOutQuart'
+    },
+    interaction: {
+      intersect: false,
+      mode: 'index'
+    },
     plugins: {
       legend: {
-        display: true
+        display: false
+      },
+      tooltip: {
+        backgroundColor: 'rgba(20, 20, 25, 0.92)',
+        padding: 12,
+        cornerRadius: 10,
+        titleFont: {
+          size: 12,
+          weight: 600
+        },
+        bodyFont: {
+          size: 13
+        },
+        displayColors: false,
+        callbacks: {
+          label: (context) => {
+            return ` ${context.parsed.y} completed`;
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false
+        },
+        border: {
+          display: false
+        },
+        ticks: {
+          color: '#85858d',
+          font: {
+            size: 12,
+            weight: 500
+          }
+        }
+      },
+      y: {
+        beginAtZero: true,
+        border: {
+          display: false,
+          dash: [4, 4]
+        },
+        grid: {
+          color: 'rgba(128, 128, 128, 0.12)',
+          drawTicks: false
+        },
+        ticks: {
+          color: '#85858d',
+          padding: 10,
+          precision: 0,
+          font: {
+            size: 11
+          }
+        }
+      }
+    },
+    elements: {
+      bar: {
+        borderRadius: 8,
+        borderSkipped: false
       }
     }
   };
