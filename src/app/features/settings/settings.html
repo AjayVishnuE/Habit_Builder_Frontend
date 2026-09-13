@@ -1,216 +1,118 @@
 <div class="settings-page">
-
   <!-- Header -->
   <div class="settings-header">
-
-    <button
-      class="back-button"
-      type="button"
-      (click)="goBack()"
-    >
+    <button class="back-button" type="button" (click)="goBack()" >
       <mat-icon>arrow_back</mat-icon>
     </button>
-
     <h1>Settings</h1>
-
   </div>
-
-
   <!-- Appearance -->
   <section class="settings-section">
-
     <h2>Appearance</h2>
-
     <div class="settings-card">
-
       <div class="setting-row">
-
         <div class="setting-icon">
           <mat-icon>
             {{ theme === 'dark' ? 'dark_mode' : 'light_mode' }}
           </mat-icon>
         </div>
-
         <div class="setting-content">
-
           <div class="setting-title">
             Dark mode
           </div>
-
           <div class="setting-description">
-            {{ theme === 'dark'
-              ? 'Dark theme is enabled'
-              : 'Use a darker appearance for the app'
-            }}
+            {{ theme === 'dark' ? 'Dark theme is enabled' : 'Use a darker appearance for the app' }}
           </div>
-
         </div>
-
-        <mat-slide-toggle
-          [checked]="theme === 'dark'"
-          (change)="toggleTheme()"
-          aria-label="Toggle dark mode"
-        />
-
+        <mat-slide-toggle [checked]="theme === 'dark'" (change)="toggleTheme()" aria-label="Toggle dark mode" />
       </div>
-
     </div>
-
   </section>
-
-
   <!-- Account -->
   <section class="settings-section">
-
     <h2>Account</h2>
-
     <div class="settings-card">
-
-      <button
-        class="setting-row clickable"
-        type="button"
-      >
-
+      <button class="setting-row clickable" type="button" (click)="goToChangePassword()" >
         <div class="setting-icon">
           <mat-icon>lock</mat-icon>
         </div>
-
         <div class="setting-content">
-
           <div class="setting-title">
             Change password
           </div>
-
           <div class="setting-description">
             Update your account password
           </div>
-
         </div>
-
         <mat-icon class="arrow">
           chevron_right
         </mat-icon>
-
       </button>
-
-
       <div class="divider"></div>
-
-
-      <button
-        class="setting-row clickable logout-row"
-        type="button"
-        (click)="logout()"
-      >
-
+      <button class="setting-row clickable logout-row" type="button" (click)="logout()" >
         <div class="setting-icon">
           <mat-icon>logout</mat-icon>
         </div>
-
         <div class="setting-content">
-
           <div class="setting-title">
             Logout
           </div>
-
           <div class="setting-description">
             Sign out of Habit Builder
           </div>
-
         </div>
-
         <mat-icon class="arrow">
           chevron_right
         </mat-icon>
-
       </button>
-
     </div>
-
   </section>
-
-
   <!-- About -->
   <section class="settings-section">
-
     <h2>About</h2>
-
     <div class="settings-card">
-
-      <button
-        class="setting-row clickable"
-        type="button"
-      >
-
+      <button class="setting-row clickable" type="button" >
         <div class="setting-icon">
           <mat-icon>info</mat-icon>
         </div>
-
         <div class="setting-content">
-
           <div class="setting-title">
             About Habit Builder
           </div>
-
           <div class="setting-description">
             Learn more about the app
           </div>
-
         </div>
-
         <mat-icon class="arrow">
           chevron_right
         </mat-icon>
-
       </button>
-
-
       <div class="divider"></div>
-
-
-      <button
-        class="setting-row clickable"
-        type="button"
-      >
-
+      <button class="setting-row clickable" type="button" >
         <div class="setting-icon">
           <mat-icon>description</mat-icon>
         </div>
-
         <div class="setting-content">
-
           <div class="setting-title">
             Licenses
           </div>
-
           <div class="setting-description">
             Open-source licenses and acknowledgements
           </div>
-
         </div>
-
         <mat-icon class="arrow">
           chevron_right
         </mat-icon>
-
       </button>
-
     </div>
-
   </section>
-
-
   <!-- App information -->
   <div class="app-info">
-
     <div class="app-name">
       Habit Builder
     </div>
-
     <div class="app-version">
       Version 1.0.0
     </div>
-
   </div>
-
 </div>

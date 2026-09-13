@@ -11,6 +11,12 @@
         placeholder="Password"
         [(ngModel)]="password">
     <button
+        type="button"
+        class="forgot-password-link"
+        (click)="goToForgotPassword()">
+        Forgot password?
+    </button>
+    <button
         class="btn btn-primary w-100"
         (click)="login()">
         Login

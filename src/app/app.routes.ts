@@ -13,6 +13,8 @@ import { DiaryDetails } from './features/diary/pages/diary-details/diary-details
 import { TasksAndNotes } from './features/tasks-and-notes/pages/tasks-and-notes/tasks-and-notes';
 import { NoteEditor } from './features/tasks-and-notes/pages/note-editor/note-editor';
 import { Settings } from './features/settings/settings';
+import { ResetPassword } from './features/auth/reset-password/reset-password';
+import { ForgotPassword } from './features/auth/forgot-password/forgot-password';
 
 export const routes: Routes = [
   {
@@ -22,6 +24,14 @@ export const routes: Routes = [
   {
     path: 'register',
     component: Register
+  },
+  {
+    path: 'forgot-password',
+    component: ForgotPassword,
+  },
+  {
+    path: 'reset-password/:token',
+    component: ResetPassword,
   },
   {
     path: '',

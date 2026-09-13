@@ -27,4 +27,12 @@ export class ProfileService {
   getProfileStats(): Observable<ProfileStats> {
     return this.api.get<ProfileStats>( API_ENDPOINTS.PROFILE_STATS );
   }
+
+  forgotPassword(email: string) {
+    return this.api.post<{ message: string }>( API_ENDPOINTS.FORGOT_PASSWORD, { email } );
+  }
+
+  resetPassword(token: string, password: string) {
+    return this.api.post<{ message: string }>( `${API_ENDPOINTS.RESET_PASSWORD}/${token}`, { password } );
+  }
 }

@@ -33,4 +33,9 @@ export class Login {
     });
   }
 
+  goToForgotPassword(): void {
+    this.router.navigate(['/forgot-password'], {
+      queryParams: { from: 'login' }
+    });
+  }
 }

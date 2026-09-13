@@ -7,5 +7,7 @@ export const API_ENDPOINTS = {
   NOTES: '/notes',
   PROFILE: '/users/profile',
   PROFILE_STATS: '/users/profile/stats',
-  UPLOADTHING: '/uploadthing'
+  UPLOADTHING: '/uploadthing',
+  FORGOT_PASSWORD: '/users/forgot-password',
+  RESET_PASSWORD: '/users/reset-password'
 };
