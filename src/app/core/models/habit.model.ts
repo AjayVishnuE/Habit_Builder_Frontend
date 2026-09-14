@@ -11,6 +11,7 @@ export interface Habit {
 }
 
 export interface CompletedHistory {
+  _id?: string;
   completedAt: string;
   remark: string;
   mood: string;

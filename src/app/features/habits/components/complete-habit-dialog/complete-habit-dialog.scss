@@ -206,7 +206,8 @@ mat-dialog-actions {
 .complete-button {
     min-height: 42px;
     padding: 0 18px;
-    border-radius: 10px !important;
+    border-radius: 8px !important;
+    background-color: var(--accent);
     font-weight: 600;
 }
 

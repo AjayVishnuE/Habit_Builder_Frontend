@@ -27,6 +27,7 @@ import { calculateCurrentStreak, calculateLongestStreak } from '../../../../core
 })
 
 export class Habits implements OnInit {
+  public loading = true;
   habits: Habit[] = [];
   filteredHabits: Habit[] = [];
   searchText = '';
@@ -50,7 +51,8 @@ export class Habits implements OnInit {
       longestStreak: calculateLongestStreak( habit.completedHistory, habit.frequency ),
     }));
 
-    this.applyFilters();
+    await this.applyFilters();
+    this.loading = false
     this.cdr.detectChanges();
     } catch (err) {
       console.error(err);
@@ -182,7 +184,7 @@ export class Habits implements OnInit {
     );
   }
 
-  applyFilters() {
+  async applyFilters() {
     this.filteredHabits = this.habits.filter(habit => {
       const matchesSearch =
         habit.title.toLowerCase().includes(this.searchText.toLowerCase()) ||

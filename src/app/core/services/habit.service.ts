@@ -33,4 +33,7 @@ export class HabitService {
   getHabitById(id: string) {
     return this.api.get<Habit>(`${API_ENDPOINTS.HABITS}/${id}`);
   }
+  updateCompletion( habitId: string, completionId: string, data: { mood: string; duration: number; remark: string; } ) {
+    return this.api.patch<Habit>( `${API_ENDPOINTS.HABITS}/${habitId}/completions/${completionId}`, data );
+}
 }

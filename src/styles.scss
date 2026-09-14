@@ -178,3 +178,47 @@ html.dark-theme .habit-mood-panel {
         0 18px 45px rgba(0, 0, 0, 0.55),
         0 4px 15px rgba(0, 0, 0, 0.35);
 }
+
+
+/* =========================
+   LOADER
+========================= */
+
+.dashboard-loader {
+  min-height: 430px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--text-secondary);
+}
+
+.hourglass {
+  font-size: 42px;
+  animation: hourglass-spin 1.5s ease-in-out infinite;
+}
+
+.dashboard-loader p {
+  margin: 0;
+  font-size: 13px;
+}
+
+@keyframes hourglass-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  45% {
+    transform: rotate(180deg);
+  }
+
+  55% {
+    transform: rotate(180deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+
+}
