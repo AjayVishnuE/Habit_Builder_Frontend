@@ -63,7 +63,8 @@ export class Habits implements OnInit {
       return;
     }
     const dialogRef = this.dialog.open(DeleteConfirmDialog, {
-      width: '400px',
+      width: '440px',
+      maxWidth: 'calc(100vw - 32px)',
       data: habit
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -89,7 +90,8 @@ export class Habits implements OnInit {
       return;
     }
     const dialogRef = this.dialog.open(HabitForm, {
-      width: '500px',
+      width: '520px',
+      maxWidth: 'calc(100vw - 32px)',
       data: habit
     });
     dialogRef.afterClosed().subscribe(
@@ -151,7 +153,8 @@ export class Habits implements OnInit {
 
   openAddHabitDialog() {
     const dialogRef = this.dialog.open(HabitForm, {
-      width: '500px'
+      width: '520px',
+      maxWidth: 'calc(100vw - 32px)'
     });
     dialogRef.afterClosed().subscribe((newHabit) => {
       if (newHabit) {

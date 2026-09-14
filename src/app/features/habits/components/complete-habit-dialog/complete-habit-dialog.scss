@@ -1,12 +1,285 @@
-.w-100 {
+.dialog-shell {
+    color: var(--text-primary);
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.dialog-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    padding: 24px 24px 8px;
+}
+
+.dialog-icon {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.complete-icon {
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+    color: var(--accent);
+}
+
+.dialog-heading h2 {
+    margin: 0;
+    padding: 0;
+
+    color: var(--text-primary);
+
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+}
+
+.dialog-heading p {
+    margin: 4px 0 0;
+
+    color: var(--text-secondary);
+
+    font-size: 13px;
+}
+
+
+/* ================================
+   CONTENT
+================================ */
+
+mat-dialog-content {
+    padding: 18px 24px 8px !important;
+    margin: 0;
+
+    color: var(--text-primary);
+}
+
+.form-section {
+    margin-bottom: 18px;
+}
+
+.form-section:last-child {
+    margin-bottom: 4px;
+}
+
+.section-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 9px;
+
+    color: var(--text-secondary);
+
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}
+
+.section-dot {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.full-width {
     width: 100%;
 }
 
-mat-dialog-content {
-    min-width: 420px;
-    padding-top: 12px;
+
+/* ================================
+   MATERIAL FORM FIELDS
+================================ */
+
+:host ::ng-deep .mat-mdc-text-field-wrapper,
+:host ::ng-deep .mdc-text-field {
+    background: var(--surface) !important;
 }
 
-mat-form-field {
-    margin-bottom: 12px;
+:host ::ng-deep .mdc-floating-label {
+    color: var(--text-secondary) !important;
+}
+
+:host ::ng-deep .mdc-floating-label--float-above {
+    color: var(--accent) !important;
+}
+
+:host ::ng-deep .mat-mdc-input-element,
+:host ::ng-deep textarea {
+    color: var(--text-primary) !important;
+    caret-color: var(--accent) !important;
+}
+
+:host ::ng-deep .mat-mdc-input-element::placeholder,
+:host ::ng-deep textarea::placeholder {
+    color: var(--text-secondary) !important;
+    opacity: 0.75;
+}
+
+:host ::ng-deep .mat-mdc-form-field-hint,
+:host ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+    color: var(--text-secondary) !important;
+}
+
+
+/* ================================
+   SELECT
+================================ */
+
+:host ::ng-deep .mat-mdc-select-value {
+    color: var(--text-primary) !important;
+}
+
+:host ::ng-deep .mat-mdc-select-arrow {
+    color: var(--text-secondary) !important;
+}
+
+.selected-mood {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+
+    color: var(--text-primary);
+
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.mood-emoji {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 30px;
+    height: 30px;
+
+    border-radius: 9px;
+
+    background: var(--surface-secondary);
+
+    font-size: 17px;
+}
+
+
+/* ================================
+   MOOD DROPDOWN
+================================ */
+
+.mood-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    width: 100%;
+}
+
+.mood-option > span:last-child {
+    display: flex;
+    flex-direction: column;
+}
+
+.mood-option strong {
+    color: var(--text-primary);
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.mood-option small {
+    margin-top: 3px;
+
+    color: var(--text-secondary);
+
+    font-size: 11px;
+}
+
+
+/* ================================
+   ACTIONS
+================================ */
+
+mat-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 12px 24px 22px !important;
+    margin: 0;
+}
+
+.cancel-button {
+    color: var(--text-secondary) !important;
+}
+
+.complete-button {
+    min-height: 42px;
+    padding: 0 18px;
+
+    border-radius: 10px !important;
+
+    font-weight: 600;
+}
+
+.button-check {
+    margin-right: 6px;
+    font-weight: 700;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 600px) {
+
+    .dialog-header {
+        padding: 20px 18px 6px;
+        gap: 12px;
+    }
+
+    .dialog-icon {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+
+        border-radius: 12px;
+        font-size: 19px;
+    }
+
+    .dialog-heading h2 {
+        font-size: 19px;
+    }
+
+    .dialog-heading p {
+        font-size: 12px;
+    }
+
+    mat-dialog-content {
+        padding: 16px 18px 6px !important;
+    }
+
+    mat-dialog-actions {
+        padding: 10px 18px 18px !important;
+    }
+
+    .complete-button {
+        flex: 1;
+    }
 }

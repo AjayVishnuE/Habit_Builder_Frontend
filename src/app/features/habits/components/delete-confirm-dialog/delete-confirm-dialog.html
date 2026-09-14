@@ -1,16 +1,39 @@
-<h2 mat-dialog-title>Delete Habit</h2>
-<mat-dialog-content>
-    Are you sure you want to delete
-    <strong>{{ data.title }}</strong>?
-    <br><br>
-    This action cannot be undone.
-</mat-dialog-content>
-
-<mat-dialog-actions align="end">
-    <button mat-button (click)="cancel()">
-        Cancel
-    </button>
-    <button mat-raised-button color="warn" (click)="confirm()">
-        Delete
-    </button>
-</mat-dialog-actions>
+<div class="dialog-shell">
+    <div class="dialog-header">
+        <div class="dialog-icon delete-icon">
+            <span>!</span>
+        </div>
+        <div class="dialog-heading">
+            <h2 mat-dialog-title>Delete Habit?</h2>
+            <p>This action cannot be undone.</p>
+        </div>
+    </div>
+    <mat-dialog-content>
+        <div class="warning-box">
+            <div class="warning-title">
+                You're about to delete
+            </div>
+            <div class="habit-name">
+                {{ data.title }}
+            </div>
+            <p>
+                All progress and completion history associated
+                with this habit will be removed.
+            </p>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button
+            mat-button
+            class="cancel-button"
+            (click)="cancel()">
+            Keep Habit
+        </button>
+        <button
+            mat-raised-button
+            class="delete-button"
+            (click)="confirm()">
+            Delete Habit
+        </button>
+    </mat-dialog-actions>
+</div>
