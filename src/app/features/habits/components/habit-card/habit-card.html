@@ -1,49 +1,95 @@
-<div class="card shadow-sm mb-3" [class.completed]="isCompleted()">
-    <div class="card-body">
-        <h5 class="mb-1"> {{ habit.title }} </h5>
-        <p class="text-muted mb-3"> {{ habit.description }} </p>
-        <div class="d-flex align-items-center justify-content-between mb-3">
-            <span class="badge bg-primary"> {{ habit.frequency }} </span>
-            @if (isCompleted()) {
-                <span class="badge bg-success"> ✓ Completed </span>
-            }
+<div
+    class="habit-card"
+    [class.completed]="isCompleted()">
+    <!-- Status accent -->
+    <div class="status-indicator"></div>
+    <div class="habit-main">
+        <!-- Top -->
+        <div class="habit-top">
+            <div class="habit-title-area">
+                <div class="habit-icon">
+                    {{ isCompleted() ? '✓' : '✦' }}
+                </div>
+                <div>
+                    <h3>
+                        {{ habit.title }}
+                    </h3>
+                    <p>
+                        {{ habit.description }}
+                    </p>
+                </div>
+            </div>
+            <div class="habit-badges">
+                <span class="frequency-badge">
+                    {{ habit.frequency }}
+                </span>
+                @if (isCompleted()) {
+                    <span class="completed-badge">
+                        ✓ Completed
+                    </span>
+                }
+            </div>
         </div>
-        <div class="mt-2 mb-3">
-            🔥 {{ habit.currentStreak }}
-            {{
-                habit.frequency === 'Daily'
-                    ? (habit.currentStreak === 1 ? 'day' : 'days')
-                    : habit.frequency === 'Weekly'
-                        ? (habit.currentStreak === 1 ? 'week' : 'weeks')
-                        : (habit.currentStreak === 1 ? 'month' : 'months')
-            }}
-            streak
+        <!-- Stats -->
+        <div class="habit-stats">
+            <div class="habit-stat">
+                <span class="stat-icon">
+                    🔥
+                </span>
+                <div>
+                    <small>Current streak</small>
+                    <strong>
+                        {{ habit.currentStreak }}
+                        {{
+                            habit.frequency === 'Daily'
+                                ? (habit.currentStreak === 1 ? 'day' : 'days')
+                                : habit.frequency === 'Weekly'
+                                    ? (habit.currentStreak === 1 ? 'week' : 'weeks')
+                                    : (habit.currentStreak === 1 ? 'month' : 'months')
+                        }}
+                    </strong>
+                </div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="habit-stat">
+                <span class="stat-icon">
+                    🏆
+                </span>
+                <div>
+                    <small>Best streak</small>
+                    <strong>
+                        {{ habit.longestStreak }}
+                        {{
+                            habit.frequency === 'Daily'
+                                ? (habit.longestStreak === 1 ? 'day' : 'days')
+                                : habit.frequency === 'Weekly'
+                                    ? (habit.longestStreak === 1 ? 'week' : 'weeks')
+                                    : (habit.longestStreak === 1 ? 'month' : 'months')
+                        }}
+                    </strong>
+                </div>
+            </div>
         </div>
-        <div class="text-muted">
-            🏆 Best Streak:
-            {{ habit.longestStreak }}
-
-            {{
-                habit.frequency === 'Daily'
-                    ? (habit.longestStreak === 1 ? 'day' : 'days')
-                    : habit.frequency === 'Weekly'
-                        ? (habit.longestStreak === 1 ? 'week' : 'weeks')
-                        : (habit.longestStreak === 1 ? 'month' : 'months')
-            }}
+        <!-- Actions -->
+        <div class="habit-actions">
+            <button type="button" class="action-button complete-button" [class.is-completed]="isCompleted()" [disabled]="isCompleted()" (click)="complete.emit(habit._id)">
+                <span>
+                    {{ isCompleted() ? '✓' : '✓' }}
+                </span>
+                {{ isCompleted() ? 'Completed' : 'Complete' }}
+            </button>
+            <button type="button" class="action-button secondary-button" (click)="details.emit(habit._id)">
+                <span>↗</span>
+                Details
+            </button>
+            <button type="button" class="action-button secondary-button" (click)="edit.emit(habit._id)">
+                <span>✎</span>
+                Edit
+            </button>
+            <button type="button" class="action-button delete-button" (click)="delete.emit(habit._id)">
+                <span>⌫</span>
+                Delete
+            </button>
         </div>
-        <button class="btn btn-success me-2" [disabled]="isCompleted()" (click)="complete.emit(habit._id)">
-            {{ isCompleted() ? 'Completed' : 'Complete' }}        
-        </button>
-        <button class="btn btn-warning me-2" (click)="edit.emit(habit._id)">
-            Edit
-        </button>
-        <button
-            class="btn btn-info me-2"
-            (click)="details.emit(habit._id)">
-            View Details
-        </button>
-        <button class="btn btn-danger" (click)="delete.emit(habit._id)">
-            Delete
-        </button>
     </div>
 </div>

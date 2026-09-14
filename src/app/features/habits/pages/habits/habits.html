@@ -1,34 +1,235 @@
-<div class="row mb-4">
-    <div class="col-md-6">
-        <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Search Habits</mat-label>
-            <input matInput [(ngModel)]="searchText" (ngModelChange)="onSearchChange($event)" placeholder="Search by title or description"/>
-        </mat-form-field>
-    </div>
-    <div class="col-md-3">
-        <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Frequency</mat-label>
-            <mat-select [(ngModel)]="selectedFrequency" (selectionChange)="onFrequencyChange($event.value)">
-                <mat-option value="All">All</mat-option>
-                <mat-option value="Daily">Daily</mat-option>
-                <mat-option value="Weekly">Weekly</mat-option>
-                <mat-option value="Monthly">Monthly</mat-option>
-            </mat-select>
-        </mat-form-field>
-    </div>
-    <div class="col-md-3 d-flex align-items-start justify-content-end">
-        <button mat-raised-button color="primary" (click)="openAddHabitDialog()">
-            + Add Habit
+<div class="habits-page">
+
+    <!-- Page Header -->
+    <section class="habits-header">
+
+        <div class="header-content">
+
+            <div class="header-eyebrow">
+                YOUR ROUTINE
+            </div>
+
+            <h1>My Habits</h1>
+
+            <p>
+                Build consistency, one habit at a time.
+            </p>
+
+        </div>
+
+        <button
+            mat-raised-button
+            class="add-habit-button"
+            (click)="openAddHabitDialog()">
+
+            <span class="add-icon">+</span>
+
+            Add Habit
+
         </button>
-    </div>
+
+    </section>
+
+
+    <!-- Search + Filters -->
+    <section class="habit-controls">
+
+        <!-- Search -->
+        <mat-form-field
+            appearance="outline"
+            class="search-field">
+
+            <mat-label>Search habits</mat-label>
+
+            <mat-icon matPrefix>search</mat-icon>
+
+            <input
+                matInput
+                [(ngModel)]="searchText"
+                (ngModelChange)="onSearchChange($event)"
+                placeholder="Search by title or description" />
+
+        </mat-form-field>
+
+
+        <!-- Desktop frequency filters -->
+        <div class="frequency-filters">
+
+            <button
+                type="button"
+                class="frequency-option"
+                [class.active]="selectedFrequency === 'All'"
+                (click)="onFrequencyChange('All')">
+
+                <span class="filter-icon">✦</span>
+
+                <span>
+                    <strong>All</strong>
+                    <small>{{ habits.length }} habits</small>
+                </span>
+
+            </button>
+
+
+            <button
+                type="button"
+                class="frequency-option"
+                [class.active]="selectedFrequency === 'Daily'"
+                (click)="onFrequencyChange('Daily')">
+
+                <span class="filter-icon">☀</span>
+
+                <span>
+                    <strong>Daily</strong>
+                    <small>
+                        {{ countHabitsByFrequency('Daily') }} habits
+                    </small>
+                </span>
+
+            </button>
+
+
+            <button
+                type="button"
+                class="frequency-option"
+                [class.active]="selectedFrequency === 'Weekly'"
+                (click)="onFrequencyChange('Weekly')">
+
+                <span class="filter-icon">◷</span>
+
+                <span>
+                    <strong>Weekly</strong>
+                    <small>
+                        {{ countHabitsByFrequency('Weekly') }} habits
+                    </small>
+                </span>
+
+            </button>
+
+
+            <button
+                type="button"
+                class="frequency-option"
+                [class.active]="selectedFrequency === 'Monthly'"
+                (click)="onFrequencyChange('Monthly')">
+
+                <span class="filter-icon">▣</span>
+
+                <span>
+                    <strong>Monthly</strong>
+                    <small>
+                        {{ countHabitsByFrequency('Monthly') }} habits
+                    </small>
+                </span>
+
+            </button>
+
+        </div>
+
+
+        <!-- Mobile frequency dropdown -->
+        <mat-form-field
+            appearance="outline"
+            class="mobile-frequency">
+
+            <mat-label>Frequency</mat-label>
+
+            <mat-select
+                [(ngModel)]="selectedFrequency"
+                (selectionChange)="onFrequencyChange($event.value)">
+
+                <mat-option value="All">
+                    All
+                </mat-option>
+
+                <mat-option value="Daily">
+                    Daily
+                </mat-option>
+
+                <mat-option value="Weekly">
+                    Weekly
+                </mat-option>
+
+                <mat-option value="Monthly">
+                    Monthly
+                </mat-option>
+
+            </mat-select>
+
+        </mat-form-field>
+
+    </section>
+
+
+    <!-- Results heading -->
+    <section class="results-header">
+
+        <div>
+
+            <h2>
+                {{ selectedFrequency === 'All'
+                    ? 'All habits'
+                    : selectedFrequency + ' habits'
+                }}
+            </h2>
+
+            <span>
+                {{ filteredHabits.length }}
+                {{ filteredHabits.length === 1 ? 'habit' : 'habits' }}
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- Habits -->
+    <section class="habits-list">
+
+        @if (filteredHabits.length > 0) {
+
+            @for (
+                habit of filteredHabits;
+                track habit._id
+            ) {
+
+                <app-habit-card
+                    [habit]="habit"
+                    (delete)="deleteHabit($event)"
+                    (edit)="editHabit($event)"
+                    (complete)="completeHabit($event)"
+                    (details)="viewDetails($event)">
+                </app-habit-card>
+
+            }
+
+        } @else {
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    ✦
+                </div>
+
+                <h3>No habits found</h3>
+
+                <p>
+                    Try changing your search or frequency filter.
+                </p>
+
+                <button
+                    mat-raised-button
+                    class="empty-button"
+                    (click)="openAddHabitDialog()">
+
+                    + Create your first habit
+
+                </button>
+
+            </div>
+
+        }
+
+    </section>
+
 </div>
-<hr>
-@for (habit of filteredHabits; track habit._id) {
-    <app-habit-card
-        [habit]="habit"
-        (delete)="deleteHabit($event)"
-        (edit)="editHabit($event)"
-        (complete)="completeHabit($event)"
-        (details)="viewDetails($event)">
-    </app-habit-card>
-}

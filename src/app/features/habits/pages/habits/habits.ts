@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 
 import { Habit } from '../../../../core/models/habit.model';
 import { HabitService } from '../../../../core/services/habit.service';
@@ -20,9 +21,9 @@ import { calculateCurrentStreak, calculateLongestStreak } from '../../../../core
 
 @Component({
   selector: 'app-habits',
-  imports: [HabitCard, MatDialogModule, MatButtonModule, MatSnackBarModule, FormsModule, MatFormFieldModule, MatInputModule, MatSelectModule],
+  imports: [HabitCard, MatDialogModule, MatButtonModule, MatSnackBarModule, FormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatIconModule],
   templateUrl: './habits.html',
-  styleUrl: './habits.sass',
+  styleUrl: './habits.scss',
 })
 
 export class Habits implements OnInit {
@@ -202,6 +203,12 @@ export class Habits implements OnInit {
 
   viewDetails(id: string) {
     this.router.navigate(['/habits', id]);
+  }
+
+  countHabitsByFrequency(frequency: string): number {
+    return this.habits.filter(
+      habit => habit.frequency === frequency
+    ).length;
   }
 }
 
