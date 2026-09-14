@@ -1,29 +1,113 @@
 <div class="editor-page">
-    <!-- Header -->
-    <div class="editor-header">
-        <div>
-            <button
-                class="back-btn"
-                (click)="cancel()">
-
-                ← Back to Diary
-            </button>
+    <!-- HEADER -->
+    <header class="editor-header">
+        <button
+            class="back-btn"
+            type="button"
+            (click)="cancel()">
+            ← Back to Diary
+        </button>
+        <div class="editor-heading">
             @if (isEditMode) {
-                <h2>Edit your diary</h2>
+                <span class="editor-kicker">
+                    EDITING A MEMORY
+                </span>
+                <h2>
+                    Edit your diary
+                </h2>
                 <p>
                     Update your thoughts from this day.
                 </p>
+            } @else if (isMissedDiaryMode) {
+                <span class="editor-kicker">
+                    BRING BACK A MEMORY
+                </span>
+                <h2>
+                    Write a missed diary
+                </h2>
+                <p>
+                    Choose the day you forgot to write about,
+                    then capture what happened.
+                </p>
             } @else {
-                <h2>Write your diary</h2>
+                <span class="editor-kicker">
+                    TODAY
+                </span>
+                <h2>
+                    Write your diary
+                </h2>
                 <p>
                     Capture what happened today.
                 </p>
             }
         </div>
-    </div>
-    <!-- Editor Card -->
+    </header>
+    <!-- DATE SELECTOR
+         ONLY VISIBLE FOR MISSED DIARY -->
+    @if (!isEditMode && isMissedDiaryMode) {
+        <section class="date-picker-card">
+            <div class="date-picker-icon">
+                📅
+            </div>
+            <div class="date-picker-content">
+                <label for="diaryDate">
+                    Which day is this diary for?
+                </label>
+                <mat-form-field
+                    appearance="outline"
+                    class="diary-date-field">
+                    <mat-label>
+                        Diary date
+                    </mat-label>
+                    <input
+                        matInput
+                        [matDatepicker]="picker"
+                        [matDatepickerFilter]="dateFilter"
+                        [max]="getTodayDate()"
+                        [(ngModel)]="selectedDiaryDate"
+                        (dateChange)="onDateSelected($event.value)"
+                        readonly
+                    />
+                    <mat-datepicker-toggle
+                        matIconSuffix
+                        [for]="picker">
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                @if (diaryDate) {
+                    <p class="selected-date">
+                        Writing about
+                        <strong>
+                            {{ getSelectedDateLabel() }}
+                        </strong>
+                    </p>
+                }
+                <p class="date-hint">
+                    Days that already have a diary cannot be
+                    selected. Future days are not available.
+                </p>
+            </div>
+        </section>
+    }
+    <!-- ERROR -->
+    @if (error) {
+        <div class="editor-error">
+            <span class="error-icon">
+                !
+            </span>
+            <div>
+                <strong>
+                    Couldn't save your diary
+                </strong>
+                <p>
+                    {{ error }}
+                </p>
+            </div>
+        </div>
+    }
+    <!-- EDITOR -->
     <div class="editor-card">
-        <!-- Title -->
+        <!-- TITLE -->
         <input
             type="text"
             class="title-input"
@@ -31,9 +115,8 @@
             placeholder="Give your diary a heading..."
             maxlength="150"
         />
-        <!-- Toolbar -->
+        <!-- TOOLBAR -->
         <div class="toolbar">
-            <!-- Text style -->
             <button
                 type="button"
                 (click)="formatBlock('h2')"
@@ -47,7 +130,6 @@
                 ¶
             </button>
             <div class="toolbar-divider"></div>
-            <!-- Bold -->
             <button
                 type="button"
                 (click)="format('bold')"
@@ -55,14 +137,12 @@
 
                 <strong>B</strong>
             </button>
-            <!-- Italic -->
             <button
                 type="button"
                 (click)="format('italic')"
                 title="Italic">
                 <em>I</em>
             </button>
-            <!-- Underline -->
             <button
                 type="button"
                 (click)="format('underline')"
@@ -70,12 +150,10 @@
                 <u>U</u>
             </button>
             <div class="toolbar-divider"></div>
-            <!-- Lists -->
             <button
                 type="button"
                 (click)="format('insertUnorderedList')"
                 title="Bullet list">
-
                 •☰
             </button>
             <button
@@ -85,7 +163,6 @@
                 1☰
             </button>
             <div class="toolbar-divider"></div>
-            <!-- Alignment -->
             <button
                 type="button"
                 (click)="format('justifyLeft')"
@@ -105,7 +182,7 @@
                 ≡
             </button>
         </div>
-        <!-- Writing area -->
+        <!-- WRITING AREA -->
         <div
             #editor
             class="writing-area"
@@ -113,7 +190,7 @@
             spellcheck="true"
             data-placeholder="Start writing about your day..."
         ></div>
-        <!-- Footer -->
+        <!-- FOOTER -->
         <div class="editor-footer">
             <button
                 type="button"
@@ -127,6 +204,7 @@
                 [disabled]="saving"
                 (click)="saveDiary()">
                 @if (saving) {
+                    <span class="button-spinner"></span>
                     Saving...
                 } @else {
                     @if (isEditMode) {

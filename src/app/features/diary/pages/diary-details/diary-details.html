@@ -1,52 +1,68 @@
-<div class="container mt-4">
-    <div class="details-header">
-        <button class="btn btn-outline-secondary mb-4" routerLink="/diary">
+<div class="details-page">
+    <div class="details-topbar">
+        <button
+            class="back-btn"
+            routerLink="/diary">
             ← Back to Diary
         </button>
-        <button class="btn btn-primary" (click)="editDiary()">
-            ✏️ Edit Diary
-        </button>
+        @if (diary) {
+            <button
+                class="edit-diary-btn"
+                (click)="editDiary()">
+                ✏️ Edit Diary
+            </button>
+        }
     </div>
     @if (loading) {
-    <div class="text-center py-5">
-        <div class="spinner-border"></div>
-        <p class="text-muted mt-3">
-            Loading diary...
-        </p>
-    </div>  
+        <div class="details-state">
+            <div class="spinner"></div>
+            <p>
+                Opening your diary...
+            </p>
+        </div>
     }
-
     @else if (error) {
-
-    <div class="alert alert-danger">
-        {{ error }}
-    </div>
-
-    }
-
-    @else if (diary) {
-
-    <div class="card shadow-sm">
-
-        <div class="card-body diary-details">
-
-            <div class="diary-date">
-                {{ diary.createdAt | date:'EEEE, MMMM d, y' }}
+        <div class="details-state error">
+            <div class="state-icon">
+                ⚠️
             </div>
-
+            <h4>
+                Unable to open diary
+            </h4>
+            <p>
+                {{ error }}
+            </p>
+            <button
+                class="back-state-btn"
+                routerLink="/diary">
+                Back to Diary
+            </button>
+        </div>
+    }
+    @else if (diary) {
+        <article class="diary-reading-card">
+            <div class="diary-reading-header">
+                <span class="reading-label">
+                    DIARY ENTRY
+                </span>
+                <div class="diary-date">
+                    {{ getDiaryDate() | date:'EEEE, MMMM d, y' }}
+                </div>
+            </div>
             <h1 class="diary-title">
                 {{ diary.title }}
             </h1>
-
-            <hr>
-
-            <div class="diary-content" [innerHTML]="diary.content">
+            <div class="title-line"></div>
+            <div
+                class="diary-content"
+                [innerHTML]="diary.content">
             </div>
-
-        </div>
-
-    </div>
-
+            <footer class="diary-reading-footer">
+                <span>
+                    Written
+                    {{ diary.createdAt | date:'MMM d, y • shortTime' }}
+                </span>
+            </footer>
+        </article>
     }
-
 </div>

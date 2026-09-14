@@ -1,36 +1,31 @@
 .editor-page {
-    max-width: 900px;
+    max-width: 920px;
     margin: 0 auto;
-    padding: 30px 20px 60px;
+    padding: 35px 24px 70px;
+
+    color: var(--text-primary);
 }
 
 
-/* Header */
+/* =========================================================
+   HEADER
+   ========================================================= */
 
 .editor-header {
-    margin-bottom: 25px;
-
-    h2 {
-        margin: 15px 0 5px;
-        font-size: 30px;
-        font-weight: 600;
-    }
-
-    p {
-        margin: 0;
-        color: #777;
-    }
+    margin-bottom: 24px;
 }
 
-
 .back-btn {
-    border: none;
+    border: 0;
     background: transparent;
+
     padding: 0;
 
-    color: #4f46e5;
+    color: var(--accent);
 
-    font-size: 14px;
+    font-size: 13px;
+    font-weight: 600;
+
     cursor: pointer;
 
     &:hover {
@@ -38,227 +33,473 @@
     }
 }
 
+.editor-heading {
+    margin-top: 22px;
 
-/* Editor */
+    .editor-kicker {
+        color: var(--accent);
 
-.editor-card {
-    background: white;
+        font-size: 10px;
+        font-weight: 800;
 
-    border: 1px solid #e5e5e5;
+        letter-spacing: 0.14em;
+    }
 
-    border-radius: 14px;
+    h2 {
+        margin: 7px 0 5px;
 
-    overflow: hidden;
+        font-size: clamp(28px, 4vw, 36px);
+        font-weight: 700;
 
-    box-shadow:
-        0 4px 18px rgba(0, 0, 0, 0.06);
+        letter-spacing: -0.03em;
+    }
+
+    p {
+        margin: 0;
+
+        color: var(--text-secondary);
+
+        font-size: 14px;
+    }
 }
 
 
-/* Title */
+/* =========================================================
+   DATE CARD
+   ========================================================= */
 
-.title-input {
+.date-picker-card {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 15px;
+
+    margin-bottom: 16px;
+
+    padding: 17px;
+
+    border: 1px solid var(--border);
+    border-radius: 14px;
+
+    background: var(--surface-secondary);
+}
+
+.date-picker-icon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 11px;
+
+    background: rgba(91, 91, 214, 0.1);
+
+    font-size: 21px;
+}
+
+.date-picker-content {
+    flex: 1;
+
+    label {
+        display: block;
+
+        margin-bottom: 8px;
+
+        font-size: 13px;
+        font-weight: 650;
+    }
+}
+
+.date-input {
     width: 100%;
+    max-width: 280px;
 
-    border: none;
+    padding: 10px 12px;
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    background: var(--surface);
+    color: var(--text-primary);
+
+    font: inherit;
+
     outline: none;
 
-    padding: 25px 28px 20px;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
 
-    font-size: 26px;
-    font-weight: 600;
+    &:focus {
+        border-color: var(--accent);
+
+        box-shadow:
+            0 0 0 3px rgba(91, 91, 214, 0.12);
+    }
+}
+
+.selected-date {
+    margin: 9px 0 0;
+
+    color: var(--text-primary);
+
+    font-size: 12px;
+
+    strong {
+        color: var(--accent);
+    }
+}
+
+.date-hint {
+    margin: 6px 0 0;
+
+    color: var(--text-secondary);
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.editor-error {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 11px;
+
+    margin-bottom: 16px;
+
+    padding: 13px 15px;
+
+    border: 1px solid rgba(220, 80, 80, 0.28);
+    border-radius: 11px;
+
+    background: rgba(220, 80, 80, 0.07);
+
+    color: var(--text-primary);
+
+    .error-icon {
+        width: 23px;
+        height: 23px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        flex-shrink: 0;
+
+        border-radius: 50%;
+
+        background: rgba(220, 80, 80, 0.14);
+        color: #d9534f;
+
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    strong {
+        display: block;
+        margin-bottom: 2px;
+
+        font-size: 13px;
+    }
+
+    p {
+        margin: 0;
+
+        color: var(--text-secondary);
+
+        font-size: 12px;
+        line-height: 1.5;
+    }
+}
+
+
+/* =========================================================
+   EDITOR CARD
+   ========================================================= */
+
+.editor-card {
+    overflow: hidden;
+
+    border: 1px solid var(--border);
+    border-radius: 16px;
+
+    background: var(--surface);
+
+    box-shadow: var(--shadow);
+
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease;
+}
+
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.title-input {
+    display: block;
+
+    width: 100%;
 
     box-sizing: border-box;
 
-    border-bottom: 1px solid #eeeeee;
+    padding: 24px 26px 19px;
+
+    border: 0;
+    border-bottom: 1px solid var(--border);
+
+    outline: none;
+
+    background: var(--surface);
+    color: var(--text-primary);
+
+    font-size: 25px;
+    font-weight: 650;
 
     &::placeholder {
-        color: #b5b5b5;
+        color: var(--text-secondary);
+        opacity: 0.55;
     }
 }
 
 
-/* Toolbar */
+/* =========================================================
+   TOOLBAR
+   ========================================================= */
 
 .toolbar {
     display: flex;
-
     align-items: center;
+    flex-wrap: wrap;
 
     gap: 4px;
 
-    padding: 10px 18px;
+    padding: 9px 15px;
 
-    border-bottom: 1px solid #eeeeee;
+    border-bottom: 1px solid var(--border);
 
-    background: #fafafa;
+    background: var(--surface-secondary);
 }
 
-
 .toolbar button {
-    width: 36px;
-    height: 34px;
+    width: 34px;
+    height: 32px;
 
-    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    border-radius: 6px;
+    border: 0;
+    border-radius: 7px;
 
     background: transparent;
+    color: var(--text-primary);
 
-    font-size: 15px;
+    font-size: 14px;
 
     cursor: pointer;
 
-    display: flex;
-
-    justify-content: center;
-    align-items: center;
+    transition: background 0.15s ease;
 
     &:hover {
-        background: #e8e8e8;
+        background: var(--surface-hover);
     }
 }
 
-
 .toolbar-divider {
     width: 1px;
-
-    height: 22px;
-
-    background: #ddd;
+    height: 21px;
 
     margin: 0 5px;
+
+    background: var(--border);
 }
 
 
-/* Writing area */
+/* =========================================================
+   WRITING AREA
+   ========================================================= */
 
 .writing-area {
-    min-height: 450px;
+    min-height: 470px;
 
     padding: 28px;
 
     outline: none;
 
+    background: var(--surface);
+    color: var(--text-primary);
+
     font-size: 16px;
-
-    line-height: 1.8;
-
-    color: #292929;
+    line-height: 1.85;
 }
-
 
 .writing-area:empty::before {
     content: attr(data-placeholder);
 
-    color: #aaa;
+    color: var(--text-secondary);
+    opacity: 0.5;
 
     pointer-events: none;
 }
 
-
 .writing-area h2 {
-    font-size: 24px;
     margin: 20px 0 10px;
-}
 
+    font-size: 24px;
+}
 
 .writing-area ul,
 .writing-area ol {
     padding-left: 30px;
 }
 
-
 .writing-area blockquote {
-    border-left: 4px solid #4f46e5;
+    margin: 20px 0;
 
     padding-left: 15px;
 
-    color: #666;
+    border-left: 3px solid var(--accent);
+
+    color: var(--text-secondary);
 }
 
 
-/* Footer */
+/* =========================================================
+   FOOTER
+   ========================================================= */
 
 .editor-footer {
     display: flex;
-
     justify-content: flex-end;
+    align-items: center;
 
-    gap: 10px;
+    gap: 9px;
 
-    padding: 15px 20px;
+    padding: 14px 17px;
 
-    border-top: 1px solid #eeeeee;
+    border-top: 1px solid var(--border);
 
-    background: #fafafa;
+    background: var(--surface-secondary);
 }
-
 
 .cancel-btn,
 .save-btn {
-    padding: 10px 18px;
+    min-height: 38px;
 
-    border-radius: 7px;
+    padding: 9px 16px;
+
+    border-radius: 8px;
+
+    font-size: 13px;
+    font-weight: 600;
 
     cursor: pointer;
 
-    font-size: 14px;
+    transition: 0.2s ease;
 }
 
-
 .cancel-btn {
-    background: white;
+    border: 1px solid var(--border);
 
-    border: 1px solid #ddd;
-
-    color: #555;
+    background: var(--surface);
+    color: var(--text-primary);
 
     &:hover {
-        background: #f5f5f5;
+        background: var(--surface-hover);
     }
 }
 
-
 .save-btn {
-    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
 
-    background: #4f46e5;
+    border: 0;
 
-    color: white;
+    background: var(--accent);
+    color: #fff;
 
-    font-weight: 500;
-
-    &:hover {
-        background: #4338ca;
+    &:hover:not(:disabled) {
+        transform: translateY(-1px);
+        opacity: 0.92;
     }
 
     &:disabled {
-        opacity: 0.6;
+        opacity: 0.55;
         cursor: not-allowed;
     }
 }
 
+.button-spinner {
+    width: 13px;
+    height: 13px;
 
-/* Mobile */
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: white;
+
+    border-radius: 50%;
+
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
 
 @media (max-width: 600px) {
 
     .editor-page {
-        padding: 20px 12px 40px;
+        padding: 24px 14px 50px;
     }
 
-    .toolbar {
-        flex-wrap: wrap;
+    .editor-heading h2 {
+        font-size: 27px;
     }
 
-    .writing-area {
-        min-height: 350px;
-        padding: 20px;
+    .date-picker-card {
+        padding: 14px;
+    }
+
+    .date-input {
+        max-width: none;
     }
 
     .title-input {
-        font-size: 22px;
+        padding: 20px 18px 16px;
+        font-size: 21px;
     }
 
+    .toolbar {
+        padding: 8px 9px;
+    }
+
+    .writing-area {
+        min-height: 360px;
+        padding: 21px 18px;
+    }
+    .editor-footer {
+        justify-content: stretch;
+    }
+    .cancel-btn,
+    .save-btn {
+        flex: 1;
+    }
 }

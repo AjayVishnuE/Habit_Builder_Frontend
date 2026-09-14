@@ -1,6 +1,17 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  ChangeDetectorRef
+} from '@angular/core';
+
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule, Router } from '@angular/router';
+
+import {
+  ActivatedRoute,
+  RouterModule,
+  Router
+} from '@angular/router';
 
 import { DiaryService } from '../../../../core/services/diary.service';
 
@@ -22,38 +33,70 @@ export class DiaryDetails implements OnInit {
   private router = inject(Router);
 
   diary: any = null;
+
   loading = true;
   error = '';
 
+
   ngOnInit(): void {
 
-    const id = this.route.snapshot.paramMap.get('id');
+    const id =
+      this.route.snapshot.paramMap.get('id');
 
     if (!id) {
-      this.error = 'Diary not found.';
+
+      this.error =
+        'Diary not found.';
+
       this.loading = false;
+
       return;
     }
 
-    this.diaryService.getDiaryById(id).subscribe({
-      next: (diary) => {
-        this.diary = diary;
-        this.loading = false;
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        console.error(err);
-        this.error = 'Unable to load diary.';
-        this.loading = false;
-      }
-    });
+
+    this.diaryService
+      .getDiaryById(id)
+      .subscribe({
+
+        next: diary => {
+
+          this.diary = diary;
+
+          this.loading = false;
+
+          this.cdr.detectChanges();
+        },
+
+        error: err => {
+
+          console.error(err);
+
+          this.error =
+            err?.error?.message ||
+            'Unable to load diary.';
+
+          this.loading = false;
+
+          this.cdr.detectChanges();
+        }
+      });
+  }
+
+
+  getDiaryDate(): Date {
+    if (!this.diary) {
+      return new Date();
+    }
+    return new Date(
+      this.diary.diaryDate ||
+      this.diary.createdAt
+    );
   }
 
   editDiary(): void {
     if (!this.diary?._id) {
       return;
     }
-
-    this.router.navigate(['/diary/edit', this.diary._id]);
+    this.router.navigate([ '/diary/edit', this.diary._id ]);
   }
 }

@@ -5,4 +5,5 @@ export interface Diary {
   content: string;
   createdAt: string;
   updatedAt: string;
+  diaryDate?: string | Date;
 }
