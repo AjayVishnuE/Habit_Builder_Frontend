@@ -1,96 +1,69 @@
 <div class="dialog-shell">
-
     <div class="dialog-header">
-
         <div class="dialog-icon complete-icon">
             <span>✓</span>
         </div>
-
         <div class="dialog-heading">
             <h2 mat-dialog-title>
                 Complete Habit
             </h2>
-
             <p>
                 Take a moment to record how it went.
             </p>
         </div>
-
     </div>
-
-
     <form
         [formGroup]="completeForm"
         (ngSubmit)="complete()">
-
         <mat-dialog-content>
-
             <div class="form-section">
-
                 <div class="section-label">
                     <span class="section-dot"></span>
                     How are you feeling?
                 </div>
-
-
                 <mat-form-field
                     appearance="outline"
                     class="full-width">
-
                     <mat-label>Mood</mat-label>
-
                     <mat-select
                         formControlName="mood"
                         panelClass="habit-mood-panel">
-
                         <!-- SELECTED VALUE -->
-
                         <mat-select-trigger>
-
                             @switch (completeForm.controls.mood.value) {
-
                                 @case ('Excellent') {
                                     <span class="selected-mood">
                                         <span class="mood-emoji">😄</span>
                                         <span>Excellent</span>
                                     </span>
                                 }
-
                                 @case ('Great') {
                                     <span class="selected-mood">
                                         <span class="mood-emoji">😊</span>
                                         <span>Great</span>
                                     </span>
                                 }
-
                                 @case ('Good') {
                                     <span class="selected-mood">
                                         <span class="mood-emoji">🙂</span>
                                         <span>Good</span>
                                     </span>
                                 }
-
                                 @case ('Okay') {
                                     <span class="selected-mood">
                                         <span class="mood-emoji">😐</span>
                                         <span>Okay</span>
                                     </span>
                                 }
-
                                 @case ('Bad') {
                                     <span class="selected-mood">
                                         <span class="mood-emoji">😞</span>
                                         <span>Bad</span>
                                     </span>
                                 }
-
                             }
-
                         </mat-select-trigger>
-
-
                         <!-- DROPDOWN -->
-
                         <mat-option value="Excellent">
                             <span class="mood-option">
                                 <span class="mood-emoji">😄</span>
@@ -100,8 +73,6 @@
                                 </span>
                             </span>
                         </mat-option>
-
-
                         <mat-option value="Great">
                             <span class="mood-option">
                                 <span class="mood-emoji">😊</span>
@@ -111,8 +82,6 @@
                                 </span>
                             </span>
                         </mat-option>
-
-
                         <mat-option value="Good">
                             <span class="mood-option">
                                 <span class="mood-emoji">🙂</span>
@@ -122,8 +91,6 @@
                                 </span>
                             </span>
                         </mat-option>
-
-
                         <mat-option value="Okay">
                             <span class="mood-option">
                                 <span class="mood-emoji">😐</span>
@@ -133,8 +100,6 @@
                                 </span>
                             </span>
                         </mat-option>
-
-
                         <mat-option value="Bad">
                             <span class="mood-option">
                                 <span class="mood-emoji">😞</span>
@@ -144,104 +109,67 @@
                                 </span>
                             </span>
                         </mat-option>
-
                     </mat-select>
-
                 </mat-form-field>
-
             </div>
-
-
             <div class="form-section">
-
                 <div class="section-label">
                     <span class="section-dot"></span>
                     Activity details
                 </div>
-
-
                 <mat-form-field
                     appearance="outline"
                     class="full-width">
-
                     <mat-label>Duration</mat-label>
-
                     <input
                         matInput
                         type="number"
                         min="0"
                         formControlName="duration">
-
                     <span matTextSuffix>
                         min
                     </span>
-
                 </mat-form-field>
-
             </div>
-
-
             <div class="form-section">
-
                 <div class="section-label">
                     <span class="section-dot"></span>
                     Reflection
                 </div>
-
-
                 <mat-form-field
                     appearance="outline"
                     class="full-width">
-
                     <mat-label>Remark</mat-label>
-
                     <textarea
                         matInput
                         rows="4"
                         maxlength="250"
                         formControlName="remark">
                     </textarea>
-
                     <mat-hint align="end">
                         {{ completeForm.controls.remark.value.length }}/250
                     </mat-hint>
-
                 </mat-form-field>
-
             </div>
-
         </mat-dialog-content>
-
-
         <mat-dialog-actions>
-
             <button
                 mat-button
                 type="button"
                 class="cancel-button"
                 (click)="cancel()">
-
                 Cancel
-
             </button>
-
-
             <button
                 mat-raised-button
                 color="primary"
                 type="submit"
                 class="complete-button">
-
                 <span class="button-check">
                     ✓
                 </span>
-
                 Complete Habit
-
             </button>
-
         </mat-dialog-actions>
-
     </form>
-
 </div>

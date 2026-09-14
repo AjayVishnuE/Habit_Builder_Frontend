@@ -1,16 +1,12 @@
 <div class="dialog-shell">
-
     <div class="dialog-header">
-
         <div class="dialog-icon habit-icon">
             <span>{{ data ? '✎' : '+' }}</span>
         </div>
-
         <div class="dialog-heading">
             <h2 mat-dialog-title>
                 {{ data ? 'Edit Habit' : 'Create a Habit' }}
             </h2>
-
             <p>
                 {{
                     data
@@ -19,251 +15,164 @@
                 }}
             </p>
         </div>
-
     </div>
-
-
     <form
         [formGroup]="habitForm"
         (ngSubmit)="saveHabit()">
-
         <mat-dialog-content>
-
             <div class="form-section">
-
                 <div class="section-label">
                     <span class="section-dot"></span>
                     Habit details
                 </div>
-
-
                 <mat-form-field
                     appearance="outline"
                     class="full-width">
-
                     <mat-label>Habit title</mat-label>
-
                     <input
                         matInput
                         formControlName="title">
-
                 </mat-form-field>
-
-
                 <mat-form-field
                     appearance="outline"
                     class="full-width">
-
                     <mat-label>Description</mat-label>
-
                     <textarea
                         matInput
                         rows="3"
                         maxlength="200"
                         formControlName="description">
                     </textarea>
-
                     <mat-hint align="end">
                         {{ habitForm.controls.description.value.length }}/200
                     </mat-hint>
-
                 </mat-form-field>
-
             </div>
-
-
             <div class="form-section">
-
                 <div class="section-label">
                     <span class="section-dot"></span>
                     Schedule
                 </div>
-
-
                 <mat-form-field
                     appearance="outline"
                     class="full-width">
-
                     <mat-label>Frequency</mat-label>
-
                     <mat-select
                         formControlName="frequency"
                         panelClass="habit-frequency-panel">
-
                         <!-- CLOSED / SELECTED VALUE -->
                         <mat-select-trigger>
-
                             @switch (habitForm.controls.frequency.value) {
-
                                 @case ('Daily') {
                                     <span class="selected-frequency">
                                         <span class="selected-frequency-symbol">
                                             D
                                         </span>
-
                                         <span class="selected-frequency-text">
                                             Daily
                                         </span>
                                     </span>
                                 }
-
                                 @case ('Weekly') {
                                     <span class="selected-frequency">
                                         <span class="selected-frequency-symbol">
                                             W
                                         </span>
-
                                         <span class="selected-frequency-text">
                                             Weekly
                                         </span>
                                     </span>
                                 }
-
                                 @case ('Monthly') {
                                     <span class="selected-frequency">
                                         <span class="selected-frequency-symbol">
                                             M
                                         </span>
-
                                         <span class="selected-frequency-text">
                                             Monthly
                                         </span>
                                     </span>
                                 }
-
                             }
-
                         </mat-select-trigger>
-
-
                         <!-- DROPDOWN OPTIONS -->
-
                         <mat-option value="Daily">
-
                             <span class="frequency-option">
-
                                 <span class="frequency-symbol">
                                     D
                                 </span>
-
                                 <span class="frequency-option-text">
-
                                     <strong>Daily</strong>
-
                                     <small>
                                         Every day
                                     </small>
-
                                 </span>
-
                             </span>
-
                         </mat-option>
-
-
                         <mat-option value="Weekly">
-
                             <span class="frequency-option">
-
                                 <span class="frequency-symbol">
                                     W
                                 </span>
-
                                 <span class="frequency-option-text">
-
                                     <strong>Weekly</strong>
-
                                     <small>
                                         Once each week
                                     </small>
-
                                 </span>
-
                             </span>
-
                         </mat-option>
-
-
                         <mat-option value="Monthly">
-
                             <span class="frequency-option">
-
                                 <span class="frequency-symbol">
                                     M
                                 </span>
-
                                 <span class="frequency-option-text">
-
                                     <strong>Monthly</strong>
-
                                     <small>
                                         Once each month
                                     </small>
-
                                 </span>
-
                             </span>
-
                         </mat-option>
-
                     </mat-select>
-
                 </mat-form-field>
-
             </div>
-
-    @if (!  data) {
-            <div class="habit-tip">
-
-                <div class="tip-icon">
-                    ✦
+            @if (!  data) {
+                <div class="habit-tip">
+                    <div class="tip-icon">
+                        ✦
+                    </div>
+                    <div>
+                        <strong>
+                            Keep it achievable
+                        </strong>
+                        <p>
+                            Small habits repeated consistently
+                            are easier to maintain.
+                        </p>
+                    </div>
                 </div>
-
-                <div>
-                    <strong>
-                        Keep it achievable
-                    </strong>
-
-                    <p>
-                        Small habits repeated consistently
-                        are easier to maintain.
-                    </p>
-                </div>
-
-            </div>
-        }
+            }
         </mat-dialog-content>
-
-
         <mat-dialog-actions>
-
             <button
                 mat-button
                 type="button"
                 class="cancel-button"
                 (click)="close()">
-
                 Cancel
-
             </button>
-
-
             <button
                 mat-raised-button
                 color="primary"
                 type="submit"
                 class="save-button">
-
                 <span>
                     {{ data ? '✓' : '+' }}
                 </span>
-
                 {{ data ? 'Update Habit' : 'Create Habit' }}
-
             </button>
-
         </mat-dialog-actions>
-
     </form>
-
 </div>
