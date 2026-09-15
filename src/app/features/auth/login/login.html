@@ -1,30 +1,218 @@
-<div class="container mt-5" style="max-width: 400px;">
-    <h2>Login</h2>
-    <input
-        class="form-control mb-3"
-        type="email"
-        placeholder="Email"
-        [(ngModel)]="email">
-    <input
-        class="form-control mb-3"
-        type="password"
-        placeholder="Password"
-        [(ngModel)]="password">
-    <button
-        type="button"
-        class="forgot-password-link"
-        (click)="goToForgotPassword()">
-        Forgot password?
-    </button>
-    <button
-        class="btn btn-primary w-100"
-        (click)="login()">
-        Login
-    </button> 
-    <div class="text-center mt-3">
-        Don't have an account?
-        <a routerLink="/register">
-            Register
-        </a>
+<div class="auth-page login-page">
+
+    <!-- Decorative background -->
+    <div class="auth-orb auth-orb-one"></div>
+    <div class="auth-orb auth-orb-two"></div>
+    <div class="auth-grid"></div>
+
+    <div class="auth-content">
+
+        <!-- Brand -->
+        <div class="auth-brand">
+
+            <div class="brand-mark">
+                ✓
+            </div>
+
+            <div class="brand-name">
+                Habit<span>Builder</span>
+            </div>
+
+        </div>
+
+
+        <!-- Small intro -->
+        <div class="auth-intro">
+
+            <span class="welcome-badge">
+                <span class="status-dot"></span>
+                Welcome back
+            </span>
+
+            <h1>
+                Build better days.
+            </h1>
+
+            <p>
+                Pick up where you left off and keep
+                building the habits that matter.
+            </p>
+
+        </div>
+
+
+        <!-- Login Card -->
+        <div class="auth-card">
+
+            <div class="card-heading">
+
+                <h2>Sign in</h2>
+
+                <p>
+                    Enter your details to continue.
+                </p>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="login-email">
+                    Email
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">
+                        @
+                    </span>
+
+                    <input
+                        id="login-email"
+                        class="auth-input"
+                        type="email"
+                        placeholder="you@example.com"
+                        [(ngModel)]="email">
+
+                </div>
+
+            </div>
+
+
+
+            <div class="form-group">
+
+                <label for="login-password">
+                    Password
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">
+                        •
+                    </span>
+
+                    <input
+                        id="login-password"
+                        class="auth-input"
+                        [type]="showPassword ? 'text' : 'password'"
+                        placeholder="Enter your password"
+                        [(ngModel)]="password">
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        (click)="showPassword = !showPassword"
+                        [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+
+                        <mat-icon>
+                            {{ showPassword ? 'visibility_off' : 'visibility' }}
+                        </mat-icon>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="forgot-password-link"
+                (click)="goToForgotPassword()">
+
+                Forgot password?
+
+            </button>
+
+
+            <button
+                type="button"
+                class="auth-primary-button"
+                (click)="login()">
+
+                <span>Login</span>
+
+                <span class="button-arrow">
+                    →
+                </span>
+
+            </button>
+
+
+            <div class="auth-divider">
+
+                <span></span>
+
+                <small>
+                    New to HabitBuilder?
+                </small>
+
+                <span></span>
+
+            </div>
+
+
+            <div class="auth-switch">
+
+                <span>
+                    Don't have an account?
+                </span>
+
+                <a routerLink="/register">
+                    Create one
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- Bottom feature strip -->
+        <div class="auth-features">
+
+            <div class="auth-feature">
+
+                <div class="feature-icon">
+                    ✓
+                </div>
+
+                <span>
+                    Build habits
+                </span>
+
+            </div>
+
+            <div class="feature-line"></div>
+
+            <div class="auth-feature">
+
+                <div class="feature-icon">
+                    ↗
+                </div>
+
+                <span>
+                    Track progress
+                </span>
+
+            </div>
+
+            <div class="feature-line"></div>
+
+            <div class="auth-feature">
+
+                <div class="feature-icon">
+                    ★
+                </div>
+
+                <span>
+                    Stay consistent
+                </span>
+
+            </div>
+
+        </div>
+
     </div>
+
 </div>

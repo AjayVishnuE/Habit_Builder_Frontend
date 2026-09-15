@@ -1,36 +1,270 @@
-<div class="container d-flex justify-content-center align-items-center vh-100">
-    <mat-card class="p-4 shadow register-card">
-        <h2 class="text-center mb-4">
-            Create Account
-        </h2>
-        <form
-            [formGroup]="registerForm"
-            (ngSubmit)="register()">
-            <mat-form-field appearance="outline" class="w-100 mb-3">
-                <mat-label>Name</mat-label>
-                <input matInput formControlName="name"/>
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="w-100 mb-3">
-                <mat-label>Email</mat-label>
-                <input matInput type="email" formControlName="email">
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="w-100 mb-3">
-                <mat-label>Password</mat-label>
-                <input matInput type="password" formControlName="password">
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="w-100 mb-3">
-                <mat-label>Confirm Password</mat-label>
-                <input matInput type="password" formControlName="confirmPassword">
-            </mat-form-field>
-            <button mat-raised-button color="primary" class="w-100 mb-3" type="submit">
-                Register
-            </button>
-        </form>
-        <div class="text-center">
-            Already have an account?
-            <a routerLink="/login">
-                Login
-            </a>
+<div class="auth-page register-page">
+
+    <!-- Decorative background -->
+    <div class="auth-orb auth-orb-one"></div>
+    <div class="auth-orb auth-orb-two"></div>
+    <div class="auth-grid"></div>
+
+    <div class="auth-content">
+
+        <!-- Brand -->
+        <div class="auth-brand">
+
+            <div class="brand-mark">
+                ✓
+            </div>
+
+            <div class="brand-name">
+                Habit<span>Builder</span>
+            </div>
+
         </div>
-    </mat-card>
+
+
+        <!-- Intro -->
+        <div class="auth-intro">
+
+            <span class="welcome-badge">
+                <span class="status-dot"></span>
+                Start your journey
+            </span>
+
+            <h1>
+                Make small changes.
+            </h1>
+
+            <p>
+                Create your space, build better habits,
+                and watch your progress grow.
+            </p>
+
+        </div>
+
+
+        <!-- Register Card -->
+        <div class="auth-card register-card">
+
+            <div class="card-heading">
+
+                <h2>Create your account</h2>
+
+                <p>
+                    It only takes a minute to get started.
+                </p>
+
+            </div>
+
+
+            <form
+                [formGroup]="registerForm"
+                (ngSubmit)="register()">
+
+                <!-- NAME -->
+
+                <div class="form-group">
+
+                    <label for="register-name">
+                        Name
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            ●
+                        </span>
+
+                        <input
+                            id="register-name"
+                            class="auth-input"
+                            type="text"
+                            placeholder="Your name"
+                            formControlName="name">
+
+                    </div>
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="register-email">
+                        Email
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            @
+                        </span>
+
+                        <input
+                            id="register-email"
+                            class="auth-input"
+                            type="email"
+                            placeholder="you@example.com"
+                            formControlName="email">
+
+                    </div>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+                <div class="form-group">
+
+                    <label for="register-password">
+                        Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            •
+                        </span>
+
+                        <input
+                            id="register-password"
+                            class="auth-input"
+                            [type]="showPassword ? 'text' : 'password'"
+                            placeholder="Create a password"
+                            formControlName="password">
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            (click)="showPassword = !showPassword"
+                            [attr.aria-label]="
+                                showPassword
+                                    ? 'Hide password'
+                                    : 'Show password'
+                            ">
+
+                            <mat-icon>
+                                {{
+                                    showPassword
+                                        ? 'visibility_off'
+                                        : 'visibility'
+                                }}
+                            </mat-icon>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CONFIRM PASSWORD -->
+
+                <div class="form-group">
+
+                    <label for="register-confirm-password">
+                        Confirm password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            •
+                        </span>
+
+                        <input
+                            id="register-confirm-password"
+                            class="auth-input"
+                            [type]="showConfirmPassword ? 'text' : 'password'"
+                            placeholder="Repeat your password"
+                            formControlName="confirmPassword">
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            (click)="showConfirmPassword = !showConfirmPassword"
+                            [attr.aria-label]="
+                                showConfirmPassword
+                                    ? 'Hide password'
+                                    : 'Show password'
+                            ">
+
+                            <mat-icon>
+                                {{
+                                    showConfirmPassword
+                                        ? 'visibility_off'
+                                        : 'visibility'
+                                }}
+                            </mat-icon>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="auth-primary-button"
+                    type="submit">
+
+                    <span>
+                        Create account
+                    </span>
+
+                    <span class="button-arrow">
+                        →
+                    </span>
+
+                </button>
+
+            </form>
+
+
+            <div class="auth-divider">
+
+                <span></span>
+
+                <small>
+                    Already part of HabitBuilder?
+                </small>
+
+                <span></span>
+
+            </div>
+
+
+            <div class="auth-switch">
+
+                <span>
+                    Already have an account?
+                </span>
+
+                <a routerLink="/login">
+                    Sign in
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- Bottom message -->
+        <div class="register-message">
+
+            <span class="message-spark">
+                ✦
+            </span>
+
+            <span>
+                Better habits.
+                <strong>Brighter future.</strong>
+            </span>
+
+            <span class="message-spark">
+                ✦
+            </span>
+
+        </div>
+
+    </div>
+
 </div>

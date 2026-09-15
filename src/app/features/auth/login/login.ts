@@ -2,11 +2,12 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
 import { Router, RouterLink } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, MatIconModule],
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })
@@ -16,6 +17,7 @@ export class Login {
   private router = inject(Router);
   email = '';
   password = ''; 
+  showPassword = false;
 
   login() {
     this.authService.login({
