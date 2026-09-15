@@ -78,11 +78,49 @@
 .search-field {
   width: 100%;
   margin-top: 10px;
-}
 
-.search-field mat-icon {
-  margin-right: 7px;
-  color: var(--text-secondary);
+  ::ng-deep .mat-mdc-text-field-wrapper {
+    background: var(--surface);
+    border-radius: 12px;
+  }
+
+  ::ng-deep .mdc-notched-outline {
+    border-color: var(--border);
+    border-radius: 10px !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  ::ng-deep .mat-mdc-form-field-flex {
+    min-height: 52px;
+  }
+
+  ::ng-deep .mat-mdc-input-element {
+    color: var(--text-primary);
+    font-size: 13px;
+  }
+
+  ::ng-deep .mat-mdc-floating-label {
+    color: var(--text-secondary);
+  }
+
+  ::ng-deep .mat-mdc-form-field-icon-prefix {
+    color: var(--text-secondary);
+    padding-left: 4px;
+  }
+
+  ::ng-deep .mat-mdc-form-field-icon-prefix mat-icon {
+    margin-right: 5px;
+  }
+
+  ::ng-deep .mat-mdc-text-field-wrapper:hover .mdc-notched-outline {
+    border-color: var(--accent);
+  }
+
+  ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline {
+    border-color: var(--accent);
+    border-width: 1px;
+    box-shadow: 0 0 0 3px rgba(91, 91, 214, 0.08);
+  }
 }
 
 .frequency-filters {
@@ -164,8 +202,9 @@
 }
 
 .mobile-frequency {
-  display: none;
-}
+  display: none
+
+}  
 
 /* =========================
    RESULTS HEADER
@@ -294,10 +333,17 @@
   }
 
   .habit-controls {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(125px, 0.85fr);
+    align-items: center;
+    gap: 9px;
     margin-bottom: 24px;
+  }
+
+  .search-field,
+  .mobile-frequency {
+    margin-top: 0;
+    min-width: 0;
   }
 
   .frequency-filters {
@@ -306,7 +352,33 @@
 
   .mobile-frequency {
     display: block;
-    width: 100%;
+      width: 100%;
+
+      ::ng-deep .mat-mdc-text-field-wrapper {
+        background: var(--surface);
+        border-radius: 12px;
+      }
+
+      ::ng-deep .mdc-notched-outline {
+        border-color: var(--border);
+      }
+
+      ::ng-deep .mat-mdc-form-field-flex {
+        min-height: 52px;
+      }
+
+      ::ng-deep .mat-mdc-floating-label {
+        color: var(--text-secondary);
+      }
+
+      ::ng-deep .mat-mdc-select-value {
+        color: var(--text-primary);
+        font-size: 13px;
+      }
+
+      ::ng-deep .mat-mdc-select-arrow {
+        color: var(--text-secondary);
+      }
   }
   .results-header {
     margin-bottom: 12px;
