@@ -775,3 +775,197 @@
         justify-content: flex-end;
     }
 }
+
+/* ==============================
+   DELETE CONFIRMATION MODAL
+   ============================== */
+
+.delete-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(0, 0, 0, 0.48);
+
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  animation: deleteModalFadeIn 0.18s ease-out;
+}
+
+.delete-modal {
+  width: min(420px, 100%);
+
+  padding: 26px;
+
+  border: 1px solid var(--border);
+  border-radius: 18px;
+
+  background: var(--surface);
+  color: var(--text-primary);
+
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.22),
+    0 4px 18px rgba(0, 0, 0, 0.08);
+
+  animation: deleteModalSlideIn 0.2s ease-out;
+}
+
+.delete-modal-icon {
+  width: 48px;
+  height: 48px;
+
+  margin-bottom: 18px;
+
+  border-radius: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: color-mix(
+    in srgb,
+    #d32f2f 10%,
+    var(--surface-secondary)
+  );
+
+  color: #d32f2f;
+
+  mat-icon {
+    width: 23px;
+    height: 23px;
+    font-size: 23px;
+  }
+}
+
+.delete-modal-content {
+
+  h3 {
+    margin: 0;
+
+    font-size: 19px;
+    font-weight: 600;
+
+    color: var(--text-primary);
+  }
+
+  p {
+    margin: 10px 0 4px;
+
+    font-size: 14px;
+    line-height: 1.55;
+
+    color: var(--text-primary);
+
+    strong {
+      font-weight: 600;
+    }
+  }
+
+  > span {
+    display: block;
+
+    margin-top: 4px;
+
+    font-size: 12px;
+    line-height: 1.5;
+
+    color: var(--text-secondary);
+  }
+}
+
+.delete-modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 8px;
+
+  margin-top: 24px;
+}
+
+.delete-cancel-button {
+  color: var(--text-secondary);
+  border-radius: 10px;
+  &:hover {
+    background: var(--surface-hover);
+  }
+}
+
+.delete-confirm-button {
+  min-width: 92px;
+
+  border-radius: 9px;
+
+  background: #d32f2f;
+  color: #ffffff;
+
+  mat-icon {
+    width: 18px;
+    height: 18px;
+
+    margin-right: 4px;
+
+    font-size: 18px;
+  }
+
+  &:hover {
+    background: #b71c1c;
+  }
+}
+
+
+/* ==============================
+   DELETE MODAL ANIMATION
+   ============================== */
+
+@keyframes deleteModalFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes deleteModalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+/* ==============================
+   MOBILE
+   ============================== */
+
+@media (max-width: 600px) {
+
+  .delete-modal {
+    padding: 22px;
+
+    border-radius: 16px;
+  }
+
+  .delete-modal-actions {
+    margin-top: 20px;
+  }
+
+  .delete-cancel-button,
+  .delete-confirm-button {
+    flex: 1;
+  }
+}

@@ -25,6 +25,7 @@
     margin: 0;
     font-size: 24px;
     font-weight: 600;
+    color: var(--text-primary);
   }
 }
 
@@ -40,6 +41,11 @@
   justify-content: center;
 
   cursor: pointer;
+  color: var(--text-primary);
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 
   mat-icon {
     font-size: 21px;
@@ -48,7 +54,12 @@
   }
 
   &:hover {
-    background: #f0f0f0;
+    background: var(--surface-hover);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
   }
 }
 
@@ -75,14 +86,19 @@
   border-radius: 50%;
   overflow: hidden;
 
-  background: #eeeeee;
+  background: var(--surface-secondary);
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border: 4px solid #ffffff;
-  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.12);
+  border: 4px solid var(--surface);
+  box-shadow: var(--shadow);
+
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 
   img {
     width: 100%;
@@ -100,11 +116,11 @@
   width: 38px;
   height: 38px;
 
-  border: 3px solid white;
+  border: 3px solid var(--surface);
   border-radius: 50%;
 
-  background: #333;
-  color: white;
+  background: var(--text-primary);
+  color: var(--background);
 
   display: flex;
   align-items: center;
@@ -112,10 +128,25 @@
 
   cursor: pointer;
 
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    opacity 0.2s ease,
+    transform 0.2s ease;
+
   mat-icon {
     font-size: 18px;
     width: 18px;
     height: 18px;
+  }
+
+  &:hover {
+    transform: scale(1.04);
+  }
+
+  &.uploading {
+    cursor: wait;
+    opacity: 0.7;
   }
 }
 
@@ -123,7 +154,7 @@
   margin: 12px 0 0;
 
   font-size: 13px;
-  color: #777;
+  color: var(--text-secondary);
 }
 
 
@@ -142,12 +173,13 @@
     margin: 0;
     font-size: 18px;
     font-weight: 600;
+    color: var(--text-primary);
   }
 
   p {
     margin: 4px 0 0;
     font-size: 13px;
-    color: #777;
+    color: var(--text-secondary);
   }
 }
 
@@ -163,10 +195,14 @@
 }
 
 .geek-stat {
-  border: 1px solid #e5e5e5;
+  border: 1px solid var(--border);
   border-radius: 12px;
   overflow: hidden;
-  background: white;
+  background: var(--surface);
+
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease;
 }
 
 .geek-stat-header {
@@ -186,6 +222,14 @@
 
   text-align: left;
   cursor: pointer;
+  color: var(--text-primary);
+
+  transition:
+    background-color 0.2s ease;
+
+  &:hover {
+    background: var(--surface-hover);
+  }
 }
 
 .stat-icon {
@@ -196,11 +240,16 @@
 
   border-radius: 10px;
 
-  background: #f3f3f3;
+  background: var(--surface-secondary);
+  color: var(--text-primary);
 
   display: flex;
   align-items: center;
   justify-content: center;
+
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
 
   mat-icon {
     font-size: 20px;
@@ -214,10 +263,11 @@
 
   font-size: 14px;
   font-weight: 500;
+  color: var(--text-primary);
 }
 
 .expand-icon {
-  color: #777;
+  color: var(--text-secondary);
 }
 
 .geek-stat-details {
@@ -229,11 +279,12 @@
 
   strong {
     font-size: 15px;
+    color: var(--text-primary);
   }
 
   span {
     font-size: 13px;
-    color: #777;
+    color: var(--text-secondary);
   }
 }
 
@@ -252,7 +303,7 @@
 }
 
 .summary-card {
-  border: 1px solid #e5e5e5;
+  border: 1px solid var(--border);
   border-radius: 12px;
 
   padding: 18px 12px;
@@ -263,19 +314,122 @@
 
   text-align: center;
 
-  background: white;
+  background: var(--surface);
+
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.2s ease;
+
+  &:hover {
+    background: var(--surface-hover);
+  }
 
   strong {
     font-size: 24px;
     font-weight: 600;
+    color: var(--text-primary);
   }
 
   span {
     margin-top: 4px;
 
     font-size: 12px;
-    color: #777;
+    color: var(--text-secondary);
   }
+}
+
+
+/* ==============================
+   LOADING
+   ============================== */
+
+.profile-loading {
+  min-height: 300px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--text-secondary);
+
+  mat-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+  }
+
+  p {
+    margin-top: 10px;
+  }
+}
+
+
+/* ==============================
+   ERROR
+   ============================== */
+
+.profile-error {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+
+  border-radius: 10px;
+
+  background: color-mix(
+    in srgb,
+    #b3261e 10%,
+    var(--surface)
+  );
+
+  border: 1px solid color-mix(
+    in srgb,
+    #b3261e 20%,
+    var(--border)
+  );
+
+  color: #b3261e;
+
+  font-size: 13px;
+}
+
+
+/* ==============================
+   USERNAME EDIT
+   ============================== */
+
+.username-input {
+  width: min(280px, 55vw);
+
+  border: none;
+  border-bottom: 2px solid var(--text-secondary);
+
+  background: transparent;
+
+  padding: 4px 2px;
+
+  font-size: 24px;
+  font-weight: 600;
+
+  color: var(--text-primary);
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease;
+
+  &::placeholder {
+    color: var(--text-secondary);
+  }
+
+  &:focus {
+    border-bottom-color: var(--accent);
+  }
+}
+
+.save-name-button {
+  color: var(--accent);
 }
 
 
@@ -299,6 +453,10 @@
     font-size: 20px;
   }
 
+  .username-input {
+    font-size: 20px;
+  }
+
   .avatar {
     width: 115px;
     height: 115px;
@@ -316,70 +474,4 @@
   .geek-stat-details {
     padding-left: 64px;
   }
-}
-
-.profile-loading {
-  min-height: 300px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  color: #777;
-
-  mat-icon {
-    font-size: 32px;
-    width: 32px;
-    height: 32px;
-  }
-}
-
-.profile-error {
-  margin-bottom: 16px;
-  padding: 12px 14px;
-
-  border-radius: 10px;
-
-  background: #fff1f1;
-  color: #b3261e;
-
-  font-size: 13px;
-}
-
-.username-input {
-  width: min(280px, 55vw);
-
-  border: none;
-  border-bottom: 2px solid #555;
-
-  background: transparent;
-
-  padding: 4px 2px;
-
-  font-size: 24px;
-  font-weight: 600;
-
-  outline: none;
-}
-
-.save-name-button {
-  color: #2e7d32;
-}
-
-.avatar-edit {
-  cursor: pointer;
-
-  &.uploading {
-    cursor: wait;
-    opacity: 0.7;
-  }
-}
-
-@media (max-width: 600px) {
-
-  .username-input {
-    font-size: 20px;
-  }
-
 }

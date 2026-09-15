@@ -600,5 +600,67 @@
         </div>
 
     }
+<!-- =========================
+     DELETE CONFIRMATION MODAL
+========================== -->
 
+@if (deleteConfirmationTask) {
+
+    <div
+        class="delete-modal-backdrop"
+        (click)="cancelDelete()">
+
+        <div
+            class="delete-modal"
+            (click)="$event.stopPropagation()">
+
+            <div class="delete-modal-icon">
+                <mat-icon>delete_outline</mat-icon>
+            </div>
+
+            <div class="delete-modal-content">
+
+                <h3>Delete task?</h3>
+
+                <p>
+                    Are you sure you want to delete
+                    <strong>
+                        "{{ deleteConfirmationTask.title }}"
+                    </strong>?
+                </p>
+
+                <span>
+                    This action cannot be undone.
+                </span>
+
+            </div>
+
+            <div class="delete-modal-actions">
+
+                <button
+                    mat-button
+                    class="delete-cancel-button"
+                    (click)="cancelDelete()">
+
+                    Cancel
+
+                </button>
+
+                <button
+                    mat-flat-button
+                    class="delete-confirm-button"
+                    (click)="confirmDelete()">
+
+                    <mat-icon>delete_outline</mat-icon>
+
+                    Delete
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+}
 </div>

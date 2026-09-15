@@ -87,6 +87,7 @@ export class Tasks implements OnInit {
 
   editedTask: Task | null = null;
   savingTaskId: string | null = null;
+  deleteConfirmationTask: Task | null = null;
 
   ngOnInit(): void {
     this.loadTasks();
@@ -591,41 +592,50 @@ export class Tasks implements OnInit {
      DELETE
   ========================= */
 
-  deleteTask(task: Task): void {
+deleteTask(task: Task): void {
+  this.deleteConfirmationTask = task;
+}
 
-    const confirmed = confirm(
-      `Delete "${task.title}"?`
-    );
+cancelDelete(): void {
+  this.deleteConfirmationTask = null;
+}
 
-    if (!confirmed) {
-      return;
-    }
+confirmDelete(): void {
+  const task = this.deleteConfirmationTask;
 
-    this.taskService
-      .deleteTask(task._id)
-      .subscribe({
-
-        next: () => {
-
-          if (
-            this.expandedTaskId ===
-            task._id
-          ) {
-            this.closeExpandedTask();
-          }
-
-          this.loadTasks();
-        },
-
-        error: (error) => {
-          console.error(
-            'Failed to delete task:',
-            error
-          );
-        }
-      });
+  if (!task) {
+    return;
   }
 
+  this.taskService
+    .deleteTask(task._id)
+    .subscribe({
+
+      next: () => {
+
+        if (
+          this.expandedTaskId ===
+          task._id
+        ) {
+          this.closeExpandedTask();
+        }
+
+        this.deleteConfirmationTask = null;
+
+        this.loadTasks();
+      },
+
+      error: (error) => {
+        console.error(
+          'Failed to delete task:',
+          error
+        );
+
+        this.deleteConfirmationTask = null;
+        this.cdr.detectChanges();
+      }
+    });
+}
   /* =========================
      PRIORITY
   ========================= */
