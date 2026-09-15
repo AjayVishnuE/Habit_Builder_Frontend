@@ -1,55 +1,126 @@
 <div class="editor-page">
+
     @if (loading) {
+
         <div class="loading-state">
-            <mat-icon>hourglass_empty</mat-icon>
+
+            <mat-icon>
+                hourglass_empty
+            </mat-icon>
+
             <span>
                 Loading note...
             </span>
+
         </div>
+
     } @else {
+
         <!-- TOP BAR -->
+
         <div class="editor-topbar">
-            <button mat-button class="back-button" (click)="goBack()">
-                <mat-icon>arrow_back</mat-icon>
+
+            <button
+                mat-button
+                class="back-button"
+                (click)="goBack()">
+
+                <mat-icon>
+                    arrow_back
+                </mat-icon>
+
                 Notes
+
             </button>
+
         </div>
+
+
         <!-- EDITORIAL AREA -->
+
         <main class="editorial-window">
+
+            <div class="editor-label">
+                {{ note ? 'EDIT NOTE' : 'NEW NOTE' }}
+            </div>
+
             <!-- TITLE -->
-            <input class="note-title" type="text" [(ngModel)]="title" placeholder="Note title" />
+
+            <input
+                class="note-title"
+                type="text"
+                [(ngModel)]="title"
+                placeholder="Note title" />
+
+
             <!-- META -->
+
             @if (note) {
+
                 <div class="note-meta">
+
                     <span>
                         Created
                         {{ note.createdAt | date:'dd MMMM yyyy, hh:mm a' }}
                     </span>
-                    @if (note.updatedAt !== note.createdAt) {
-                    <span>
-                        Updated
-                        {{ note.updatedAt | date:'dd MMMM yyyy, hh:mm a' }}
-                    </span>
+
+                    @if (
+                        note.updatedAt !== note.createdAt
+                    ) {
+
+                        <span>
+                            Updated
+                            {{ note.updatedAt | date:'dd MMMM yyyy, hh:mm a' }}
+                        </span>
+
                     }
+
                 </div>
+
             }
+
+
             <!-- CONTENT -->
-            <textarea class="note-editor" [(ngModel)]="content" placeholder="Start writing..."></textarea>
+
+            <textarea
+                class="note-editor"
+                [(ngModel)]="content"
+                placeholder="Start writing...">
+            </textarea>
+
+
             <!-- SAVE -->
+
             @if (canSave()) {
+
                 <div class="save-container">
-                    <button mat-flat-button class="save-button" (click)="saveNote()">
+
+                    <button
+                        mat-flat-button
+                        class="save-button"
+                        (click)="saveNote()">
+
                         <mat-icon>
-                            {{ saving ? 'hourglass_empty' : 'save' }}
+                            {{ saving
+                                ? 'hourglass_empty'
+                                : 'save'
+                            }}
                         </mat-icon>
+
                         {{
-                        saving
-                        ? 'Saving...'
-                        : 'Save'
+                            saving
+                                ? 'Saving...'
+                                : 'Save'
                         }}
+
                     </button>
+
                 </div>
+
             }
+
         </main>
+
     }
+
 </div>

@@ -1,66 +1,144 @@
 <div class="notes-container">
+
     <div class="notes-header">
+
         <div class="header-content">
+
+            <div class="section-kicker">
+                YOUR THOUGHTS
+            </div>
+
             <h2>Notes</h2>
+
             <p>
                 Keep your thoughts, ideas and information organized.
             </p>
+
         </div>
-        <button mat-icon-button class="add-note-button" (click)="addNote()" aria-label="Add note">
+
+        <button
+            mat-icon-button
+            class="add-note-button"
+            (click)="addNote()"
+            aria-label="Add note">
+
             <mat-icon>add</mat-icon>
+
         </button>
+
     </div>
+
+
     @if (loading) {
+
         <div class="loading-state">
-            <mat-icon>hourglass_empty</mat-icon>
-            <span>Loading notes...</span>
+
+            <mat-icon>
+                hourglass_empty
+            </mat-icon>
+
+            <span>
+                Loading notes...
+            </span>
+
         </div>
+
     } @else if (notes.length === 0) {
+
         <div class="empty-state">
-            <mat-icon>description</mat-icon>
+
+            <div class="empty-note-icon">
+                <mat-icon>
+                    description
+                </mat-icon>
+            </div>
+
             <h3>No notes yet</h3>
+
             <p>
                 Start writing something you want to remember.
             </p>
-            <button mat-flat-button (click)="addNote()">
-                <mat-icon>add</mat-icon>
+
+            <button
+                mat-flat-button
+                class="create-note-button"
+                (click)="addNote()">
+
+                <mat-icon>
+                    add
+                </mat-icon>
+
                 Create Note
+
             </button>
+
         </div>
+
     } @else {
+
         <div class="notes-list">
+
             @for (note of notes; track note._id) {
-                <article class="note-card" (click)="openNote(note)">
+
+                <article
+                    class="note-card"
+                    (click)="openNote(note)">
+
+                    <div class="note-marker"></div>
+
                     <div class="note-content">
+
                         <h3>
                             {{ note.title }}
                         </h3>
+
                         <p>
                             {{ getPreview(note.content) }}
                         </p>
+
                         <div class="note-date">
+
                             @if (
-                            note.updatedAt &&
-                            note.updatedAt !== note.createdAt
+                                note.updatedAt &&
+                                note.updatedAt !== note.createdAt
                             ) {
-                            <span>
-                                Updated
-                                {{ note.updatedAt | date:'dd MMM yyyy' }}
-                            </span>
+
+                                <span>
+                                    Updated
+                                    {{ note.updatedAt | date:'dd MMM yyyy' }}
+                                </span>
+
                             } @else {
-                            <span>
-                                Created
-                                {{ note.createdAt | date:'dd MMM yyyy' }}
-                            </span>
+
+                                <span>
+                                    Created
+                                    {{ note.createdAt | date:'dd MMM yyyy' }}
+                                </span>
+
                             }
+
                         </div>
+
                     </div>
-                    <button mat-icon-button class="delete-note-button" (click)="deleteNote($event, note)"
+
+                    <button
+                        mat-icon-button
+                        class="delete-note-button"
+                        (click)="deleteNote($event, note)"
                         aria-label="Delete note">
-                        <mat-icon>delete_outline</mat-icon>
+
+                        <mat-icon>
+                            delete_outline
+                        </mat-icon>
+
                     </button>
+
                 </article>
+
             }
+
         </div>
+
     }
+
 </div>

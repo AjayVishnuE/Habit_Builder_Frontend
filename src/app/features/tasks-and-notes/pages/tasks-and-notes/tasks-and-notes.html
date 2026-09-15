@@ -1,13 +1,17 @@
 <div class="tasks-notes-page">
     <div class="page-header">
-        <div>
-            <h2>📝 Tasks & Notes</h2>
+        <div class="header-copy">
+            <div class="section-kicker">YOUR WORKSPACE</div>
+            <h2>
+                <span class="header-icon">✦</span>
+                Tasks & Notes
+            </h2>
             <p>
-                Organize your tasks and keep track of your thoughts.
+                Organize what needs to be done and keep track of what matters.
             </p>
         </div>
     </div>
-    <mat-tab-group animationDuration="200ms">
+    <mat-tab-group class="tasks-notes-tabs" animationDuration="200ms">
         <mat-tab label="Tasks">
             <div class="tab-content">
                 <app-tasks></app-tasks>

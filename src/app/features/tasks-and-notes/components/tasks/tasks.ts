@@ -1,6 +1,13 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  ChangeDetectorRef
+} from '@angular/core';
+
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -49,12 +56,32 @@ export class Tasks implements OnInit {
   private cdr = inject(ChangeDetectorRef);
 
   taskDays: TaskDay[] = [];
-
+  allTasks: Task[] = [];
   loading = true;
+
+  /* =========================
+     NORMAL ADD
+  ========================= */
+
   addingTaskFor: string | null = null;
 
   newTaskTitle = '';
   newTaskPriority: 'Low' | 'Medium' | 'High' = 'Medium';
+
+  /* =========================
+     FUTURE TASKS
+  ========================= */
+
+  showUpcomingTasks = false;
+  addingFutureTask = false;
+
+  futureTaskTitle = '';
+  futureTaskPriority: 'Low' | 'Medium' | 'High' = 'Medium';
+  futureTaskDate = '';
+
+  /* =========================
+     EDIT
+  ========================= */
 
   expandedTaskId: string | null = null;
 
@@ -63,29 +90,47 @@ export class Tasks implements OnInit {
 
   ngOnInit(): void {
     this.loadTasks();
-    this.cdr.detectChanges();
   }
+
+  /* =========================
+     LOAD
+  ========================= */
 
   loadTasks(): void {
     this.loading = true;
 
     this.taskService.getTasks().subscribe({
       next: (tasks: Task[]) => {
-        this.buildTaskDays(tasks);
+        // Always keep the complete dataset.
+        this.allTasks = tasks;
+
+        // Build the currently visible timeline from all tasks.
+        this.buildTaskDays(this.allTasks);
+
         this.loading = false;
         this.cdr.detectChanges();
       },
+
       error: (error) => {
         console.error('Failed to load tasks:', error);
         this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }
 
-  private buildTaskDays(tasks: Task[]): void {
+  /* =========================
+     BUILD DAY GROUPS
+  ========================= */
+
+  buildTaskDays(tasks: Task[]): void  {
     const grouped = new Map<string, Task[]>();
 
     tasks.forEach(task => {
+      if (!task.dueDate) {
+        return;
+      }
+
       const dateKey = this.getDateKey(task.dueDate);
 
       if (!grouped.has(dateKey)) {
@@ -97,24 +142,55 @@ export class Tasks implements OnInit {
 
     const today = this.startOfDay(new Date());
 
-    const dates = Array.from(grouped.keys())
-      .map(key => this.parseDateKey(key))
-      .filter(date => date <= today)
-      .sort((a, b) => b.getTime() - a.getTime());
+    let dates = Array.from(grouped.keys())
+      .map(key => this.parseDateKey(key));
+
+    if (this.showUpcomingTasks) {
+
+      /*
+       * Upcoming mode:
+       * Future → Today → Past
+       */
+      dates = dates.sort((a, b) => b.getTime() - a.getTime());
+      this.cdr.detectChanges();
+
+    } else {
+
+      /*
+       * Normal mode:
+       * Today → Yesterday → Older
+       *
+       * Future dates are hidden.
+       */
+      dates = dates
+        .filter(date => date.getTime() <= today.getTime())
+        .sort((a, b) => b.getTime() - a.getTime());
+    }
 
     this.taskDays = dates.map(date => ({
       date,
       tasks: grouped.get(this.getDateKey(date.toISOString())) || []
     }));
 
-    // Always show today even if there are no tasks.
-    if (!this.taskDays.some(day => this.isToday(day.date))) {
+    /*
+     * Always show Today in normal mode.
+     */
+    if (
+      !this.showUpcomingTasks &&
+      !this.taskDays.some(day => this.isToday(day.date))
+    ) {
       this.taskDays.unshift({
         date: today,
         tasks: []
       });
+      this.cdr.detectChanges();
     }
+    this.cdr.detectChanges();
   }
+
+  /* =========================
+     DATE HELPERS
+  ========================= */
 
   getDateKey(dateValue: string): string {
     const date = new Date(dateValue);
@@ -128,12 +204,19 @@ export class Tasks implements OnInit {
 
   private parseDateKey(key: string): Date {
     const [year, month, day] = key.split('-').map(Number);
-    return new Date(year, month - 1, day);
+
+    return new Date(
+      year,
+      month - 1,
+      day
+    );
   }
 
   private startOfDay(date: Date): Date {
     const result = new Date(date);
+
     result.setHours(0, 0, 0, 0);
+
     return result;
   }
 
@@ -147,13 +230,22 @@ export class Tasks implements OnInit {
     );
   }
 
+  isFuture(date: Date): boolean {
+    return this.startOfDay(date).getTime() >
+      this.startOfDay(new Date()).getTime();
+  }
+
   getDayLabel(date: Date): string {
+
     if (this.isToday(date)) {
       return 'Today';
     }
 
     const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
+
+    yesterday.setDate(
+      yesterday.getDate() - 1
+    );
 
     if (
       date.getFullYear() === yesterday.getFullYear() &&
@@ -163,21 +255,76 @@ export class Tasks implements OnInit {
       return 'Yesterday';
     }
 
-    return date.toLocaleDateString('en-US', {
-      weekday: 'long'
-    });
+    if (this.isFuture(date)) {
+      const tomorrow = new Date();
+
+      tomorrow.setDate(
+        tomorrow.getDate() + 1
+      );
+
+      if (
+        date.getFullYear() === tomorrow.getFullYear() &&
+        date.getMonth() === tomorrow.getMonth() &&
+        date.getDate() === tomorrow.getDate()
+      ) {
+        return 'Tomorrow';
+      }
+    }
+
+    return date.toLocaleDateString(
+      'en-US',
+      {
+        weekday: 'long'
+      }
+    );
   }
 
   getFullDate(date: Date): string {
-    return date.toLocaleDateString('en-US', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
+    return date.toLocaleDateString(
+      'en-US',
+      {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      }
+    );
   }
 
+  /* =========================
+     UPCOMING TOGGLE
+  ========================= */
+
+  toggleUpcomingTasks(): void {
+    this.showUpcomingTasks = !this.showUpcomingTasks;
+
+    this.addingTaskFor = null;
+    this.addingFutureTask = false;
+
+    // Rebuild from ALL tasks, not only the currently visible days.
+    this.buildTaskDays(this.allTasks);
+
+    this.cdr.detectChanges();
+  }
+
+  /* =========================
+     NORMAL ADD TASK
+  ========================= */
+
   openAddTask(date: Date): void {
-    this.addingTaskFor = this.getDateKey(date.toISOString());
+
+    /*
+     * Future dates are intentionally added through
+     * the dedicated "Add future task" flow.
+     */
+    if (this.isFuture(date)) {
+      return;
+    }
+
+    this.addingFutureTask = false;
+
+    this.addingTaskFor =
+      this.getDateKey(date.toISOString());
+
     this.newTaskTitle = '';
     this.newTaskPriority = 'Medium';
   }
@@ -188,6 +335,7 @@ export class Tasks implements OnInit {
   }
 
   saveNewTask(date: Date): void {
+
     const title = this.newTaskTitle.trim();
 
     if (!title) {
@@ -206,28 +354,147 @@ export class Tasks implements OnInit {
       next: () => {
         this.cancelAddTask();
         this.loadTasks();
-        this.cdr.detectChanges();
       },
+
       error: (error) => {
-        console.error('Failed to create task:', error);
+        console.error(
+          'Failed to create task:',
+          error
+        );
       }
     });
   }
+
+  /* =========================
+     FUTURE TASK
+  ========================= */
+
+  getTomorrowKey(): string {
+    const tomorrow = new Date();
+
+    tomorrow.setDate(
+      tomorrow.getDate() + 1
+    );
+
+    return this.getDateInputValue(tomorrow);
+  }
+
+  private getDateInputValue(date: Date): string {
+    return [
+      date.getFullYear(),
+      String(date.getMonth() + 1).padStart(2, '0'),
+      String(date.getDate()).padStart(2, '0')
+    ].join('-');
+  }
+
+  openFutureTask(): void {
+    this.addingTaskFor = null;
+
+    this.addingFutureTask = true;
+
+    this.futureTaskTitle = '';
+    this.futureTaskPriority = 'Medium';
+
+    /*
+     * Default future date = tomorrow.
+     */
+    this.futureTaskDate = this.getTomorrowKey();
+  }
+
+  cancelFutureTask(): void {
+    this.addingFutureTask = false;
+    this.futureTaskTitle = '';
+    this.futureTaskDate = '';
+    this.futureTaskPriority = 'Medium';
+  }
+
+  saveFutureTask(): void {
+
+    const title = this.futureTaskTitle.trim();
+
+    if (!title || !this.futureTaskDate) {
+      return;
+    }
+
+    const selectedDate = this.parseDateKey(
+      this.futureTaskDate
+    );
+
+    const today = this.startOfDay(
+      new Date()
+    );
+
+    /*
+     * Safety check:
+     * future flow can only create tomorrow onwards.
+     */
+    if (selectedDate.getTime() <= today.getTime()) {
+      return;
+    }
+
+    const task = {
+      title,
+      description: '',
+      dueDate: selectedDate.toISOString(),
+      priority: this.futureTaskPriority,
+      completed: false
+    };
+
+    this.taskService.createTask(task).subscribe({
+      next: () => {
+        this.cancelFutureTask();
+
+        /*
+         * Automatically reveal the newly created
+         * future task so the user can see it.
+         */
+        this.showUpcomingTasks = true;
+
+        this.loadTasks();
+      },
+
+      error: (error) => {
+        console.error(
+          'Failed to create future task:',
+          error
+        );
+      }
+    });
+  }
+
+  /* =========================
+     TOGGLE
+  ========================= */
 
   toggleTask(task: Task): void {
+
     this.taskService.toggleTask(task._id).subscribe({
       next: (updatedTask: Task) => {
-        task.completed = updatedTask.completed;
-        task.completedAt = updatedTask.completedAt;
+
+        task.completed =
+          updatedTask.completed;
+
+        task.completedAt =
+          updatedTask.completedAt;
+
         this.cdr.detectChanges();
       },
+
       error: (error) => {
-        console.error('Failed to toggle task:', error);
+        console.error(
+          'Failed to toggle task:',
+          error
+        );
       }
     });
   }
 
+  /* =========================
+     EDIT
+  ========================= */
+
   expandTask(task: Task): void {
+
     if (this.expandedTaskId === task._id) {
       this.closeExpandedTask();
       return;
@@ -243,7 +510,11 @@ export class Tasks implements OnInit {
   }
 
   hasTaskChanges(task: Task): boolean {
-    if (!this.editedTask || this.editedTask._id !== task._id) {
+
+    if (
+      !this.editedTask ||
+      this.editedTask._id !== task._id
+    ) {
       return false;
     }
 
@@ -256,7 +527,11 @@ export class Tasks implements OnInit {
   }
 
   saveTask(task: Task): void {
-    if (!this.editedTask || this.editedTask._id !== task._id) {
+
+    if (
+      !this.editedTask ||
+      this.editedTask._id !== task._id
+    ) {
       return;
     }
 
@@ -268,26 +543,56 @@ export class Tasks implements OnInit {
 
     const update = {
       title: this.editedTask.title.trim(),
-      description: this.editedTask.description || '',
+      description:
+        this.editedTask.description || '',
       priority: this.editedTask.priority,
       dueDate: this.editedTask.dueDate
     };
 
-    this.taskService.updateTask(task._id, update).subscribe({
-      next: (updatedTask: Task) => {
-        Object.assign(task, updatedTask);
-        this.editedTask = { ...updatedTask };
-        this.savingTaskId = null;
-        this.cdr.detectChanges();
-      },
-      error: (error) => {
-        console.error('Failed to update task:', error);
-        this.savingTaskId = null;
-      }
-    });
+    this.taskService
+      .updateTask(task._id, update)
+      .subscribe({
+
+        next: (updatedTask: Task) => {
+
+          Object.assign(
+            task,
+            updatedTask
+          );
+
+          this.editedTask = {
+            ...updatedTask
+          };
+
+          this.savingTaskId = null;
+
+          /*
+           * If the due date was changed from past → future
+           * or future → past, rebuild the visible groups.
+           */
+          this.loadTasks();
+        },
+
+        error: (error) => {
+
+          console.error(
+            'Failed to update task:',
+            error
+          );
+
+          this.savingTaskId = null;
+
+          this.cdr.detectChanges();
+        }
+      });
   }
 
+  /* =========================
+     DELETE
+  ========================= */
+
   deleteTask(task: Task): void {
+
     const confirmed = confirm(
       `Delete "${task.title}"?`
     );
@@ -296,29 +601,58 @@ export class Tasks implements OnInit {
       return;
     }
 
-    this.taskService.deleteTask(task._id).subscribe({
-      next: () => {
-        if (this.expandedTaskId === task._id) {
-          this.closeExpandedTask();
+    this.taskService
+      .deleteTask(task._id)
+      .subscribe({
+
+        next: () => {
+
+          if (
+            this.expandedTaskId ===
+            task._id
+          ) {
+            this.closeExpandedTask();
+          }
+
+          this.loadTasks();
+        },
+
+        error: (error) => {
+          console.error(
+            'Failed to delete task:',
+            error
+          );
         }
-        this.loadTasks();
-        this.cdr.detectChanges();
-      },
-      error: (error) => {
-        console.error('Failed to delete task:', error);
-      }
-    });
+      });
   }
 
-  getPriorityClass(priority: string): string {
+  /* =========================
+     PRIORITY
+  ========================= */
+
+  getPriorityClass(
+    priority: string
+  ): string {
     return priority.toLowerCase();
   }
 
-  trackTask(_: number, task: Task): string {
+  /* =========================
+     TRACKING
+  ========================= */
+
+  trackTask(
+    _: number,
+    task: Task
+  ): string {
     return task._id;
   }
 
-  trackDay(_: number, day: TaskDay): string {
-    return this.getDateKey(day.date.toISOString());
+  trackDay(
+    _: number,
+    day: TaskDay
+  ): string {
+    return this.getDateKey(
+      day.date.toISOString()
+    );
   }
 }

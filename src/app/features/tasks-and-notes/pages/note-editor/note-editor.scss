@@ -1,178 +1,165 @@
 .editor-page {
-  width: 100%;
-  min-height: 100%;
+    width: 100%;
+    min-height: 100%;
+    color: var(--text-primary);
 }
-
 
 /* =========================
    TOP BAR
 ========================= */
 
 .editor-topbar {
-  width: 100%;
-  margin-bottom: 15px;
+    width: 100%;
+    margin-bottom: 8px;
 }
 
 .back-button {
-  color: #666666;
-  font-size: 13px;
-  padding-left: 4px;
-}
+    color: var(--text-secondary);
+    font-size: 12px;
+    padding-left: 2px;
 
-.back-button mat-icon {
-  margin-right: 5px;
-}
+    &:hover {
+        color: var(--text-primary);
+        background: var(--surface-hover);
+    }
 
+    mat-icon {
+        margin-right: 4px;
+        font-size: 18px;
+    }
+}
 
 /* =========================
-   EDITORIAL WINDOW
+   EDITORIAL AREA
 ========================= */
 
 .editorial-window {
-  width: 100%;
-  max-width: 850px;
-
-  margin: 0 auto;
-
-  padding: 20px 30px 40px;
-
-  box-sizing: border-box;
+    width: 100%;
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 20px 30px 45px;
+    box-sizing: border-box;
 }
 
+/* =========================
+   LABEL
+========================= */
+
+.editor-label {
+    margin-bottom: 10px;
+    font-size: 9px;
+    font-weight: 750;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+}
 
 /* =========================
    TITLE
 ========================= */
 
 .note-title {
-  width: 100%;
-
-  border: none;
-  outline: none;
-
-  background: transparent;
-
-  padding: 0;
-
-  font-family: inherit;
-
-  font-size: 32px;
-  font-weight: 650;
-
-  color: #171717;
-
-  line-height: 1.25;
-
-  box-sizing: border-box;
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 0;
+    font-family: inherit;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.25;
+    box-sizing: border-box;
 }
 
 .note-title::placeholder {
-  color: #b0b0b0;
+    color: var(--text-secondary);
+    opacity: 0.5;
 }
-
 
 /* =========================
    META
 ========================= */
 
 .note-meta {
-  display: flex;
-  flex-wrap: wrap;
-
-  gap: 16px;
-
-  margin-top: 10px;
-  margin-bottom: 28px;
-
-  font-size: 11px;
-
-  color: #999999;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 9px;
+    margin-bottom: 27px;
+    font-size: 10px;
+    color: var(--text-secondary);
 }
-
 
 /* =========================
    EDITOR
 ========================= */
 
 .note-editor {
-  width: 100%;
-  min-height: 480px;
-
-  resize: vertical;
-
-  border: none;
-  outline: none;
-
-  background: transparent;
-
-  padding: 0;
-
-  font-family: inherit;
-
-  font-size: 16px;
-
-  line-height: 1.8;
-
-  color: #252525;
-
-  box-sizing: border-box;
+    width: 100%;
+    min-height: 480px;
+    resize: vertical;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 0;
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.85;
+    color: var(--text-primary);
+    box-sizing: border-box;
 }
 
 .note-editor::placeholder {
-  color: #b8b8b8;
+    color: var(--text-secondary);
+    opacity: 0.45;
 }
-
 
 /* =========================
    SAVE
 ========================= */
 
 .save-container {
-  display: flex;
-  justify-content: flex-end;
-
-  margin-top: 20px;
-
-  padding-top: 15px;
-
-  border-top: 1px solid #eeeeee;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border);
 }
 
 .save-button {
-  border-radius: 7px;
-  font-size: 13px;
-}
+    min-height: 37px;
+    padding: 0 15px;
+    border-radius: 8px;
+    background: var(--accent) !important;
+    color: #fff !important;
+    font-size: 12px;
 
-.save-button mat-icon {
-  margin-right: 5px;
+    mat-icon {
+        margin-right: 5px;
+        font-size: 17px;
+    }
 }
-
 
 /* =========================
    LOADING
 ========================= */
 
 .loading-state {
-  min-height: 350px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-
-  gap: 10px;
-
-  color: #888888;
-
-  font-size: 13px;
+    min-height: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    color: var(--text-secondary);
+    font-size: 12px;
 }
 
 .loading-state mat-icon {
-  width: 30px;
-  height: 30px;
-  font-size: 30px;
+    width: 30px;
+    height: 30px;
+    font-size: 30px;
 }
-
 
 /* =========================
    MOBILE
@@ -180,17 +167,26 @@
 
 @media (max-width: 600px) {
 
-  .editorial-window {
-    padding: 15px 10px 30px;
-  }
+    .editorial-window {
+        padding: 14px 10px 30px;
+    }
 
-  .note-title {
-    font-size: 26px;
-  }
+    .note-title {
+        font-size: 26px;
+    }
 
-  .note-editor {
-    min-height: 400px;
-    font-size: 15px;
-  }
+    .note-meta {
+        margin-bottom: 22px;
+        font-size: 9px;
+    }
 
+    .note-editor {
+        min-height: 400px;
+        font-size: 14px;
+        line-height: 1.75;
+    }
+
+    .save-container {
+        margin-top: 15px;
+    }
 }

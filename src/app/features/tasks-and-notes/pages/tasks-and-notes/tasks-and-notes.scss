@@ -1,21 +1,133 @@
 .tasks-notes-page {
-    padding: 24px;
+    width: 100%;
+    min-height: 100%;
+    padding: 28px 24px 40px;
+    box-sizing: border-box;
+    color: var(--text-primary);
 }
 
 .page-header {
-    margin-bottom: 24px;
+    max-width: 900px;
+    margin: 0 auto 22px;
+}
+
+.header-copy {
+    .section-kicker {
+        margin-bottom: 6px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--text-secondary);
+    }
 
     h2 {
+        display: flex;
+        align-items: center;
+        gap: 9px;
         margin: 0;
-        font-weight: 600;
+        font-size: 27px;
+        line-height: 1.2;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        color: var(--text-primary);
     }
 
     p {
-        margin-top: 6px;
-        color: #777;
+        margin: 7px 0 0;
+        color: var(--text-secondary);
+        font-size: 13px;
+        line-height: 1.5;
     }
 }
 
+.header-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    background: var(--surface-secondary);
+    color: var(--accent);
+    font-size: 15px;
+}
+
+/* =========================
+   TABS
+========================= */
+
+.tasks-notes-tabs {
+    display: block;
+    max-width: 900px;
+    margin: 0 auto;
+    color: var(--text-primary);
+}
+
+/*
+ * Angular Material's tab internals don't automatically inherit
+ * our custom application variables in every theme configuration.
+ */
+::ng-deep .tasks-notes-tabs .mdc-tab {
+    min-width: 100px;
+}
+
+::ng-deep .tasks-notes-tabs .mdc-tab__text-label {
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+::ng-deep .tasks-notes-tabs .mdc-tab--active .mdc-tab__text-label {
+    color: var(--text-primary);
+}
+
+::ng-deep .tasks-notes-tabs .mdc-tab-indicator__content--underline {
+    border-color: var(--accent) !important;
+}
+
+::ng-deep .tasks-notes-tabs .mat-mdc-tab-header {
+    border-bottom: 1px solid var(--border);
+}
+
+::ng-deep .tasks-notes-tabs .mat-mdc-tab-body-content {
+    overflow-x: hidden;
+}
+
 .tab-content {
-    padding-top: 24px;
+    padding-top: 22px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+    .tasks-notes-page {
+        padding: 20px 14px 30px;
+    }
+
+    .page-header {
+        margin-bottom: 16px;
+    }
+
+    .header-copy {
+        h2 {
+            font-size: 23px;
+        }
+
+        p {
+            font-size: 12px;
+        }
+    }
+
+    .header-icon {
+        width: 27px;
+        height: 27px;
+        border-radius: 8px;
+    }
+
+    .tab-content {
+        padding-top: 16px;
+    }
 }
