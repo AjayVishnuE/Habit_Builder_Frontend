@@ -21,7 +21,7 @@ export class Notes implements OnInit {
   private cdr = inject(ChangeDetectorRef);
 
   notes: Note[] = [];
-
+  deleteConfirmationNote: Note | null = null;
   loading = true;
 
   ngOnInit(): void {
@@ -55,23 +55,29 @@ export class Notes implements OnInit {
 
   deleteNote(event: Event, note: Note): void {
     event.stopPropagation();
-    const confirmed = confirm(
-      `Delete "${note.title}"?`
-    );
+    this.deleteConfirmationNote = note;
+  }
 
-    if (!confirmed) {
+  cancelDelete(): void {
+    this.deleteConfirmationNote = null;
+  }
+
+  confirmDelete(): void {
+    if (!this.deleteConfirmationNote) {
       return;
     }
-
-    this.noteService.deleteNote(note._id).subscribe({
+    const noteId = this.deleteConfirmationNote._id;
+    this.noteService.deleteNote(noteId).subscribe({
       next: () => {
         this.notes = this.notes.filter(
-          item => item._id !== note._id
+          item => item._id !== noteId
         );
+        this.deleteConfirmationNote = null;
         this.cdr.detectChanges();
       },
       error: (error) => {
         console.error('Failed to delete note:', error);
+        this.deleteConfirmationNote = null;
       }
     });
   }

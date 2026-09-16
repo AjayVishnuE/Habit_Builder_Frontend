@@ -141,4 +141,70 @@
 
     }
 
+@if (deleteConfirmationNote) {
+
+    <div
+        class="delete-modal-backdrop"
+        (click)="cancelDelete()">
+
+        <div
+            class="delete-modal"
+            (click)="$event.stopPropagation()">
+
+            <div class="delete-modal-icon">
+                <mat-icon>
+                    delete_outline
+                </mat-icon>
+            </div>
+
+            <div class="delete-modal-content">
+
+                <span class="delete-modal-kicker">
+                    DELETE NOTE
+                </span>
+
+                <h3>
+                    Delete this note?
+                </h3>
+
+                <p>
+                    Are you sure you want to delete
+                    <strong>
+                        "{{ deleteConfirmationNote.title }}"
+                    </strong>?
+                </p>
+
+                <span class="delete-modal-warning">
+                    This action cannot be undone.
+                </span>
+
+            </div>
+
+            <div class="delete-modal-actions">
+
+                <button
+                    type="button"
+                    class="delete-modal-cancel"
+                    (click)="cancelDelete()">
+
+                    Cancel
+
+                </button>
+
+                <button
+                    type="button"
+                    class="delete-modal-confirm"
+                    (click)="confirmDelete()">
+
+                    Delete Note
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+}
 </div>

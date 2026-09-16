@@ -207,11 +207,11 @@
                                         {{ diary.createdAt | date:'shortTime' }}
                                     </span>
                                     <div class="diary-card-actions">
-                                        <button
-                                            class="delete-btn"
-                                            (click)="deleteDiary(diary._id)">
-                                            Delete
-                                        </button>
+                                    <button
+                                        class="delete-btn"
+                                        (click)="deleteDiary(diary)">
+                                        Delete
+                                    </button>
                                         <button
                                             class="expand-btn"
                                             [routerLink]="['/diary', diary._id]">
@@ -227,4 +227,62 @@
             </div>
         </section>
     }
+@if (deleteConfirmationDiary) {
+    <div
+        class="delete-modal-backdrop"
+        (click)="cancelDelete()">
+
+        <div
+            class="delete-modal"
+            (click)="$event.stopPropagation()">
+
+            <div class="delete-modal-icon">
+                🗑️
+            </div>
+
+            <div class="delete-modal-content">
+
+                <span class="delete-modal-kicker">
+                    DELETE DIARY
+                </span>
+
+                <h3>
+                    Delete this diary?
+                </h3>
+
+                <p>
+                    Are you sure you want to delete
+                    <strong>
+                        "{{ deleteConfirmationDiary.title }}"
+                    </strong>?
+                </p>
+
+                <span class="delete-modal-warning">
+                    This action cannot be undone.
+                </span>
+
+            </div>
+
+            <div class="delete-modal-actions">
+
+                <button
+                    type="button"
+                    class="delete-modal-cancel"
+                    (click)="cancelDelete()">
+                    Cancel
+                </button>
+
+                <button
+                    type="button"
+                    class="delete-modal-confirm"
+                    (click)="confirmDelete()">
+                    Delete Diary
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+}
 </div>

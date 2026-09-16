@@ -24,7 +24,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 export class CompleteHabitDialog {
   private fb = inject(FormBuilder);
   private dialogRef = inject(MatDialogRef<CompleteHabitDialog>);
-
+  saving = false;
   completeForm = this.fb.nonNullable.group({
     mood: ['Good', Validators.required],
     duration: [
@@ -38,9 +38,10 @@ export class CompleteHabitDialog {
   });
 
   complete() {
-    if (this.completeForm.invalid) {
+    if (this.completeForm.invalid || this.saving) {
       return;
     }
+    this.saving = true;
     this.dialogRef.close(
       this.completeForm.getRawValue()
     );

@@ -24,6 +24,7 @@ export class DiaryHome implements OnInit {
   diaries: Diary[] = [];
   loading = true;
   error = '';
+  deleteConfirmationDiary: Diary | null = null; 
 
   ngOnInit(): void {
     this.loadDiaries();
@@ -121,23 +122,31 @@ export class DiaryHome implements OnInit {
   // DELETE
   // -------------------------------------------------------
 
-  deleteDiary(id: string): void {
-    const confirmed = window.confirm(
-      'Are you sure you want to delete this diary?'
-    );
-    if (!confirmed) {
+  deleteDiary(diary: Diary): void {
+    this.deleteConfirmationDiary = diary;
+  }
+
+  cancelDelete(): void {
+    this.deleteConfirmationDiary = null;
+  }
+
+  confirmDelete(): void {
+    if (!this.deleteConfirmationDiary) {
       return;
     }
-    this.diaryService.deleteDiary(id).subscribe({
+    const diaryId = this.deleteConfirmationDiary._id;
+    this.diaryService.deleteDiary(diaryId).subscribe({
       next: () => {
         this.diaries = this.diaries.filter(
-          diary => diary._id !== id
+          diary => diary._id !== diaryId
         );
+        this.deleteConfirmationDiary = null;
         this.cdr.detectChanges();
       },
       error: error => {
         console.error('Failed to delete diary:', error);
         this.error = error?.error?.message || 'Unable to delete diary.';
+        this.deleteConfirmationDiary = null;
         this.cdr.detectChanges();
       }
     });
