@@ -169,7 +169,25 @@
             </div>
         }
 
+        @if (taskToggleError) {
+            <div class="task-toggle-error">
+                <mat-icon>error_outline</mat-icon>
 
+                <span>
+                    {{ taskToggleError }}
+                </span>
+
+                <button
+                    mat-icon-button
+                    type="button"
+                    (click)="taskToggleError = ''"
+                    aria-label="Dismiss error">
+
+                    <mat-icon>close</mat-icon>
+
+                </button>
+            </div>
+        }
         <!-- =========================
              DAY LIST
         ========================== -->
@@ -278,16 +296,22 @@
                                     <mat-icon>close</mat-icon>
 
                                 </button>
-
                                 <button
                                     mat-icon-button
                                     class="confirm-add-button"
                                     [disabled]="
-                                        !newTaskTitle.trim()
+                                        !newTaskTitle.trim() ||
+                                        addingTaskSaving
                                     "
-                                    (click)="saveNewTask(day.date)">
-
-                                    <mat-icon>check</mat-icon>
+                                    (click)="saveNewTask(day.date)"
+                                    aria-label="Add task">
+                                    <mat-icon>
+                                        {{
+                                            addingTaskSaving
+                                                ? 'hourglass_empty'
+                                                : 'check'
+                                        }}
+                                    </mat-icon>
 
                                 </button>
 
@@ -322,11 +346,10 @@
 
                                     <mat-checkbox
                                         [checked]="task.completed"
+                                        [disabled]="togglingTaskId === task._id"
                                         (change)="toggleTask(task)"
                                         class="task-checkbox">
-
                                     </mat-checkbox>
-
                                     <div class="task-title">
                                         {{ task.title }}
                                     </div>

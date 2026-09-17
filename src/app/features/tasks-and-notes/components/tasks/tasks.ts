@@ -67,7 +67,7 @@ export class Tasks implements OnInit {
 
   newTaskTitle = '';
   newTaskPriority: 'Low' | 'Medium' | 'High' = 'Medium';
-
+  addingTaskSaving = false; 
   /* =========================
      FUTURE TASKS
   ========================= */
@@ -84,7 +84,8 @@ export class Tasks implements OnInit {
   ========================= */
 
   expandedTaskId: string | null = null;
-
+  togglingTaskId: string | null = null;
+  taskToggleError = '';
   editedTask: Task | null = null;
   savingTaskId: string | null = null;
   deleteConfirmationTask: Task | null = null;
@@ -339,9 +340,11 @@ export class Tasks implements OnInit {
 
     const title = this.newTaskTitle.trim();
 
-    if (!title) {
+    if (!title || this.addingTaskSaving) {
       return;
     }
+
+    this.addingTaskSaving = true;
 
     const task = {
       title,
@@ -352,16 +355,26 @@ export class Tasks implements OnInit {
     };
 
     this.taskService.createTask(task).subscribe({
+
       next: () => {
+
+        this.addingTaskSaving = false;
+
         this.cancelAddTask();
+
         this.loadTasks();
       },
 
       error: (error) => {
+
         console.error(
           'Failed to create task:',
           error
         );
+
+        this.addingTaskSaving = false;
+
+        this.cdr.detectChanges();
       }
     });
   }
@@ -468,24 +481,39 @@ export class Tasks implements OnInit {
   ========================= */
 
   toggleTask(task: Task): void {
-
+    // Prevent repeated clicks while the request is running
+    if (this.togglingTaskId === task._id) {
+      return;
+    }
+    this.togglingTaskId = task._id;
+    this.taskToggleError = '';
+    // Remember the original state in case the API fails
+    const previousCompleted = task.completed;
+    const previousCompletedAt = task.completedAt;
+    // Immediately update the UI
+    task.completed = !task.completed;
+    if (task.completed) {
+      task.completedAt = new Date().toISOString();
+    } else {
+      task.completedAt = undefined;
+    }
+    this.cdr.detectChanges();
     this.taskService.toggleTask(task._id).subscribe({
       next: (updatedTask: Task) => {
-
-        task.completed =
-          updatedTask.completed;
-
-        task.completedAt =
-          updatedTask.completedAt;
-
+        // Use the actual backend result
+        task.completed = updatedTask.completed;
+        task.completedAt = updatedTask.completedAt;
+        this.togglingTaskId = null;
         this.cdr.detectChanges();
       },
-
       error: (error) => {
-        console.error(
-          'Failed to toggle task:',
-          error
-        );
+        console.error( 'Failed to toggle task:', error );
+        // Revert the optimistic UI update
+        task.completed = previousCompleted;
+        task.completedAt = previousCompletedAt;
+        this.togglingTaskId = null;
+        this.taskToggleError = error?.error?.message || 'Unable to update this task. Please try again.';
+        this.cdr.detectChanges();
       }
     });
   }
