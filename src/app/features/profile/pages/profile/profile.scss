@@ -456,7 +456,10 @@
   .username-input {
     font-size: 20px;
   }
-
+  .dashboard-loader {
+    min-height: 100vh;
+    min-width: 100hh;
+  }
   .avatar {
     width: 115px;
     height: 115px;

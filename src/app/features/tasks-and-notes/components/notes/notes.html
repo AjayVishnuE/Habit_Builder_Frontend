@@ -31,16 +31,11 @@
 
     @if (loading) {
 
-        <div class="loading-state">
-
-            <mat-icon>
-                hourglass_empty
-            </mat-icon>
-
-            <span>
-                Loading notes...
-            </span>
-
+        <div class="dashboard-loader">
+            <div class="hourglass">
+                ⌛
+            </div>
+            <p>Loading your notes...</p>
         </div>
 
     } @else if (notes.length === 0) {

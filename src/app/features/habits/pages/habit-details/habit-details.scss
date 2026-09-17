@@ -1161,7 +1161,10 @@
         flex: 1;
     }
 
-
+    // .visualizer-wrapper{
+    //     justify-content: start;
+    //     overflow: scroll;
+    // }
     .visualization-card {
         padding: 13px;
 
@@ -1243,7 +1246,11 @@
         padding: 4px 2px;
         width: 45%;
     }
-
+    
+    .dashboard-loader {
+        min-height: 100vh;
+        min-width: 100hh;
+    }
 
     .habit-heading h1 {
         font-size: 22px;

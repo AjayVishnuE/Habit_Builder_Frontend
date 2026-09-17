@@ -1,12 +1,12 @@
 <div class="tasks-container">
 
     @if (loading) {
-
-        <div class="loading-state">
-            <mat-icon>hourglass_empty</mat-icon>
-            <p>Loading tasks...</p>
+        <div class="dashboard-loader">
+            <div class="hourglass">
+                ⌛
+            </div>
+            <p>Loading your tasks...</p>
         </div>
-
     } @else {
 
         <!-- =========================

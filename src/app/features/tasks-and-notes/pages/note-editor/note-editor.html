@@ -1,17 +1,11 @@
 <div class="editor-page">
 
     @if (loading) {
-
-        <div class="loading-state">
-
-            <mat-icon>
-                hourglass_empty
-            </mat-icon>
-
-            <span>
-                Loading note...
-            </span>
-
+        <div class="dashboard-loader">
+            <div class="hourglass">
+                ⌛
+            </div>
+            <p>Loading your notes...</p>
         </div>
 
     } @else {
@@ -40,8 +34,36 @@
 
         <main class="editorial-window">
 
-            <div class="editor-label">
-                {{ note ? 'EDIT NOTE' : 'NEW NOTE' }}
+            <div class="editor-label-container">
+                <div class="editor-label">
+                    {{ note ? 'EDIT NOTE' : 'NEW NOTE' }}
+                </div>
+                <!-- SAVE -->
+                @if (canSave()) {
+                    <div class="save-container">
+
+                        <button
+                            mat-flat-button
+                            class="save-button"
+                            (click)="saveNote()">
+
+                            <mat-icon>
+                                {{ saving
+                                    ? 'hourglass_empty'
+                                    : 'save'
+                                }}
+                            </mat-icon>
+
+                            {{
+                                saving
+                                    ? 'Saving...'
+                                    : 'Save'
+                            }}
+
+                        </button>
+
+                    </div>
+                }
             </div>
 
             <!-- TITLE -->
@@ -79,7 +101,6 @@
 
             }
 
-
             <!-- CONTENT -->
 
             <textarea
@@ -88,36 +109,6 @@
                 placeholder="Start writing...">
             </textarea>
 
-
-            <!-- SAVE -->
-
-            @if (canSave()) {
-
-                <div class="save-container">
-
-                    <button
-                        mat-flat-button
-                        class="save-button"
-                        (click)="saveNote()">
-
-                        <mat-icon>
-                            {{ saving
-                                ? 'hourglass_empty'
-                                : 'save'
-                            }}
-                        </mat-icon>
-
-                        {{
-                            saving
-                                ? 'Saving...'
-                                : 'Save'
-                        }}
-
-                    </button>
-
-                </div>
-
-            }
 
         </main>
 

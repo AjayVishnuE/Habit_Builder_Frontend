@@ -44,13 +44,18 @@
 /* =========================
    LABEL
 ========================= */
-
+.editor-label-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 .editor-label {
-    margin-bottom: 10px;
     font-size: 9px;
     font-weight: 750;
     letter-spacing: 0.15em;
     color: var(--accent);
+    display: flex;
+    align-items: end;
 }
 
 /* =========================
@@ -121,9 +126,6 @@
 .save-container {
     display: flex;
     justify-content: flex-end;
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px solid var(--border);
 }
 
 .save-button {
