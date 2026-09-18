@@ -1,164 +1,520 @@
 <div class="dashboard">
-    <!-- Header -->
-    <section class="dashboard-header">
-        <div>
-            <p class="eyebrow">YOUR HABIT JOURNEY</p>
-            <h1>
-                Keep going<span class="wave">👋</span>
-            </h1>
-            <p class="dashboard-subtitle">
-                Small steps every day turn into meaningful change.
-            </p>
-        </div>
-        <div class="quote-card">
-            <mat-icon>format_quote</mat-icon>
-            <span>
-                Consistency beats perfection.
-            </span>
-        </div>
-    </section>
-    <!-- Loading -->
-    @if (isLoading) {
+
+  <!-- ========================================================= -->
+  <!-- HEADER -->
+  <!-- ========================================================= -->
+
+  <header class="dashboard-header">
+    <div>
+      <p class="eyebrow">WELCOME BACK</p>
+      <h1>Your Day at a Glance</h1>
+      <p class="header-subtitle">
+        Keep track of your habits, tasks and thoughts.
+      </p>
+    </div>
+
+    <div class="today-date">
+      {{ today | date:'EEEE, d MMMM' }}
+    </div>
+  </header>
+
+@if (!habitloaded && !taskloaded) {
         <div class="dashboard-loader">
             <div class="hourglass">
                 ⌛
             </div>
             <p>Loading your progress...</p>
         </div>
-    } @else {
-        <!-- Stats -->
-        <section class="stats-grid">
-            <app-stat-card
-                title="Total Habits"
-                [value]="totalHabits"
-                icon="📚">
-            </app-stat-card>
-            <app-stat-card
-                title="Completed Today"
-                [value]="completedToday"
-                icon="✅">
-            </app-stat-card>
-            <app-stat-card
-                title="Current Streak"
-                [value]="currentStreak"
-                icon="🔥">
-            </app-stat-card>
-        </section>
-        <!-- Progress -->
-        <section class="progress-section">
-            <div class="section-heading">
-                <div>
-                    <p class="section-eyebrow">YOUR PROGRESS</p>
-                    <h2>How are you doing?</h2>
-                </div>
-                <span class="section-description">
-                    Keep building your momentum
-                </span>
-            </div>
-            <div class="progress-grid">
-                <!-- Daily -->
-                <mat-card class="progress-card daily-card">
-                    <mat-card-content>
-                        <div class="progress-card-top">
-                            <div class="progress-icon">
-                                <mat-icon>today</mat-icon>
-                            </div>
-                            <span>Daily</span>
-                        </div>
-                        <div class="progress-value">
-                            {{ dailyPercentage }}<small>%</small>
-                        </div>
-                        <p class="progress-label">
-                            Today's completion
-                        </p>
-                        <mat-progress-bar
-                            mode="determinate"
-                            [value]="dailyPercentage">
-                        </mat-progress-bar>
-                    </mat-card-content>
-                </mat-card>
-                <!-- Weekly -->
-                <mat-card class="progress-card weekly-card">
-                    <mat-card-content>
-                        <div class="progress-card-top">
-                            <div class="progress-icon">
-                                <mat-icon>date_range</mat-icon>
-                            </div>
-                            <span>Weekly</span>
-                        </div>
-                        <div class="progress-value">
-                            {{ weeklyPercentage }}<small>%</small>
-                        </div>
-                        <p class="progress-label">
-                            This week's completion
-                        </p>
-                        <mat-progress-bar
-                            mode="determinate"
-                            [value]="weeklyPercentage">
-                        </mat-progress-bar>
-                    </mat-card-content>
-                </mat-card>
-                <!-- Monthly -->
-                <mat-card class="progress-card monthly-card">
+}
+  <!-- ========================================================= -->
+  <!-- TODAY CARDS -->
+  <!-- ========================================================= -->
+@else{
+  <section class="today-section">
 
-                    <mat-card-content>
-                        <div class="progress-card-top">
-                            <div class="progress-icon">
-                                <mat-icon>calendar_month</mat-icon>
-                            </div>
-                            <span>Monthly</span>
-                        </div>
-                        <div class="progress-value">
-                            {{ monthlyPercentage }}<small>%</small>
-                        </div>
-                        <p class="progress-label">
-                            This month's completion
-                        </p>
-                        <mat-progress-bar
-                            mode="determinate"
-                            [value]="monthlyPercentage">
-                        </mat-progress-bar>
-                    </mat-card-content>
-                </mat-card>
+    <div class="today-carousel">
+
+      <!-- HABITS -->
+      <div class="today-card habits-card">
+
+        <div class="today-card-top">
+          <div class="today-icon">
+            <mat-icon>check_circle</mat-icon>
+          </div>
+
+          <span class="today-label">Today</span>
+        </div>
+
+        <div class="today-card-main">
+          <h3>Habits</h3>
+
+          <div class="today-value">
+            {{ completedTodayHabits }}
+            <span>/ {{ totalHabits }}</span>
+          </div>
+
+          <p>
+            {{ completedTodayHabits === 0
+              ? 'No habits completed yet'
+              : completedTodayHabits + ' habit' + (completedTodayHabits === 1 ? '' : 's') + ' completed'
+            }}
+          </p>
+        </div>
+
+        <a routerLink="/habits" class="today-link">
+          View habits
+          <mat-icon>arrow_forward</mat-icon>
+        </a>
+
+      </div>
+
+
+      <!-- TASKS -->
+      <div class="today-card tasks-card">
+
+        <div class="today-card-top">
+          <div class="today-icon">
+            <mat-icon>task_alt</mat-icon>
+          </div>
+
+          <span class="today-label">Today</span>
+        </div>
+
+        <div class="today-card-main">
+          <h3>Tasks</h3>
+
+          <div class="today-value">
+            {{ completedTodayTasks }}
+            <span>/ {{ totalTodayTasks }}</span>
+          </div>
+
+          <p>
+            {{ totalTodayTasks === 0
+              ? 'No tasks planned today'
+              : completedTodayTasks === totalTodayTasks
+                ? 'All tasks completed'
+                : totalTodayTasks - completedTodayTasks + ' task' +
+                  (totalTodayTasks - completedTodayTasks === 1 ? '' : 's') +
+                  ' remaining'
+            }}
+          </p>
+        </div>
+
+        <a routerLink="/tasks-notes" class="today-link">
+          View tasks
+          <mat-icon>arrow_forward</mat-icon>
+        </a>
+
+      </div>
+
+
+      <!-- DIARY -->
+      <div class="today-card diary-card">
+
+        <div class="today-card-top">
+          <div class="today-icon">
+            <mat-icon>menu_book</mat-icon>
+          </div>
+
+          <span class="today-label">Today</span>
+        </div>
+
+        <div class="today-card-main">
+          <h3>Diary</h3>
+
+          <div
+            class="diary-status"
+            [class.written]="diaryWrittenToday"
+          >
+            <mat-icon>
+              {{ diaryWrittenToday ? 'done' : 'edit_note' }}
+            </mat-icon>
+
+            <span>
+              {{ diaryWrittenToday ? 'Written today' : 'Not written yet' }}
+            </span>
+          </div>
+
+          <p>
+            {{ diaryWrittenToday
+              ? 'Your thoughts are saved'
+              : 'Take a moment to write about today'
+            }}
+          </p>
+        </div>
+
+        <a routerLink="/diary" class="today-link">
+          {{ diaryWrittenToday ? 'View diary' : 'Write diary' }}
+          <mat-icon>arrow_forward</mat-icon>
+        </a>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ========================================================= -->
+  <!-- ACTIVITY -->
+  <!-- ========================================================= -->
+
+  <section class="activity-section">
+
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">YOUR PROGRESS</p>
+        <h2>Activity</h2>
+      </div>
+
+      <p class="section-description">
+        See how your habits and tasks have been progressing.
+      </p>
+    </div>
+
+
+    <!-- ======================================================= -->
+    <!-- ACTIVITY CAROUSEL -->
+    <!-- ======================================================= -->
+
+    <div class="activity-carousel">
+
+
+      <!-- ===================================================== -->
+      <!-- HABITS TILE -->
+      <!-- ===================================================== -->
+
+      <article class="activity-tile habits-activity">
+
+        <div class="activity-tile-header">
+
+          <div class="activity-title">
+            <div class="activity-icon">
+              <mat-icon>check_circle</mat-icon>
             </div>
-        </section>
-        <!-- Weekly chart -->
-        <section class="weekly-section">
-            <div class="section-heading">
-                <div>
-                    <p class="section-eyebrow">ACTIVITY</p>
-                    <h2>Weekly progress</h2>
-                </div>
-                <span class="section-description">
-                    Last 7 days
-                </span>
+
+            <div>
+              <h3>Habits</h3>
+              <p>Daily habit activity</p>
             </div>
-            <div class="chart-card">
-                <div class="chart-summary">
+          </div>
+
+          <span class="activity-count">
+            {{ completedTodayHabits }}/{{ totalHabits }} today
+          </span>
+
+        </div>
+
+
+        <!-- HABIT NAVIGATION -->
+        <div class="period-controls">
+
+          <button
+            mat-icon-button
+            class="period-arrow"
+            type="button"
+            (click)="previousHabitPeriod()"
+            aria-label="Previous habit period"
+          >
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+
+          <div class="period-title">
+            {{ habitPeriodTitle }}
+          </div>
+
+          <button
+            mat-icon-button
+            class="period-arrow"
+            type="button"
+            [disabled]="isCurrentHabitPeriod()"
+            (click)="nextHabitPeriod()"
+            aria-label="Next habit period"
+          >
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+
+        </div>
+
+
+        <!-- HABIT VIEW SWITCHER -->
+        <div class="view-switcher">
+
+          <button
+            type="button"
+            [class.active]="habitViewMode === 'week'"
+            (click)="changeHabitView('week')"
+          >
+            Week
+          </button>
+
+          <button
+            type="button"
+            [class.active]="habitViewMode === 'month'"
+            (click)="changeHabitView('month')"
+          >
+            Month
+          </button>
+
+          <button
+            type="button"
+            [class.active]="habitViewMode === 'year'"
+            (click)="changeHabitView('year')"
+          >
+            Year
+          </button>
+
+        </div>
+
+
+        <!-- HABIT GRAPH -->
+        <div class="visualizer-wrapper">
+
+          <app-stat-card
+            [data]="habitActivityData"
+            [viewMode]="habitViewMode"
+            [maxValue]="maxHabitValue"
+            type="habits"
+            (itemSelected)="onHabitActivitySelected($event)"
+          ></app-stat-card>
+
+        </div>
+
+
+        <!-- SELECTED HABIT DETAILS -->
+        @if (selectedHabitActivity) {
+
+          <div class="activity-details">
+
+            <div class="details-header">
+
+              <div>
+                <span class="details-eyebrow">SELECTED DAY</span>
+
+                <h4>
+                  {{ selectedHabitActivity.date | date:'EEEE, d MMMM yyyy' }}
+                </h4>
+              </div>
+
+              <div class="details-number">
+                {{ selectedHabitActivity.count }}
+              </div>
+
+            </div>
+
+
+            @if (selectedHabitActivity.items.length > 0) {
+
+              <div class="details-list">
+
+                @for (
+                  habit of selectedHabitActivity.items;
+                  track habit._id
+                ) {
+
+                  <div class="detail-item">
+
+                    <div class="detail-item-icon">
+                      <mat-icon>check</mat-icon>
+                    </div>
+
                     <div>
-                        <span class="chart-label">
-                            Completed habits
-                        </span>
-                        <strong>
-                            {{ completedToday }}
-                        </strong>
-                        <span class="chart-caption">
-                            today
-                        </span>
+                      <strong>{{ habit.title }}</strong>
+                      <span>Completed</span>
                     </div>
-                    <div class="chart-icon">
-                        <mat-icon>insights</mat-icon>
-                    </div>
-                </div>
-                <div class="chart-wrapper">
-                    <canvas
-                        baseChart
-                        [data]="barChartData"
-                        [options]="barChartOptions"
-                        [type]="barChartType">
-                    </canvas>
-                </div>
+
+                  </div>
+
+                }
+
+              </div>
+
+            } @else {
+
+              <div class="empty-details">
+                <mat-icon>event_busy</mat-icon>
+                <span>No habits were completed on this day.</span>
+              </div>
+
+            }
+
+          </div>
+
+        }
+
+      </article>
+
+
+
+      <!-- ===================================================== -->
+      <!-- TASKS TILE -->
+      <!-- ===================================================== -->
+
+      <article class="activity-tile tasks-activity">
+
+        <div class="activity-tile-header">
+
+          <div class="activity-title">
+            <div class="activity-icon">
+              <mat-icon>task_alt</mat-icon>
             </div>
-        </section>
-    }
+
+            <div>
+              <h3>Tasks</h3>
+              <p>Completed task activity</p>
+            </div>
+          </div>
+
+          <span class="activity-count">
+            {{ completedTodayTasks }}/{{ totalTodayTasks }} today
+          </span>
+
+        </div>
+
+
+        <!-- TASK NAVIGATION -->
+        <div class="period-controls">
+
+          <button
+            mat-icon-button
+            class="period-arrow"
+            type="button"
+            (click)="previousTaskPeriod()"
+            aria-label="Previous task period"
+          >
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+
+          <div class="period-title">
+            {{ taskPeriodTitle }}
+          </div>
+
+          <button
+            mat-icon-button
+            class="period-arrow"
+            type="button"
+            [disabled]="isCurrentTaskPeriod()"
+            (click)="nextTaskPeriod()"
+            aria-label="Next task period"
+          >
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+
+        </div>
+
+
+        <!-- TASK VIEW SWITCHER -->
+        <div class="view-switcher">
+
+          <button
+            type="button"
+            [class.active]="taskViewMode === 'week'"
+            (click)="changeTaskView('week')"
+          >
+            Week
+          </button>
+
+          <button
+            type="button"
+            [class.active]="taskViewMode === 'month'"
+            (click)="changeTaskView('month')"
+          >
+            Month
+          </button>
+
+          <button
+            type="button"
+            [class.active]="taskViewMode === 'year'"
+            (click)="changeTaskView('year')"
+          >
+            Year
+          </button>
+
+        </div>
+
+
+        <!-- TASK GRAPH -->
+        <div class="visualizer-wrapper">
+
+          <app-stat-card
+            [data]="taskActivityData"
+            [viewMode]="taskViewMode"
+            [maxValue]="maxTaskValue"
+            type="tasks"
+            (itemSelected)="onTaskActivitySelected($event)"
+          ></app-stat-card>
+
+        </div>
+
+
+        <!-- SELECTED TASK DETAILS -->
+        @if (selectedTaskActivity) {
+
+          <div class="activity-details">
+
+            <div class="details-header">
+
+              <div>
+                <span class="details-eyebrow">SELECTED DAY</span>
+
+                <h4>
+                  {{ selectedTaskActivity.date | date:'EEEE, d MMMM yyyy' }}
+                </h4>
+              </div>
+
+              <div class="details-number">
+                {{ selectedTaskActivity.count }}
+              </div>
+
+            </div>
+
+
+            @if (selectedTaskActivity.items.length > 0) {
+
+              <div class="details-list">
+
+                @for (
+                  task of selectedTaskActivity.items;
+                  track task._id
+                ) {
+
+                  <div class="detail-item">
+
+                    <div class="detail-item-icon">
+                      <mat-icon>done</mat-icon>
+                    </div>
+
+                    <div>
+                      <strong>{{ task.title }}</strong>
+
+                      <span>
+                        {{ task.priority || 'Task' }}
+                      </span>
+                    </div>
+
+                  </div>
+
+                }
+
+              </div>
+
+            } @else {
+
+              <div class="empty-details">
+                <mat-icon>event_busy</mat-icon>
+                <span>No tasks were completed on this day.</span>
+              </div>
+
+            }
+
+          </div>
+
+        }
+
+      </article>
+
+    </div>
+
+  </section>
+}
 </div>

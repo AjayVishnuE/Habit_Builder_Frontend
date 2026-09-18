@@ -1,9 +1,205 @@
-<div class="stat-card">
-    <div class="icon">
-        {{ icon }}
-    </div>
-    <div>
-        <h6>{{ title }}</h6>
-        <h2>{{ value }}</h2>
-    </div>
+<div
+  class="dashboard-progress"
+  [class.habits-progress]="type === 'habits'"
+  [class.tasks-progress]="type === 'tasks'"
+>
+
+
+  <!-- ======================================================== -->
+  <!-- WEEK -->
+  <!-- ======================================================== -->
+
+  @if (viewMode === 'week') {
+
+    @if (isEmpty) {
+
+      <div class="progress-empty">
+        <span>No activity for this period.</span>
+      </div>
+
+    } @else {
+
+      <div class="week-chart">
+
+        @for (
+          item of data;
+          track item.date.getTime()
+        ) {
+
+          <button
+            type="button"
+            class="day-column"
+            [class.selected]="false"
+            [class.future]="item.isFuture"
+            [disabled]="item.isFuture"
+            [title]="getTooltip(item)"
+            (click)="selectItem(item)"
+          >
+
+            <div class="day-count">
+              @if (item.count > 0) {
+                {{ item.count }}
+              }
+            </div>
+
+            <div class="bar-track">
+
+              <div
+                class="progress-bar"
+                [class.has-value]="item.count > 0"
+                [style.height.%]="getBarHeight(item.count)"
+              ></div>
+
+            </div>
+
+            <span class="day-label">
+              {{ item.label }}
+            </span>
+
+          </button>
+
+        }
+
+      </div>
+
+    }
+
+  }
+
+
+  <!-- ======================================================== -->
+  <!-- MONTH -->
+  <!-- ======================================================== -->
+
+  @else if (viewMode === 'month') {
+
+    @if (isEmpty) {
+
+      <div class="progress-empty">
+        <span>No activity for this period.</span>
+      </div>
+
+    } @else {
+
+      <div class="month-wrapper">
+
+        <div class="month-weekdays">
+          <span>Mon</span>
+          <span>Tue</span>
+          <span>Wed</span>
+          <span>Thu</span>
+          <span>Fri</span>
+          <span>Sat</span>
+          <span>Sun</span>
+        </div>
+
+
+        <div class="month-grid">
+
+          @for (
+            cell of calendarCells;
+            track $index
+          ) {
+
+            @if (cell) {
+
+              <button
+                type="button"
+                class="month-cell"
+                [class.future]="cell.isFuture"
+                [class.level-1]="getLevel(cell) === 1"
+                [class.level-2]="getLevel(cell) === 2"
+                [class.level-3]="getLevel(cell) === 3"
+                [class.level-4]="getLevel(cell) === 4"
+                [disabled]="cell.isFuture"
+                [title]="getTooltip(cell)"
+                (click)="selectItem(cell)"
+              >
+
+                <span class="month-day">
+                  {{ cell.date | date:'d' }}
+                </span>
+
+                @if (cell.count > 0) {
+
+                  <span class="month-count">
+                    {{ cell.count }}
+                  </span>
+
+                }
+
+              </button>
+
+            } @else {
+
+              <span class="calendar-placeholder"></span>
+
+            }
+
+          }
+
+        </div>
+
+      </div>
+
+    }
+
+  }
+
+
+  <!-- ======================================================== -->
+  <!-- YEAR -->
+  <!-- ======================================================== -->
+
+  @else {
+
+    @if (isEmpty) {
+
+      <div class="progress-empty">
+        <span>No activity for this period.</span>
+      </div>
+
+    } @else {
+
+      <div class="year-scroll">
+
+        <div class="year-grid">
+
+          @for (
+            cell of calendarCells;
+            track $index
+          ) {
+
+            @if (cell) {
+
+              <button
+                type="button"
+                class="year-cell"
+                [class.future]="cell.isFuture"
+                [class.level-1]="getLevel(cell) === 1"
+                [class.level-2]="getLevel(cell) === 2"
+                [class.level-3]="getLevel(cell) === 3"
+                [class.level-4]="getLevel(cell) === 4"
+                [disabled]="cell.isFuture"
+                [title]="getTooltip(cell)"
+                (click)="selectItem(cell)"
+              >
+              </button>
+
+            } @else {
+
+              <span class="year-placeholder"></span>
+
+            }
+
+          }
+
+        </div>
+
+      </div>
+
+    }
+
+  }
+
 </div>

@@ -1,428 +1,759 @@
 .dashboard {
-  padding: 8px 4px 40px;
-  color: var(--text-primary);
+  width: 100%;
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 30px 28px 50px;
+  box-sizing: border-box;
 }
 
 
-/* =========================
+/* ============================================================
    HEADER
-========================= */
+   ============================================================ */
 
 .dashboard-header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 30px;
+  gap: 24px;
   margin-bottom: 30px;
 }
 
-.eyebrow,
-.section-eyebrow {
+.eyebrow {
   margin: 0 0 7px;
-  color: var(--accent);
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 1.4px;
+  letter-spacing: 0.13em;
+  color: var(--accent);
 }
 
 .dashboard-header h1 {
   margin: 0;
-  font-size: clamp(28px, 4vw, 38px);
-  font-weight: 750;
-  letter-spacing: -1.2px;
   color: var(--text-primary);
+  font-size: clamp(26px, 3vw, 36px);
+  font-weight: 700;
+  letter-spacing: -0.035em;
 }
 
-.wave {
-  display: inline-block;
-  margin-left: 8px;
-  font-size: 30px;
-}
-
-.dashboard-subtitle {
+.header-subtitle {
   margin: 8px 0 0;
   color: var(--text-secondary);
   font-size: 14px;
 }
 
-
-/* =========================
-   QUOTE
-========================= */
-
-.quote-card {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 16px;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  background: var(--surface);
+.today-date {
   color: var(--text-secondary);
   font-size: 13px;
-  box-shadow: var(--shadow);
   white-space: nowrap;
 }
 
-.quote-card mat-icon {
-  color: var(--accent);
-  font-size: 19px;
-  width: 19px;
-  height: 19px;
-}
 
+/* ============================================================
+   TODAY CARDS
+   ============================================================ */
 
-/* =========================
-   STATS
-========================= */
-
-.stats-grid {
+.today-carousel {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-  margin-bottom: 34px;
-}
-
-
-/* =========================
-   SECTION HEADINGS
-========================= */
-
-.section-heading {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 20px;
-  margin-bottom: 16px;
-}
-
-.section-heading h2 {
-  margin: 0;
-  color: var(--text-primary);
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: -0.4px;
-}
-
-.section-description {
-  color: var(--text-secondary);
-  font-size: 12px;
-}
-
-
-/* =========================
-   PROGRESS
-========================= */
-
-.progress-section {
-  margin-bottom: 34px;
-}
-
-.progress-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
 }
 
-.progress-card {
-  height: 100%;
-  background: var(--surface) !important;
-  color: var(--text-primary);
+.today-card {
+  position: relative;
+  min-width: 0;
+  min-height: 225px;
+  padding: 22px;
   border: 1px solid var(--border);
-  border-radius: 16px !important;
-  box-shadow: var(--shadow) !important;
+  border-radius: 20px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease,
     border-color 0.2s ease;
 }
 
-.progress-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(91, 91, 214, 0.35);
+.today-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
 }
 
-.progress-card mat-card-content {
-  padding: 20px !important;
+.today-card::after {
+  content: '';
+  position: absolute;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  right: -55px;
+  top: -55px;
+  background: var(--surface-secondary);
+  opacity: 0.7;
+  pointer-events: none;
 }
 
-.progress-card-top {
+.today-card-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 18px;
-  color: var(--text-secondary);
-  font-size: 12px;
-  font-weight: 600;
+  position: relative;
+  z-index: 1;
 }
 
-.progress-icon {
-  width: 36px;
-  height: 36px;
+.today-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
   background: var(--surface-secondary);
-  color: var(--accent);
 }
 
-.progress-icon mat-icon {
+.today-icon mat-icon {
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+}
+
+.today-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.today-card-main {
+  position: relative;
+  z-index: 1;
+  margin-top: 18px;
+}
+
+.today-card-main h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 650;
+}
+
+.today-value {
+  margin-top: 8px;
+  color: var(--text-primary);
+  font-size: 30px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.today-value span {
+  color: var(--text-secondary);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.today-card-main p {
+  margin: 9px 0 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.today-link {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.today-link mat-icon {
+  width: 17px;
+  height: 17px;
+  font-size: 17px;
+  transition: transform 0.2s ease;
+}
+
+.today-link:hover mat-icon {
+  transform: translateX(3px);
+}
+
+.habits-card .today-icon mat-icon {
+  color: #6c63ff;
+}
+
+.tasks-card .today-icon mat-icon {
+  color: #16a34a;
+}
+
+.diary-card .today-icon mat-icon {
+  color: #d97706;
+}
+
+.diary-status {
+  margin-top: 11px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.diary-status mat-icon {
   width: 19px;
   height: 19px;
   font-size: 19px;
 }
 
-.progress-value {
+.diary-status.written {
+  color: #16a34a;
+}
+
+
+/* ============================================================
+   ACTIVITY SECTION
+   ============================================================ */
+
+.activity-section {
+  margin-top: 42px;
+}
+
+.section-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 17px;
+}
+
+.section-heading h2 {
+  margin: 0;
   color: var(--text-primary);
-  font-size: 32px;
-  line-height: 1;
-  font-weight: 750;
-  letter-spacing: -1px;
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
 }
 
-.progress-value small {
-  margin-left: 2px;
-  font-size: 18px;
+.section-description {
+  margin: 0;
   color: var(--text-secondary);
+  font-size: 13px;
 }
 
-.progress-label {
-  margin: 8px 0 16px;
-  color: var(--text-secondary);
-  font-size: 12px;
+
+/* ============================================================
+   ACTIVITY CAROUSEL
+   ============================================================ */
+
+.activity-carousel {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
 }
 
-.progress-card mat-progress-bar {
-  margin-top: 0;
-  height: 7px;
-  border-radius: 10px;
+
+/* ============================================================
+   ACTIVITY TILE
+   ============================================================ */
+
+.activity-tile {
+  min-width: 0;
   overflow: hidden;
-}
-
-
-/* =========================
-   CHART
-========================= */
-
-.weekly-section {
-  margin-bottom: 20px;
-}
-
-.chart-card {
-  padding: 22px 22px 18px;
   border: 1px solid var(--border);
-  border-radius: 18px;
+  border-radius: 22px;
   background: var(--surface);
   box-shadow: var(--shadow);
+  padding: 22px;
 }
 
-.chart-summary {
+.activity-tile-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px;
+  gap: 15px;
 }
 
-.chart-summary > div:first-child {
+.activity-title {
   display: flex;
-  align-items: baseline;
-  gap: 7px;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
 }
 
-.chart-label {
+.activity-icon {
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-secondary);
+}
+
+.activity-icon mat-icon {
+  width: 21px;
+  height: 21px;
+  font-size: 21px;
+}
+
+.habits-activity .activity-icon mat-icon {
+  color: #6c63ff;
+}
+
+.tasks-activity .activity-icon mat-icon {
+  color: #16a34a;
+}
+
+.activity-title h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 17px;
+  font-weight: 650;
+}
+
+.activity-title p {
+  margin: 3px 0 0;
   color: var(--text-secondary);
   font-size: 12px;
 }
 
-.chart-summary strong {
-  color: var(--text-primary);
-  font-size: 22px;
-  font-weight: 750;
+.activity-count {
+  flex: 0 0 auto;
+  padding: 6px 9px;
+  border-radius: 999px;
+  background: var(--surface-secondary);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 600;
 }
 
-.chart-caption {
+
+/* ============================================================
+   PERIOD NAVIGATION
+   ============================================================ */
+
+.period-controls {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) 40px;
+  align-items: center;
+  gap: 7px;
+  padding: 7px;
+  border-radius: 14px;
+  background: var(--surface-secondary);
+}
+
+.period-arrow {
+  width: 36px !important;
+  height: 36px !important;
+  color: var(--text-primary) !important;
+}
+
+.period-arrow:disabled {
+  opacity: 0.35;
+}
+
+.period-title {
+  min-width: 0;
+  text-align: center;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 650;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+/* ============================================================
+   VIEW SWITCHER
+   ============================================================ */
+
+.view-switcher {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 13px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--surface-secondary);
+}
+
+.view-switcher button {
+  flex: 1;
+  min-height: 31px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.view-switcher button:hover {
+  color: var(--text-primary);
+}
+
+.view-switcher button.active {
+  background: var(--surface);
+  color: var(--text-primary);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+
+/* ============================================================
+   VISUALIZER
+   ============================================================ */
+
+.visualizer-wrapper {
+  width: 100%;
+  min-width: 0;
+  margin-top: 8px;
+}
+
+
+/* ============================================================
+   SELECTED DETAILS
+   ============================================================ */
+
+.activity-details {
+  margin-top: 12px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: var(--surface-secondary);
+  animation: detailsIn 0.2s ease;
+}
+
+@keyframes detailsIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.details-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.details-eyebrow {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--text-secondary);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.details-header h4 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.details-number {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-top: 13px;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px;
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.detail-item-icon {
+  width: 27px;
+  height: 27px;
+  flex: 0 0 auto;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-secondary);
+}
+
+.detail-item-icon mat-icon {
+  width: 15px;
+  height: 15px;
+  font-size: 15px;
+}
+
+.habits-activity .detail-item-icon mat-icon {
+  color: #6c63ff;
+}
+
+.tasks-activity .detail-item-icon mat-icon {
+  color: #16a34a;
+}
+
+.detail-item div:last-child {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-item strong {
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.detail-item span {
+  margin-top: 2px;
+  color: var(--text-secondary);
+  font-size: 10px;
+}
+
+.empty-details {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 0 2px;
   color: var(--text-secondary);
   font-size: 11px;
 }
 
-.chart-icon {
-  width: 38px;
-  height: 38px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 11px;
-  background: var(--surface-secondary);
-  color: var(--accent);
-}
-
-.chart-icon mat-icon {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
-}
-
-.chart-wrapper {
-  position: relative;
-  width: 100%;
-  height: 260px;
-  margin-top: 8px;
-}
-
-.chart-wrapper canvas {
-  width: 100% !important;
-  height: 100% !important;
+.empty-details mat-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
 }
 
 
-/* =========================
-   LOADER
-========================= */
+/* ============================================================
+   DARK MODE
+   ============================================================ */
 
-.dashboard-loader {
-  min-height: 430px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  color: var(--text-secondary);
+:host-context(.dark-theme) .today-card:hover {
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
 }
 
-.hourglass {
-  font-size: 42px;
-  animation: hourglass-spin 1.5s ease-in-out infinite;
-}
-
-.dashboard-loader p {
-  margin: 0;
-  font-size: 13px;
-}
-
-@keyframes hourglass-spin {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  45% {
-    transform: rotate(180deg);
-  }
-
-  55% {
-    transform: rotate(180deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-
+:host-context(.dark-theme) .view-switcher button.active {
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
 }
 
 
-/* =========================
-   RESPONSIVE
-========================= */
+/* ============================================================
+   TABLET
+   ============================================================ */
 
 @media (max-width: 900px) {
-  .stats-grid,
-  .progress-grid {
-    grid-template-columns: 1fr;
+
+  .dashboard {
+    padding: 25px 20px 40px;
   }
 
-  .stats-grid {
-    gap: 14px;
+  .today-carousel {
+    gap: 13px;
   }
 
-  .progress-grid {
-    gap: 14px;
+  .today-card {
+    padding: 18px;
+  }
+
+  .activity-tile {
+    padding: 18px;
   }
 
 }
 
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
 
 @media (max-width: 700px) {
+
   .dashboard {
-    padding: 4px 0 90px;
+    padding: 20px 0 35px;
   }
 
+
+  /* Header remains padded */
   .dashboard-header {
+    padding: 0 17px;
     align-items: flex-start;
     flex-direction: column;
-    gap: 16px;
-    margin-bottom: 24px;
+    gap: 10px;
+    margin-bottom: 22px;
   }
-
-  .dashboard-header h1 {
-    font-size: 30px;
-  }
-
-  .dashboard-subtitle {
-    max-width: 300px;
-    line-height: 1.5;
-  }
-
-  .quote-card {
-    width: 100%;
-    white-space: normal;
-    box-sizing: border-box;
-  }
-
-  .section-heading {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 4px;
-    margin-bottom: 12px;
-  }
-
-  .section-heading h2 {
-    font-size: 18px;
-  }
-
-  .progress-card mat-card-content {
-    padding: 18px !important;
-  }
-
-  .chart-card {
-    padding: 18px 14px 14px;
-    border-radius: 16px;
-  }
-
-  .chart-wrapper {
-    height: 220px;
-  }
-
-}
-
-
-@media (max-width: 480px) {
 
   .dashboard-header h1 {
     font-size: 27px;
   }
 
-  .stats-grid {
-    margin-bottom: 26px;
+  .today-date {
+    font-size: 12px;
   }
 
-  .progress-section {
-    margin-bottom: 28px;
+
+  /* ==========================================================
+     TODAY CAROUSEL
+     ========================================================== */
+
+  .today-carousel {
+    display: flex;
+    gap: 12px;
+    padding: 2px 17px 8px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 
-  .progress-value {
-    font-size: 29px;
+  .today-carousel::-webkit-scrollbar {
+    display: none;
   }
 
-  .chart-wrapper {
-    height: 200px;
+  .today-card {
+    flex: 0 0 86%;
+    min-height: 205px;
+    scroll-snap-align: start;
+    border-radius: 19px;
+  }
+
+
+  /* ==========================================================
+     ACTIVITY
+     ========================================================== */
+
+  .activity-section {
+    margin-top: 32px;
+  }
+
+  .section-heading {
+    padding: 0 17px;
+    display: block;
+    margin-bottom: 14px;
+  }
+
+  .section-heading h2 {
+    font-size: 23px;
+  }
+
+  .section-description {
+    margin-top: 5px;
+    font-size: 12px;
+  }
+
+
+  /* ==========================================================
+     ACTIVITY CAROUSEL
+     ========================================================== */
+
+  .activity-carousel {
+    display: flex;
+    gap: 13px;
+    padding: 2px 17px 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .activity-carousel::-webkit-scrollbar {
+    display: none;
+  }
+
+  .activity-tile {
+    flex: 0 0 91%;
+    scroll-snap-align: start;
+    border-radius: 20px;
+    padding: 17px;
+  }
+
+
+  .activity-tile-header {
+    align-items: flex-start;
+  }
+
+  .activity-count {
+    font-size: 10px;
+  }
+
+
+  .period-controls {
+    margin-top: 16px;
+  }
+
+
+  .visualizer-wrapper {
+    margin-top: 7px;
   }
 
 }
 
-::ng-deep .progress-card .mdc-linear-progress__bar-inner {
-  border-color: var(--accent) !important;
-}
 
-::ng-deep .progress-card .mdc-linear-progress__buffer {
-  background-color: var(--surface-secondary) !important;
+/* ============================================================
+   SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 420px) {
+
+  .today-card {
+    flex-basis: 89%;
+  }
+
+  .activity-tile {
+    flex-basis: 94%;
+  }
+
+  .activity-title h3 {
+    font-size: 16px;
+  }
+
+  .activity-title p {
+    font-size: 11px;
+  }
+
+  .period-title {
+    font-size: 12px;
+  }
+
 }

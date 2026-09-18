@@ -1,95 +1,406 @@
-.stat-card {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  min-height: 96px;
-  padding: 20px 22px;
-  box-sizing: border-box;
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  background: var(--surface);
+.dashboard-progress {
+  width: 100%;
+  min-width: 0;
   color: var(--text-primary);
-  box-shadow: var(--shadow);
-  overflow: hidden;
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
 }
 
-.stat-card::after {
-  content: '';
-  position: absolute;
-  right: -28px;
-  top: -28px;
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: var(--surface-secondary);
-  opacity: 0.7;
-}
 
-.stat-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(91, 91, 214, 0.35);
-}
+/* ============================================================
+   EMPTY
+   ============================================================ */
 
-.icon {
-  position: relative;
-  z-index: 1;
-  width: 52px;
-  height: 52px;
-  flex-shrink: 0;
+.progress-empty {
+  min-height: 190px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 14px;
-  background: var(--surface-secondary);
-  font-size: 27px;
-}
-
-.stat-card > div:last-child {
-  position: relative;
-  z-index: 1;
-}
-
-.stat-card h6 {
-  margin: 0 0 5px;
   color: var(--text-secondary);
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
+  font-size: 12px;
 }
 
-.stat-card h2 {
-  margin: 0;
+
+/* ============================================================
+   WEEK
+   ============================================================ */
+
+.week-chart {
+  width: 100%;
+  height: 245px;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  align-items: end;
+  gap: 7px;
+  padding: 18px 2px 8px;
+  box-sizing: border-box;
+}
+
+.day-column {
+  min-width: 0;
+  height: 225px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  cursor: pointer;
+}
+
+.day-column:disabled {
+  cursor: default;
+}
+
+.day-count {
+  height: 18px;
+  margin-bottom: 5px;
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.bar-track {
+  width: min(32px, 70%);
+  height: 172px;
+  border-radius: 10px;
+  background: var(--surface-secondary);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.progress-bar {
+  width: 100%;
+  min-height: 5px;
+  border-radius: 10px;
+  background: var(--border);
+  transition:
+    height 0.3s ease,
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.habits-progress .progress-bar.has-value {
+  background: #6c63ff;
+}
+
+.tasks-progress .progress-bar.has-value {
+  background: #16a34a;
+}
+
+.day-column:hover:not(:disabled) .progress-bar {
+  transform: scaleX(1.08);
+}
+
+.day-column:hover:not(:disabled) .day-label {
   color: var(--text-primary);
-  font-size: 27px;
-  line-height: 1;
-  font-weight: 750;
-  letter-spacing: -0.5px;
 }
 
+.day-column.future {
+  opacity: 0.35;
+}
+
+.day-label {
+  width: 100%;
+  margin-top: 9px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+
+/* ============================================================
+   MONTH
+   ============================================================ */
+
+.month-wrapper {
+  width: 100%;
+  padding: 10px 2px 8px;
+  box-sizing: border-box;
+}
+
+.month-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+  margin-bottom: 7px;
+}
+
+.month-weekdays span {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.month-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.month-cell {
+  position: relative;
+  aspect-ratio: 1;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--surface-secondary);
+  color: var(--text-secondary);
+  font-family: inherit;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.month-cell:hover:not(:disabled) {
+  transform: scale(1.08);
+  border-color: var(--text-secondary);
+}
+
+.month-cell.future {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.month-day {
+  position: absolute;
+  left: 5px;
+  top: 4px;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.month-count {
+  position: absolute;
+  right: 4px;
+  bottom: 3px;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.month-cell.level-1 {
+  background: color-mix(
+    in srgb,
+    var(--accent) 25%,
+    var(--surface-secondary)
+  );
+}
+
+.month-cell.level-2 {
+  background: color-mix(
+    in srgb,
+    var(--accent) 45%,
+    var(--surface-secondary)
+  );
+  color: var(--text-primary);
+}
+
+.month-cell.level-3 {
+  background: color-mix(
+    in srgb,
+    var(--accent) 65%,
+    var(--surface-secondary)
+  );
+  color: var(--text-primary);
+}
+
+.month-cell.level-4 {
+  background: var(--accent);
+  color: white;
+}
+
+.tasks-progress .month-cell.level-1 {
+  background: color-mix(
+    in srgb,
+    #16a34a 25%,
+    var(--surface-secondary)
+  );
+}
+
+.tasks-progress .month-cell.level-2 {
+  background: color-mix(
+    in srgb,
+    #16a34a 45%,
+    var(--surface-secondary)
+  );
+}
+
+.tasks-progress .month-cell.level-3 {
+  background: color-mix(
+    in srgb,
+    #16a34a 65%,
+    var(--surface-secondary)
+  );
+}
+
+.tasks-progress .month-cell.level-4 {
+  background: #16a34a;
+}
+
+.calendar-placeholder {
+  aspect-ratio: 1;
+}
+
+
+/* ============================================================
+   YEAR
+   ============================================================ */
+
+.year-scroll {
+  width: 100%;
+  overflow-x: auto;
+  padding: 17px 2px 12px;
+  scrollbar-width: thin;
+}
+
+.year-grid {
+  width: max-content;
+  display: grid;
+  grid-template-rows: repeat(7, 11px);
+  grid-auto-flow: column;
+  grid-auto-columns: 11px;
+  gap: 3px;
+}
+
+.year-cell {
+  width: 11px;
+  height: 11px;
+  padding: 0;
+  border: 0;
+  border-radius: 2px;
+  background: var(--surface-secondary);
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.year-cell:hover:not(:disabled) {
+  transform: scale(1.35);
+}
+
+.year-cell.future {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.year-cell.level-1 {
+  background: color-mix(
+    in srgb,
+    var(--accent) 25%,
+    var(--surface-secondary)
+  );
+}
+
+.year-cell.level-2 {
+  background: color-mix(
+    in srgb,
+    var(--accent) 45%,
+    var(--surface-secondary)
+  );
+}
+
+.year-cell.level-3 {
+  background: color-mix(
+    in srgb,
+    var(--accent) 65%,
+    var(--surface-secondary)
+  );
+}
+
+.year-cell.level-4 {
+  background: var(--accent);
+}
+
+.tasks-progress .year-cell.level-1 {
+  background: color-mix(
+    in srgb,
+    #16a34a 25%,
+    var(--surface-secondary)
+  );
+}
+
+.tasks-progress .year-cell.level-2 {
+  background: color-mix(
+    in srgb,
+    #16a34a 45%,
+    var(--surface-secondary)
+  );
+}
+
+.tasks-progress .year-cell.level-3 {
+  background: color-mix(
+    in srgb,
+    #16a34a 65%,
+    var(--surface-secondary)
+  );
+}
+
+.tasks-progress .year-cell.level-4 {
+  background: #16a34a;
+}
+
+.year-placeholder {
+  width: 11px;
+  height: 11px;
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
 
 @media (max-width: 700px) {
 
-  .stat-card {
-    min-height: 82px;
-    padding: 16px 18px;
-    gap: 15px;
+  .week-chart {
+    height: 225px;
+    gap: 4px;
+    padding-top: 12px;
   }
 
-  .icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    font-size: 23px;
+  .day-column {
+    height: 207px;
   }
 
-  .stat-card h2 {
-    font-size: 24px;
+  .bar-track {
+    width: min(27px, 72%);
+    height: 157px;
+  }
+
+  .day-label {
+    font-size: 9px;
+    margin-top: 8px;
+  }
+
+  .day-count {
+    font-size: 9px;
+  }
+
+  .month-wrapper {
+    padding-top: 8px;
+  }
+
+  .month-grid {
+    gap: 5px;
+  }
+
+  .month-weekdays {
+    gap: 5px;
+  }
+
+  .month-cell {
+    border-radius: 6px;
+  }
+
+  .month-day,
+  .month-count {
+    font-size: 8px;
   }
 
 }
