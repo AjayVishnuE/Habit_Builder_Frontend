@@ -182,14 +182,48 @@ export class Dashboard implements OnInit {
   // ============================================================
 
   private calculateTodayHabits(): void {
+    let completedCount = 0;
 
-    this.completedTodayHabits =
-      this.habits.filter(habit =>
-        this.habitHasCompletionOnDate(
+    this.habits.forEach((habit: any) => {
+      const frequency = habit.frequency;
+
+      if (frequency === 'Daily') {
+        if (this.habitHasCompletionOnDate(habit, this.today)) {
+          completedCount++;
+        }
+      }
+
+      if (frequency === 'Weekly') {
+        const weekStart = this.getStartOfWeek(this.today);
+
+        if (this.habitHasCompletionInPeriod(
           habit,
+          weekStart,
           this.today
-        )
-      ).length;
+        )) {
+          completedCount++;
+        }
+      }
+
+      if (frequency === 'Monthly') {
+        const monthStart = new Date(
+          this.today.getFullYear(),
+          this.today.getMonth(),
+          1
+        );
+
+        if (this.habitHasCompletionInPeriod(
+          habit,
+          monthStart,
+          this.today
+        )) {
+          completedCount++;
+        }
+      }
+    });
+
+    this.completedTodayHabits = completedCount;
+    this.totalHabits = this.habits.length;
   }
 
 
@@ -854,7 +888,33 @@ export class Dashboard implements OnInit {
       first.getMonth() === second.getMonth() &&
       first.getDate() === second.getDate()
     );
-
   }
 
+  private habitHasCompletionInPeriod(
+    habit: any,
+    startDate: Date,
+    endDate: Date
+  ): boolean {
+    if (
+      !habit.completedHistory ||
+      !Array.isArray(habit.completedHistory)
+    ) {
+      return false;
+    }
+
+    const start = this.normalizeDate(startDate).getTime();
+    const end = this.normalizeDate(endDate).getTime();
+
+    return habit.completedHistory.some((entry: any) => {
+      if (!entry.completedAt) {
+        return false;
+      }
+
+      const completedDate = this.normalizeDate(
+        new Date(entry.completedAt)
+      ).getTime();
+
+      return completedDate >= start && completedDate <= end;
+    });
+  }
 }
