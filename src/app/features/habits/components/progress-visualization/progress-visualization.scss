@@ -1,228 +1,675 @@
-/* =========================
-   WEEK - BAR CHART
-========================= */
+/* =========================================================
+   BASE
+========================================================= */
 
-.bar-chart {
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    gap: 28px;
-    min-height: 280px;
-    padding: 30px 20px 15px;
-    overflow-x: auto;
+:host {
+    display: block;
+    width: 100%;
+    color: var(--text-primary);
 }
 
-.bar-wrapper {
+
+/* =========================================================
+   WEEK
+========================================================= */
+
+.week-visualization {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 20px 10px 10px;
+}
+
+
+/* ---------- Day headers ---------- */
+
+.week-day-header {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.day-column {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-end;
-    min-width: 45px;
-    height: 250px;
-    cursor: pointer;
+    gap: 3px;
 }
 
-.bar-area {
+.day-name {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.day-date {
+    font-size: 12px;
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+
+/* ---------- Bars ---------- */
+
+.week-bars {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 12px;
+    align-items: end;
+
+    height: 215px;
+
+    padding:
+        15px 0
+        0;
+}
+
+.bar-wrapper {
+    height: 100%;
+
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    height: 210px;
-    width: 35px;
+
+    position: relative;
+
+    cursor: pointer;
+}
+
+
+/*
+ * Subtle track behind every bar.
+ * This makes missed days visible instead
+ * of making them look like missing data.
+ */
+
+.bar-wrapper::before {
+    content: '';
+
+    position: absolute;
+
+    bottom: 0;
+
+    width: 28px;
+    height: 175px;
+
+    border-radius: 8px;
+
+    background:
+        var(--surface-secondary);
+
+    border:
+        1px solid var(--border);
+
+    opacity: .75;
+}
+
+
+/* ---------- Actual bar ---------- */
+
+.bar-area {
+    position: relative;
+
+    z-index: 1;
+
+    height: 175px;
+    width: 28px;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
 }
 
 .bar {
-    width: 26px;
-    min-height: 6px;
-    border-radius: 6px 6px 2px 2px;
-    background: #d9d9d9;
-    transition: all 0.2s ease;
+    width: 100%;
+
+    min-height: 7px;
+
+    border-radius:
+        7px 7px 4px 4px;
+
+    background:
+        var(--border);
+
+    transition:
+        height .25s ease,
+        transform .18s ease,
+        opacity .18s ease;
 }
+
+
+/* ---------- Mood colours ---------- */
 
 .bar.completed {
     background: #4caf50;
 }
 
+.bar.mood-excellent {
+    background: #087f23;
+}
+
+.bar.mood-great {
+    background: #16a34a;
+}
+
+.bar.mood-good {
+    background: #4caf50;
+}
+
+.bar.mood-okay {
+    background: #84cc16;
+}
+
+.bar.mood-bad {
+    background: #eab308;
+}
+
+
+/* ---------- Hover ---------- */
+
 .bar-wrapper:hover .bar {
-    transform: scaleX(1.08);
+    transform: scaleX(1.12);
 }
 
-.bar-wrapper small {
-    margin-top: 10px;
-    font-size: 12px;
-    white-space: nowrap;
+.bar-wrapper:hover::before {
+    border-color:
+        color-mix(
+            in srgb,
+            var(--accent) 30%,
+            var(--border)
+        );
 }
 
 
-/* =========================
-   MONTH - HEATMAP
-========================= */
+/* ---------- Selected day ---------- */
 
-.month-heatmap {
+.bar-wrapper.selected::after {
+    content: '';
+
+    position: absolute;
+
+    bottom: -8px;
+
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: var(--accent);
+}
+
+
+/* ---------- Status row ---------- */
+
+.week-status {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 8px;
-    padding: 20px;
-    max-width: 650px;
-    margin: auto;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 12px;
+
+    margin-top: 12px;
 }
 
-.heat-cell {
+.status-day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 24px;
+
+    color: var(--text-secondary);
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.status-day.completed {
+    color: #4caf50;
+}
+
+
+/* =========================================================
+   MONTH CALENDAR
+========================================================= */
+
+.month-calendar {
+    width: 100%;
+    max-width: 700px;
+
+    margin: 0 auto;
+
+    padding:
+        20px 10px 12px;
+}
+
+
+/* ---------- Weekday header ---------- */
+
+.calendar-weekdays {
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, minmax(0, 1fr));
+
+    gap: 8px;
+
+    margin-bottom: 8px;
+}
+
+.calendar-weekdays div {
+    text-align: center;
+
+    color: var(--text-secondary);
+
+    font-size: 11px;
+    font-weight: 750;
+
+    text-transform: uppercase;
+
+    letter-spacing: .04em;
+}
+
+
+/* ---------- Calendar cells ---------- */
+
+.calendar-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, minmax(0, 1fr));
+
+    gap: 8px;
+}
+
+.calendar-cell {
+    position: relative;
+
     aspect-ratio: 1;
-    min-width: 32px;
-    border-radius: 5px;
+
+    min-width: 0;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    font-size: 11px;
-    color: #777;
+    border-radius: 9px;
 
-    background: #eeeeee;
+    background: var(--surface-secondary);
+
+    border:
+        1px solid var(--border);
+
+    color: var(--text-secondary);
 
     cursor: pointer;
 
     transition:
-        transform 0.15s ease,
-        opacity 0.15s ease;
-}
-
-.heat-cell:hover {
-    transform: scale(1.12);
+        transform .15s ease,
+        border-color .15s ease,
+        background-color .15s ease;
 }
 
 
-/* Completed mood levels */
+/* Empty cells before day 1 */
 
-.heat-cell.completed {
-    color: white;
+.calendar-cell.empty {
+    visibility: hidden;
+    pointer-events: none;
 }
 
-.heat-cell.mood-excellent {
+
+/* ---------- Date ---------- */
+
+.date-number {
+    position: relative;
+    z-index: 2;
+
+    font-size: 12px;
+    font-weight: 650;
+}
+
+
+/* ---------- Today ---------- */
+
+.calendar-cell.today {
+    border-color: var(--accent);
+
+    box-shadow:
+        inset 0 0 0 1px
+        color-mix(
+            in srgb,
+            var(--accent) 35%,
+            transparent
+        );
+}
+
+
+/* ---------- Completed ---------- */
+
+.calendar-cell.completed {
+    color: #fff;
+}
+
+.calendar-cell.mood-excellent {
     background: #087f23;
+    border-color: #087f23;
 }
 
-.heat-cell.mood-great {
+.calendar-cell.mood-great {
     background: #16a34a;
+    border-color: #16a34a;
 }
 
-.heat-cell.mood-good {
+.calendar-cell.mood-good {
     background: #4caf50;
+    border-color: #4caf50;
 }
 
-.heat-cell.mood-okay {
+.calendar-cell.mood-okay {
     background: #84cc16;
+    border-color: #84cc16;
 }
 
-.heat-cell.mood-bad {
+.calendar-cell.mood-bad {
     background: #eab308;
+    border-color: #eab308;
 }
 
 
-/* =========================
-   YEAR - GITHUB STYLE
-========================= */
+/* ---------- Completion tick ---------- */
+
+.completion-dot {
+    position: absolute;
+
+    right: 5px;
+    bottom: 4px;
+
+    font-size: 9px;
+
+    opacity: .85;
+}
+
+
+/* ---------- Hover ---------- */
+
+.calendar-cell:not(.empty):hover {
+    transform: translateY(-2px);
+
+    border-color: var(--accent);
+}
+
+
+/* ---------- Selected ---------- */
+
+.calendar-cell.selected {
+    box-shadow:
+        0 0 0 2px var(--accent);
+}
+
+
+/* =========================================================
+   YEAR
+========================================================= */
+
+.year-visualization {
+    width: 100%;
+
+    overflow-x: auto;
+
+    padding:
+        20px 10px 15px;
+}
+
+
+/* ---------- Month labels ---------- */
+
+.year-month-labels {
+    display: grid;
+
+    grid-template-columns:
+        repeat(12, minmax(60px, 1fr));
+
+    min-width: 730px;
+
+    margin-left: 18px;
+    margin-bottom: 8px;
+}
+
+.year-month-labels span {
+    font-size: 10px;
+
+    color: var(--text-secondary);
+
+    font-weight: 700;
+
+    text-align: left;
+}
+
+
+/* ---------- Heatmap ---------- */
 
 .year-heatmap {
     display: grid;
 
-    /*
-     * 7 rows representing days of the week.
-     * The grid automatically creates the
-     * required number of columns.
-     */
-    grid-template-rows: repeat(7, 12px);
+    grid-template-rows:
+        repeat(7, 12px);
+
     grid-auto-flow: column;
+
+    grid-auto-columns: 12px;
+
     gap: 3px;
-    overflow-x: auto;
-    padding: 20px;
+
+    width: max-content;
 }
+
+
+/* ---------- Cells ---------- */
 
 .year-cell {
     width: 12px;
     height: 12px;
-    border-radius: 2px;
-    background: #eeeeee;
+
+    border-radius: 3px;
+
+    background: var(--surface-secondary);
+
+    border:
+        1px solid var(--border);
+
     cursor: pointer;
+
     transition:
-        transform 0.15s ease,
-        opacity 0.15s ease;
+        transform .15s ease,
+        border-color .15s ease;
 }
 
 .year-cell:hover {
     transform: scale(1.35);
+
+    border-color: var(--accent);
 }
-
-
-/* Year completed cells */
 
 .year-cell.completed {
     background: #4caf50;
+
+    border-color: #4caf50;
 }
 
 .year-cell.mood-excellent {
     background: #087f23;
+    border-color: #087f23;
 }
 
 .year-cell.mood-great {
     background: #16a34a;
+    border-color: #16a34a;
 }
 
 .year-cell.mood-good {
     background: #4caf50;
+    border-color: #4caf50;
 }
 
 .year-cell.mood-okay {
     background: #84cc16;
+    border-color: #84cc16;
 }
 
 .year-cell.mood-bad {
     background: #eab308;
+    border-color: #eab308;
+}
+
+.year-cell.selected {
+    box-shadow:
+        0 0 0 2px var(--accent);
 }
 
 
-/* =========================
-   EMPTY PERIOD
-========================= */
+/* =========================================================
+   EMPTY STATE
+========================================================= */
 
 .empty-period {
     width: 100%;
+
     min-height: 220px;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #888;
+
+    color: var(--text-secondary);
+
     font-size: 14px;
 }
 
 
-/* =========================
-   RESPONSIVE
-========================= */
+/* =========================================================
+   TABLET
+========================================================= */
 
 @media (max-width: 768px) {
 
-    .bar-chart {
-        justify-content: flex-start;
-        gap: 20px;
+    .week-visualization {
+        padding:
+            16px 2px 8px;
     }
 
-    .month-heatmap {
+    .week-day-header,
+    .week-bars,
+    .week-status {
+        gap: 6px;
+    }
+
+    .week-bars {
+        height: 190px;
+    }
+
+    .bar-wrapper::before {
+        width: 22px;
+        height: 155px;
+    }
+
+    .bar-area {
+        width: 22px;
+        height: 155px;
+    }
+
+    .day-name {
+        font-size: 9px;
+    }
+
+    .day-date {
+        font-size: 11px;
+    }
+
+    .month-calendar {
+        padding:
+            16px 2px 10px;
+    }
+
+    .calendar-grid,
+    .calendar-weekdays {
         gap: 5px;
-        padding: 10px;
     }
 
-    .heat-cell {
-        min-width: 28px;
+    .calendar-cell {
+        border-radius: 7px;
+    }
+
+    .date-number {
+        font-size: 11px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .week-day-header,
+    .week-bars,
+    .week-status {
+        gap: 4px;
+    }
+
+    .week-bars {
+        height: 165px;
+    }
+
+    .bar-wrapper::before {
+        width: 18px;
+        height: 135px;
+    }
+
+    .bar-area {
+        width: 18px;
+        height: 135px;
+    }
+
+    .day-name {
+        font-size: 8px;
+    }
+
+    .day-date {
         font-size: 10px;
     }
 
-    .year-heatmap {
-        gap: 2px;
+    .status-day {
+        font-size: 11px;
     }
 
-    .year-cell {
-        width: 10px;
-        height: 10px;
+
+    .calendar-grid,
+    .calendar-weekdays {
+        gap: 4px;
     }
+
+    .calendar-cell {
+        border-radius: 6px;
+    }
+
+    .date-number {
+        font-size: 10px;
+    }
+
+    .completion-dot {
+        right: 3px;
+        bottom: 2px;
+        font-size: 7px;
+    }
+
+
+    .year-visualization {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
 }
