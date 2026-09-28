@@ -153,7 +153,7 @@
 }
 
 .today-card-main p {
-  margin: 9px 0 0;
+  margin: 9px 0;
   color: var(--text-secondary);
   font-size: 13px;
 }
@@ -184,6 +184,16 @@
 
 .habits-card .today-icon mat-icon {
   color: #6c63ff;
+}
+
+.habit-breakdown {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  white-space: nowrap;
 }
 
 .tasks-card .today-icon mat-icon {

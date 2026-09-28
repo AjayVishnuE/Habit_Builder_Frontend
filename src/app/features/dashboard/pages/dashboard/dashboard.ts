@@ -64,7 +64,12 @@ export class Dashboard implements OnInit {
   // ============================================================
   // TODAY
   // ============================================================
-
+  completedDailyHabits = 0;
+  completedWeeklyHabits = 0;
+  completedMonthlyHabits = 0;
+  totalDailyHabits = 0;
+  totalWeeklyHabits = 0;
+  totalMonthlyHabits = 0;
   completedTodayHabits = 0;
   totalHabits = 0;
 
@@ -137,7 +142,7 @@ export class Dashboard implements OnInit {
         this.calculateTodayHabits();
 
         this.buildHabitActivityData();
-
+        this.cdr.detectChanges();
       },
       error: (error) => {
         console.error('Failed to load habits:', error);
@@ -153,7 +158,7 @@ export class Dashboard implements OnInit {
         this.calculateTodayTasks();
 
         this.buildTaskActivityData();
-
+        this.cdr.detectChanges();
       },
       error: (error) => {
         console.error('Failed to load tasks:', error);
@@ -167,6 +172,7 @@ export class Dashboard implements OnInit {
         this.diaries = diaries || [];
 
         this.calculateTodayDiary();
+        this.cdr.detectChanges();
 
       },
       error: (error) => {
@@ -183,45 +189,51 @@ export class Dashboard implements OnInit {
 
   private calculateTodayHabits(): void {
     let completedCount = 0;
-
+    this.completedDailyHabits = 0;
+    this.completedWeeklyHabits = 0;
+    this.completedMonthlyHabits = 0;
     this.habits.forEach((habit: any) => {
       const frequency = habit.frequency;
-
       if (frequency === 'Daily') {
+        this.totalDailyHabits++;
         if (this.habitHasCompletionOnDate(habit, this.today)) {
           completedCount++;
+          this.completedDailyHabits++;
         }
       }
-
       if (frequency === 'Weekly') {
+        this.totalWeeklyHabits++;
         const weekStart = this.getStartOfWeek(this.today);
-
-        if (this.habitHasCompletionInPeriod(
-          habit,
-          weekStart,
-          this.today
-        )) {
+        if (
+          this.habitHasCompletionInPeriod(
+            habit,
+            weekStart,
+            this.today
+          )
+        ) {
           completedCount++;
+          this.completedWeeklyHabits++;
         }
       }
-
       if (frequency === 'Monthly') {
+        this.totalMonthlyHabits++;
         const monthStart = new Date(
           this.today.getFullYear(),
           this.today.getMonth(),
           1
         );
-
-        if (this.habitHasCompletionInPeriod(
-          habit,
-          monthStart,
-          this.today
-        )) {
+        if (
+          this.habitHasCompletionInPeriod(
+            habit,
+            monthStart,
+            this.today
+          )
+        ) {
           completedCount++;
+          this.completedMonthlyHabits++;
         }
       }
     });
-
     this.completedTodayHabits = completedCount;
     this.totalHabits = this.habits.length;
   }
