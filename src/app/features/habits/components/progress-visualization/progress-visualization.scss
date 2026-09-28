@@ -427,23 +427,15 @@
 
 .year-month-labels {
     display: grid;
-
-    grid-template-columns:
-        repeat(12, minmax(60px, 1fr));
-
+    grid-template-columns: repeat(12, minmax(6.1%, 6%));
     min-width: 730px;
-
-    margin-left: 18px;
     margin-bottom: 8px;
 }
 
 .year-month-labels span {
     font-size: 10px;
-
     color: var(--text-secondary);
-
     font-weight: 700;
-
     text-align: left;
 }
 
@@ -646,6 +638,10 @@
         font-size: 11px;
     }
 
+
+    .year-month-labels {
+        grid-template-columns: repeat(12, minmax(65px, 1fr));
+    }
 
     .calendar-grid,
     .calendar-weekdays {

@@ -604,18 +604,22 @@ export class HabitDetails implements OnInit {
         }
 
         if (this.habit?.frequency === 'Monthly') {
-            const entry = this.getCompletionInRange(start, this.getWeekEnd(start));
-
-            this.visualizationData = entry ? [{
-                date: new Date(entry.completedAt),
-                label: 'Week',
-                completed: true,
-                completionId: entry._id ?? null,
-                mood: entry.mood,
-                remark: entry.remark,
-                duration: entry.duration,
-                completedAt: entry.completedAt
-            }] : [];
+            this.visualizationData = [];
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(start);
+                date.setDate( start.getDate() + i );
+                const entry = this.getCompletionForDate(date);
+                this.visualizationData.push({
+                    date,
+                    label: date.toLocaleDateString( 'en-US', { weekday: 'short' } ),
+                    completed: !!entry,
+                    completionId: entry?._id ?? null,
+                    mood: entry?.mood ?? null,
+                    remark: entry?.remark ?? '',
+                    duration: entry?.duration ?? 0,
+                    completedAt: entry?.completedAt ?? null
+                });
+            }
         }
     }
 

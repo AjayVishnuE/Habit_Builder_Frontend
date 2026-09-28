@@ -1,12 +1,4 @@
-import {
-    Component,
-    Input,
-    Output,
-    EventEmitter,
-    OnChanges,
-    SimpleChanges
-} from '@angular/core';
-
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -19,19 +11,12 @@ import { CommonModule } from '@angular/common';
 export class ProgressVisualization implements OnChanges {
 
     @Input() data: any[] = [];
-
-    @Input()
-    viewMode: 'week' | 'month' | 'year' = 'week';
-
-    @Output()
-    barSelected = new EventEmitter<any>();
+    @Input() viewMode: 'week' | 'month' | 'year' = 'week';
+    @Output() barSelected = new EventEmitter<any>();
 
     weekData: any[] = [];
-
     monthCalendar: any[] = [];
-
     yearData: any[] = [];
-
     yearMonths: string[] = [
         'Jan',
         'Feb',
@@ -48,7 +33,6 @@ export class ProgressVisualization implements OnChanges {
     ];
 
     selectedDate: string | null = null;
-
 
     // ========================================
     // DATA CHANGES
