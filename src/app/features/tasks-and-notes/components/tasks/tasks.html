@@ -12,42 +12,32 @@
         <!-- =========================
              TASK CONTROLS
         ========================== -->
-
         <div class="task-controls">
 
             <div class="view-control">
-
                 <label
                     class="upcoming-toggle"
                     [class.active]="showUpcomingTasks">
-
                     <input
                         type="checkbox"
                         [checked]="showUpcomingTasks"
                         (change)="toggleUpcomingTasks()" />
-
                     <span class="custom-check">
                         <mat-icon>check</mat-icon>
                     </span>
-
                     <span class="toggle-copy">
                         <strong>Show upcoming tasks</strong>
                         <small>
                             Include future tasks in the timeline
                         </small>
                     </span>
-
                 </label>
-
             </div>
-
             <button
                 mat-flat-button
                 class="future-task-button"
                 (click)="openFutureTask()">
-
                 <mat-icon>event</mat-icon>
-
                 <span>Add future task</span>
             </button>
 
@@ -231,19 +221,14 @@
                         </div>
 
                         @if (!isFuture(day.date)) {
-
                             <button
                                 mat-icon-button
                                 class="add-task-button"
                                 (click)="openAddTask(day.date)"
                                 aria-label="Add task">
-
                                 <mat-icon>add</mat-icon>
-
                             </button>
-
                         }
-
                     </div>
 
 
@@ -617,7 +602,36 @@
                     </div>
 
                 </section>
+                @if (isToday(day.date)) {
 
+                    <div class="past-task-action">
+
+                        <label
+                            class="upcoming-toggle move-past-toggle"
+                            [class.active]="movePastTasksChecked">
+
+                            <input
+                                type="checkbox"
+                                [(ngModel)]="movePastTasksChecked"
+                                [disabled]="movingPastTasks"
+                                (change)="onMovePastTasksChange()" />
+
+                            <span class="custom-check">
+                                <mat-icon>check</mat-icon>
+                            </span>
+
+                            <span class="toggle-copy">
+                                <strong>Move unfinished past tasks to today</strong>
+                                <small>
+                                    Reschedule overdue tasks
+                                </small>
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                }
             }
 
         </div>
@@ -685,5 +699,84 @@
         </div>
 
     </div>
+}
+<!-- =========================
+     MOVE PAST TASKS CONFIRMATION
+========================== -->
+
+@if (showMovePastTasksConfirmation) {
+
+    <div
+        class="move-past-modal-backdrop"
+        (click)="cancelMovePastTasks()">
+
+        <div
+            class="move-past-modal"
+            (click)="$event.stopPropagation()">
+
+            <div class="move-past-modal-icon">
+                <mat-icon>event_repeat</mat-icon>
+            </div>
+
+            <div class="move-past-modal-content">
+
+                <h3>Move unfinished tasks to today?</h3>
+
+                <p>
+                    You have
+                    <strong>
+                        {{ getUnfinishedPastTasks().length }}
+                    </strong>
+                    unfinished task{{ getUnfinishedPastTasks().length === 1 ? '' : 's' }}
+                    from previous days.
+                </p>
+
+                <span>
+                    These tasks will be rescheduled to today.
+                    This change cannot be automatically undone.
+                </span>
+
+            </div>
+
+            <div class="move-past-modal-actions">
+
+                <button
+                    mat-button
+                    class="move-past-cancel-button"
+                    [disabled]="movingPastTasks"
+                    (click)="cancelMovePastTasks()">
+
+                    Cancel
+
+                </button>
+
+                <button
+                    mat-flat-button
+                    class="move-past-confirm-button"
+                    [disabled]="movingPastTasks"
+                    (click)="confirmMovePastTasks()">
+
+                    <mat-icon>
+                        {{
+                            movingPastTasks
+                                ? 'hourglass_empty'
+                                : 'event_repeat'
+                        }}
+                    </mat-icon>
+
+                    {{
+                        movingPastTasks
+                            ? 'Moving...'
+                            : 'Move to today'
+                    }}
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
 }
 </div>

@@ -90,6 +90,14 @@ export class Tasks implements OnInit {
   savingTaskId: string | null = null;
   deleteConfirmationTask: Task | null = null;
 
+  // =========================
+  // MOVE PAST TASKS TO TODAY
+  // =========================
+
+  movePastTasksChecked = false;
+  showMovePastTasksConfirmation = false;
+  movingPastTasks = false;
+
   ngOnInit(): void {
     this.loadTasks();
   }
@@ -692,5 +700,109 @@ confirmDelete(): void {
     return this.getDateKey(
       day.date.toISOString()
     );
+  }
+
+  /* =========================
+    MOVE PAST TASKS TO TODAY
+  ========================= */
+
+  public getUnfinishedPastTasks(): Task[] {
+    const today = this.startOfDay(new Date());
+
+    return this.allTasks.filter(task => {
+      if (task.completed || !task.dueDate) {
+        return false;
+      }
+
+      const dueDate = this.startOfDay(
+        new Date(task.dueDate)
+      );
+
+      return dueDate.getTime() < today.getTime();
+    });
+  }
+
+  onMovePastTasksChange(): void {
+    if (!this.movePastTasksChecked) {
+      return;
+    }
+
+    const pastTasks = this.getUnfinishedPastTasks();
+
+    if (pastTasks.length === 0) {
+      this.movePastTasksChecked = false;
+      return;
+    }
+
+    this.showMovePastTasksConfirmation = true;
+  }
+
+  cancelMovePastTasks(): void {
+    this.movePastTasksChecked = false;
+    this.showMovePastTasksConfirmation = false;
+  }
+
+  confirmMovePastTasks(): void {
+    const pastTasks = this.getUnfinishedPastTasks();
+
+    if (
+      pastTasks.length === 0 ||
+      this.movingPastTasks
+    ) {
+      this.cancelMovePastTasks();
+      return;
+    }
+
+    this.movingPastTasks = true;
+
+    const today = this.startOfDay(new Date());
+    const todayDate = today.toISOString();
+
+    let completedRequests = 0;
+    let hasError = false;
+
+    pastTasks.forEach(task => {
+      this.taskService
+        .updateTask(task._id, {
+          title: task.title,
+          description: task.description || '',
+          priority: task.priority,
+          dueDate: todayDate
+        })
+        .subscribe({
+          next: () => {
+            completedRequests++;
+
+            if (completedRequests === pastTasks.length) {
+              this.movingPastTasks = false;
+              this.movePastTasksChecked = false;
+              this.showMovePastTasksConfirmation = false;
+
+              this.loadTasks();
+            }
+          },
+
+          error: (error) => {
+            console.error(
+              'Failed to move task to today:',
+              error
+            );
+
+            hasError = true;
+            completedRequests++;
+
+            if (completedRequests === pastTasks.length) {
+              this.movingPastTasks = false;
+              this.movePastTasksChecked = false;
+              this.showMovePastTasksConfirmation = false;
+
+              this.taskToggleError =
+                'Some tasks could not be moved to today. Please try again.';
+
+              this.loadTasks();
+            }
+          }
+        });
+    });
   }
 }
