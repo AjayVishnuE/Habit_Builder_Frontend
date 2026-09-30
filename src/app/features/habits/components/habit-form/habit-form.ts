@@ -31,6 +31,7 @@ export class HabitForm implements OnInit {
   private habitService = inject(HabitService);
   private snackBar = inject(MatSnackBar);
   public data = inject(MAT_DIALOG_DATA, {optional: true });
+  isSaving = false;
   habitForm = this.fb.nonNullable.group({
     title: ['', Validators.required],
     description: [''],
@@ -50,32 +51,52 @@ export class HabitForm implements OnInit {
     } 
   }
 
-  saveHabit() {
-    if (this.habitForm.invalid) {
+  saveHabit(): void {
+    if (this.habitForm.invalid || this.isSaving) {
       return;
     }
+    this.isSaving = true;
     if (this.data) {
-      this.habitService.updateHabit(this.data._id, this.habitForm.getRawValue()).subscribe({
-        next: (updatedHabit) => {
-          this.showMessage('Habit updated successfully!');
-          this.dialogRef.close(updatedHabit);
-        },
-        error: (err) => {
-          this.showMessage('Failed to update habit!');
-          console.error(err);
-        }
-      });
-    }
-    else {
-      this.habitService.createHabit(this.habitForm.getRawValue()).subscribe({
-        next: (habit) => {
-          this.showMessage('Habit created successfully!');
-          this.dialogRef.close(habit);
-        },error: (err) => {
-          this.showMessage('Failed to create habit!');
-          console.error(err);
-        }
-      });
+      this.habitService
+        .updateHabit(
+          this.data._id,
+          this.habitForm.getRawValue()
+        )
+        .subscribe({
+          next: (updatedHabit) => {
+            this.showMessage(
+              'Habit updated successfully!'
+            );
+            this.dialogRef.close(updatedHabit);
+          },
+          error: (err) => {
+            this.isSaving = false;
+            this.showMessage(
+              'Failed to update habit!'
+            );
+            console.error(err);
+          }
+        });
+    } else {
+      this.habitService
+        .createHabit(
+          this.habitForm.getRawValue()
+        )
+        .subscribe({
+          next: (habit) => {
+            this.showMessage(
+              'Habit created successfully!'
+            );
+            this.dialogRef.close(habit);
+          },
+          error: (err) => {
+            this.isSaving = false;
+            this.showMessage(
+              'Failed to create habit!'
+            );
+            console.error(err);
+          }
+        });
     }
   }
 

@@ -160,6 +160,7 @@
                 mat-button
                 type="button"
                 class="cancel-button"
+                [disabled]="isSaving"
                 (click)="close()">
                 Cancel
             </button>
@@ -167,11 +168,12 @@
                 mat-raised-button
                 color="primary"
                 type="submit"
-                class="save-button">
+                class="save-button"
+                [disabled]="isSaving || habitForm.invalid">
                 <span>
-                    {{ data ? '✓' : '+' }}
+                    {{ isSaving ? '…' : (data ? '✓' : '+') }}
                 </span>
-                {{ data ? 'Update Habit' : 'Create Habit' }}
+                {{ isSaving ? (data ? 'Updating Habit...' : 'Creating Habit...') : (data ? 'Update Habit' : 'Create Habit') }}
             </button>
         </mat-dialog-actions>
     </form>

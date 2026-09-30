@@ -323,6 +323,17 @@ mat-dialog-actions {
     font-weight: 600;
 }
 
+.save-button:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.save-button.mat-mdc-raised-button:disabled {
+    background-color: var(--accent) !important;
+    color: white !important;
+    opacity: 0.65;
+}
+
 .save-button span {
     margin-right: 6px;
     font-weight: 700;
