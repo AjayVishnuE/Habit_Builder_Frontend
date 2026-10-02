@@ -111,7 +111,8 @@ export class HabitForm implements OnInit {
       {
         duration: 3000,
         horizontalPosition: 'right',
-        verticalPosition: 'top'
+        verticalPosition: 'top',
+        panelClass: ['app-snackbar']
       }
     );
   }

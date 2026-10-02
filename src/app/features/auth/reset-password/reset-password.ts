@@ -103,7 +103,8 @@ export class ResetPassword {
           response.message || 'Password reset successfully.',
           'Close',
           {
-            duration: 10000
+            duration: 10000,
+            panelClass: ['app-snackbar']
           }
         );
       },
@@ -116,7 +117,8 @@ export class ResetPassword {
             'This password reset link is invalid or has expired.',
           'Close',
           {
-            duration: 5000
+            duration: 5000,
+            panelClass: ['app-snackbar']
           }
         );
       }

@@ -45,7 +45,10 @@ export class Register {
       this.snackBar.open(
         'Passwords do not match',
         'Close',
-        { duration: 3000 }
+        { 
+          duration: 3000,
+          panelClass: ['app-snackbar']
+         }
       );
       return;
     }
@@ -61,7 +64,8 @@ export class Register {
           {
             duration: 3000,
             horizontalPosition: 'right',
-            verticalPosition: 'top'
+            verticalPosition: 'top',
+            panelClass: ['app-snackbar']
           }
         );
         this.router.navigate(['/dashboard']);
@@ -71,7 +75,10 @@ export class Register {
         this.snackBar.open(
           err.error?.message || 'Registration failed',
           'Close',
-          { duration: 3000 }
+          { 
+            duration: 3000,
+            panelClass: ['app-snackbar']
+          }
         );
       }
     });

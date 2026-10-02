@@ -44,7 +44,8 @@ export class ForgotPassword {
             'If an account exists with that email, a reset link has been sent.',
           'Close',
           {
-            duration: 5000
+            duration: 5000,
+            panelClass: ['app-snackbar']
           }
         );
 
@@ -61,7 +62,8 @@ export class ForgotPassword {
             'Something went wrong. Please try again later.',
           'Close',
           {
-            duration: 4000
+            duration: 4000,
+            panelClass: ['app-snackbar']
           }
         );
       }
