@@ -311,3 +311,37 @@ html.dark-theme .habit-mood-panel {
 .mat-calendar-next-button {
   color: var(--text-primary) !important;
 }
+
+/* ================================
+   GLOBAL SNACKBAR
+================================ */
+
+.app-snackbar.mat-mdc-snack-bar-container {
+    --mdc-snackbar-container-color: var(--surface);
+    --mdc-snackbar-supporting-text-color: var(--text-primary);
+    --mat-snack-bar-button-color: var(--accent);
+
+    border: 1px solid var(--border);
+    border-radius: 10px !important;
+
+    box-shadow: var(--shadow);
+
+    min-width: 280px;
+    max-width: 420px;
+}
+
+.app-snackbar .mdc-snackbar__surface {
+    background-color: var(--surface) !important;
+    color: var(--text-primary) !important;
+
+    border: 1px solid var(--border);
+    border-radius: 10px !important;
+}
+
+.app-snackbar .mat-mdc-snack-bar-label {
+    color: var(--text-primary) !important;
+}
+
+.app-snackbar .mat-mdc-button {
+    color: var(--accent) !important;
+}

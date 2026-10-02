@@ -184,16 +184,23 @@ export class Habits implements OnInit {
     );
   }
 
-  async applyFilters() {
-    this.filteredHabits = this.habits.filter(habit => {
-      const matchesSearch =
-        habit.title.toLowerCase().includes(this.searchText.toLowerCase()) ||
-        habit.description.toLowerCase().includes(this.searchText.toLowerCase());
-      const matchesFrequency =
-        this.selectedFrequency === 'All' ||
-        habit.frequency === this.selectedFrequency;
-      return matchesSearch && matchesFrequency;
+  async applyFilters(): Promise<void> {
+    const filtered = this.habits.filter(habit => {
+      const matchesSearch = habit.title.toLowerCase().includes(this.searchText.toLowerCase()) || habit.description.toLowerCase().includes(this.searchText.toLowerCase());
+      const matchesFrequency = this.selectedFrequency === 'All' || habit.frequency === this.selectedFrequency;
+      return ( matchesSearch && matchesFrequency );
     });
+    this.filteredHabits = filtered.sort((a, b) => {
+        const aCompleted = this.isHabitCompletedForCurrentPeriod(a);
+        const bCompleted = this.isHabitCompletedForCurrentPeriod(b);
+        // Incomplete first
+        if ( aCompleted !== bCompleted ) {
+          return aCompleted ? 1 : -1;
+        }
+        // Keep existing order
+        return 0;
+      }
+    );
   }
 
   onSearchChange(value: string) {
@@ -214,6 +221,67 @@ export class Habits implements OnInit {
     return this.habits.filter(
       habit => habit.frequency === frequency
     ).length;
+  }
+
+  private startOfDay(date: Date): Date {
+    const result = new Date(date);
+    result.setHours(0, 0, 0, 0);
+    return result;
+  }
+
+  private getStartOfWeek(date: Date): Date {
+    const result = this.startOfDay(date);
+    const day = result.getDay();
+    // Monday = 0
+    const daysFromMonday = day === 0 ? 6 : day - 1;
+    result.setDate( result.getDate() - daysFromMonday );
+    return result;
+  }
+
+  private getEndOfWeek(date: Date): Date {
+    const result = this.getStartOfWeek(date);
+    result.setDate( result.getDate() + 6 );
+    return result;
+  }
+
+  private isHabitCompletedForCurrentPeriod( habit: Habit ): boolean {
+
+    if ( !habit.completedHistory || habit.completedHistory.length === 0 ) {
+      return false;
+    }
+    const today = this.startOfDay(new Date());
+    if (habit.frequency === 'Daily') {
+      return habit.completedHistory.some(completion => {
+        const completedDate = this.startOfDay( new Date(completion.completedAt) );
+        return ( completedDate.getTime() === today.getTime() );
+      });
+    }
+    if (habit.frequency === 'Weekly') {
+      const weekStart = this.getStartOfWeek(today);
+      const weekEnd = this.getEndOfWeek(today);
+      weekEnd.setHours(23, 59, 59, 999);
+      return habit.completedHistory.some(completion => {
+        const completedDate = new Date(completion.completedAt);
+        return ( completedDate >= weekStart && completedDate <= weekEnd );
+      });
+    }
+    if (habit.frequency === 'Monthly') {
+      const monthStart = new Date( today.getFullYear(), today.getMonth(), 1 );
+      const monthEnd = new Date( today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999 );
+      return habit.completedHistory.some(completion => {
+        const completedDate = new Date(completion.completedAt);
+        return ( completedDate >= monthStart && completedDate <= monthEnd );
+      });
+    }
+    return false;
+  }
+
+  getCompletedFilteredHabits(): number {
+    return this.filteredHabits.filter(
+      habit =>
+        this.isHabitCompletedForCurrentPeriod(habit)
+    ).length;
+
   }
 }
 
