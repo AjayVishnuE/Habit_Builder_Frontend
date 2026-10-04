@@ -169,8 +169,22 @@
 
 @media (max-width: 600px) {
 
+    .editor-page {
+        width: 100%;
+        min-height: calc(100dvh - 80px);
+        box-sizing: border-box;
+    }
+
+    .editor-topbar {
+        margin-bottom: 4px;
+    }
+
     .editorial-window {
+        width: 100%;
+        max-width: none;
+        min-height: calc(100dvh - 130px);
         padding: 14px 10px 30px;
+        box-sizing: border-box;
     }
 
     .note-title {
@@ -183,12 +197,14 @@
     }
 
     .note-editor {
-        min-height: 400px;
+        width: 100%;
+        min-height: calc(100dvh - 300px);
         font-size: 14px;
         line-height: 1.75;
+        box-sizing: border-box;
     }
 
     .save-container {
-        margin-top: 15px;
+        margin-top: 0;
     }
 }
