@@ -114,31 +114,35 @@
                 </div>
 
             </div>
+            <div class="flex-div-login">
+                @if (loginError) {
+                    <div class="login-error">
+                        {{ loginError }}
+                    </div>
+                }
+                <button
+                    type="button"
+                    class="forgot-password-link"
+                    (click)="goToForgotPassword()">
 
+                    Forgot password?
 
-            <button
-                type="button"
-                class="forgot-password-link"
-                (click)="goToForgotPassword()">
-
-                Forgot password?
-
-            </button>
-
-
+                </button>
+            </div>
             <button
                 type="button"
                 class="auth-primary-button"
-                (click)="login()">
-
-                <span>Login</span>
-
-                <span class="button-arrow">
-                    →
+                (click)="login()"
+                [disabled]="isLoggingIn">
+                <span>
+                    {{ isLoggingIn ? 'Logging in...' : 'Login' }}
                 </span>
-
+                @if (!isLoggingIn) {
+                    <span class="button-arrow">
+                        →
+                    </span>
+                }
             </button>
-
 
             <div class="auth-divider">
 

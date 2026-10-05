@@ -602,7 +602,7 @@
                     </div>
 
                 </section>
-                @if (isToday(day.date)) {
+                @if (isToday(day.date) && getUnfinishedPastTasks().length > 0) {
 
                     <div class="past-task-action">
 
