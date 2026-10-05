@@ -62,75 +62,68 @@
                 <!-- NAME -->
 
                 <div class="form-group">
-
                     <label for="register-name">
-                        Name
+                        Name<span class="required-mark">*</span>
                     </label>
-
                     <div class="input-wrapper">
-
                         <span class="input-icon">
                             ●
                         </span>
-
                         <input
                             id="register-name"
                             class="auth-input"
                             type="text"
                             placeholder="Your name"
                             formControlName="name">
-
                     </div>
-
+                    @if (isFieldInvalid('name')) {
+                        <small class="field-error">
+                            Name is required
+                        </small>
+                    }
                 </div>
-
-
                 <!-- EMAIL -->
-
                 <div class="form-group">
-
                     <label for="register-email">
-                        Email
+                        Email <span class="required-mark">*</span>
                     </label>
-
                     <div class="input-wrapper">
-
                         <span class="input-icon">
                             @
                         </span>
-
                         <input
                             id="register-email"
                             class="auth-input"
                             type="email"
                             placeholder="you@example.com"
                             formControlName="email">
-
                     </div>
-
+                    @if (registerForm.get('email')?.touched && registerForm.get('email')?.hasError('required')) {
+                        <small class="field-error">
+                            Email is required
+                        </small>
+                    }
+                    @if (registerForm.get('email')?.touched && registerForm.get('email')?.hasError('email')) {
+                        <small class="field-error">
+                            Enter a valid email address
+                        </small>
+                    }
                 </div>
-
-
                 <!-- PASSWORD -->
                 <div class="form-group">
-
                     <label for="register-password">
-                        Password
+                        Password <span class="required-mark">*</span>
                     </label>
-
                     <div class="input-wrapper">
-
                         <span class="input-icon">
                             •
                         </span>
-
                         <input
                             id="register-password"
                             class="auth-input"
                             [type]="showPassword ? 'text' : 'password'"
                             placeholder="Create a password"
                             formControlName="password">
-
                         <button
                             type="button"
                             class="password-toggle"
@@ -140,7 +133,6 @@
                                     ? 'Hide password'
                                     : 'Show password'
                             ">
-
                             <mat-icon>
                                 {{
                                     showPassword
@@ -148,35 +140,34 @@
                                         : 'visibility'
                                 }}
                             </mat-icon>
-
                         </button>
-
                     </div>
-
+                    @if (registerForm.get('password')?.touched && registerForm.get('password')?.hasError('required')) {
+                        <small class="field-error">
+                            Password is required
+                        </small>
+                    }
+                    @if (registerForm.get('password')?.touched && registerForm.get('password')?.hasError('minlength')) {
+                        <small class="field-error">
+                            Password must be at least 6 characters
+                        </small>
+                    }
                 </div>
-
-
                 <!-- CONFIRM PASSWORD -->
-
                 <div class="form-group">
-
                     <label for="register-confirm-password">
-                        Confirm password
+                        Confirm password <span class="required-mark">*</span>
                     </label>
-
                     <div class="input-wrapper">
-
                         <span class="input-icon">
                             •
                         </span>
-
                         <input
                             id="register-confirm-password"
                             class="auth-input"
                             [type]="showConfirmPassword ? 'text' : 'password'"
                             placeholder="Repeat your password"
                             formControlName="confirmPassword">
-
                         <button
                             type="button"
                             class="password-toggle"
@@ -186,7 +177,6 @@
                                     ? 'Hide password'
                                     : 'Show password'
                             ">
-
                             <mat-icon>
                                 {{
                                     showConfirmPassword
@@ -194,59 +184,49 @@
                                         : 'visibility'
                                 }}
                             </mat-icon>
-
                         </button>
-
                     </div>
-
+                    @if (isFieldInvalid('confirmPassword')) {
+                        <small class="field-error">
+                            Confirm password is required
+                        </small>
+                    }
+                    @if (passwordsDoNotMatch()) {
+                        <small class="field-error">
+                            Passwords do not match
+                        </small>
+                    }
                 </div>
-
-
                 <button
                     class="auth-primary-button"
-                    type="submit">
-
+                    type="submit"
+                    [disabled]="isRegistering">
                     <span>
-                        Create account
+                        {{ isRegistering ? 'Creating account...' : 'Create account' }}
                     </span>
-
-                    <span class="button-arrow">
-                        →
-                    </span>
-
+                    @if (!isRegistering) {
+                        <span class="button-arrow">
+                            →
+                        </span>
+                    }
                 </button>
-
             </form>
-
-
             <div class="auth-divider">
-
                 <span></span>
-
                 <small>
                     Already part of DayLivo?
                 </small>
-
                 <span></span>
-
             </div>
-
-
             <div class="auth-switch">
-
                 <span>
                     Already have an account?
                 </span>
-
                 <a routerLink="/login">
                     Sign in
                 </a>
-
             </div>
-
         </div>
-
-
         <!-- Bottom message -->
         <div class="register-message">
 

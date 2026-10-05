@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -24,6 +24,8 @@ export class Register {
   private authService = inject(AuthService);
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
+  private cdr = inject(ChangeDetectorRef);
+  isRegistering = false;
   showPassword = false;
   showConfirmPassword = false;
   registerForm: FormGroup = this.fb.group({
@@ -33,31 +35,55 @@ export class Register {
     confirmPassword: ['', Validators.required]
   });
 
-  register() {
-    if (this.registerForm.invalid) {
+  register(): void {
+
+    if (this.isRegistering) {
       return;
     }
 
+    /*
+    * Show validation messages for every field
+    * when the user submits an incomplete form.
+    */
+    if (this.registerForm.invalid) {
+
+      this.registerForm.markAllAsTouched();
+
+      this.cdr.detectChanges();
+
+      return;
+    }
+
+    /*
+    * Confirm password validation.
+    */
     if (
       this.registerForm.value.password !==
       this.registerForm.value.confirmPassword
     ) {
-      this.snackBar.open(
-        'Passwords do not match',
-        'Close',
-        { 
-          duration: 3000,
-          panelClass: ['app-snackbar']
-         }
-      );
+
+      this.registerForm.get('confirmPassword')?.markAsTouched();
+
+      this.cdr.detectChanges();
+
       return;
     }
 
-    const { name, email, password } = this.registerForm.value;
+    this.isRegistering = true;
 
-    this.authService.register({ name, email, password  }).subscribe({
+    const { name, email, password } =
+      this.registerForm.getRawValue();
+
+    this.authService.register({
+      name,
+      email,
+      password
+    }).subscribe({
+
       next: (response) => {
+
         this.authService.saveToken(response.token);
+
         this.snackBar.open(
           'Registration Successful 🎉',
           'Close',
@@ -68,19 +94,58 @@ export class Register {
             panelClass: ['app-snackbar']
           }
         );
+
         this.router.navigate(['/dashboard']);
+
       },
 
       error: (err) => {
+
+        console.error(err);
+
+        this.isRegistering = false;
+
+        /*
+        * Force Angular to immediately update
+        * the disabled/loading state.
+        */
+        this.cdr.detectChanges();
+
         this.snackBar.open(
           err.error?.message || 'Registration failed',
           'Close',
-          { 
+          {
             duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
             panelClass: ['app-snackbar']
           }
         );
+
       }
+
     });
+  }
+
+  isFieldInvalid(fieldName: string): boolean {
+    const field = this.registerForm.get(fieldName);
+
+    return !!(
+      field &&
+      field.invalid &&
+      field.touched
+    );
+  }
+
+  passwordsDoNotMatch(): boolean {
+    const password = this.registerForm.get('password')?.value;
+    const confirmPassword = this.registerForm.get('confirmPassword')?.value;
+    const confirmField = this.registerForm.get('confirmPassword');
+
+    return !!(
+      confirmField?.touched &&
+      confirmPassword &&
+      password !== confirmPassword
+    );
   }
 }

@@ -522,8 +522,9 @@ export class ProfileView implements OnInit {
     ) {
       return this.profile.profileImage;
     }
+    return `../../../../../../assets/default-avatar.jpg`;
     this.cdr.detectChanges();
-    return 'assets/images/default-avatar.png';
+
 
   }
 
