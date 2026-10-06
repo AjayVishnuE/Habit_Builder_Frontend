@@ -222,7 +222,7 @@ export class ProfileView implements OnInit {
             'Unable to update name.';
 
           this.savingName = false;
-
+          this.cdr.detectChanges();
         }
 
       });
@@ -522,9 +522,7 @@ export class ProfileView implements OnInit {
     ) {
       return this.profile.profileImage;
     }
-    return `../../../../../../assets/default-avatar.jpg`;
-    this.cdr.detectChanges();
-
+    return '/default-avatar.jpg';
 
   }
 
@@ -533,6 +531,22 @@ export class ProfileView implements OnInit {
     return this.stats?.geekStats;
   }
 
+  get hasGeekStats(): boolean {
+    const stats = this.stats?.geekStats;
+
+    if (!stats) {
+      return false;
+    }
+
+    return !!(
+      stats.oldestHabit ||
+      stats.mostConsistentHabit ||
+      stats.longestMaintainedHabit ||
+      stats.bestStreak ||
+      stats.mostCompletedHabit ||
+      stats.mostActiveDay
+    );
+  }
 
   get summary() {
     return this.stats?.summary;

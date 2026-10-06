@@ -159,8 +159,7 @@
         </div>
 
       </div>
-
-
+    @if (hasGeekStats) {
       <div class="geek-stats">
 
 
@@ -499,7 +498,17 @@
         }
 
       </div>
-
+    } @else {
+      <div class="geek-stats-empty">
+        <div class="empty-stat-icon">
+          <mat-icon>insights</mat-icon>
+        </div>
+        <h4>No stats yet</h4>
+        <p>
+          Start building habits and your achievements will appear here.
+        </p>
+      </div>
+    }
     </section>
 
 
