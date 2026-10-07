@@ -9,5 +9,6 @@ export const API_ENDPOINTS = {
   PROFILE_STATS: '/users/profile/stats',
   UPLOADTHING: '/uploadthing',
   FORGOT_PASSWORD: '/users/forgot-password',
-  RESET_PASSWORD: '/users/reset-password'
+  RESET_PASSWORD: '/users/reset-password',
+  DELETE_ACCOUNT: '/users/account'
 };

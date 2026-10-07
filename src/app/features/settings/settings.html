@@ -65,6 +65,27 @@
           chevron_right
         </mat-icon>
       </button>
+      <div class="divider"></div>
+      <button
+        class="setting-row clickable delete-account-row"
+        type="button"
+        (click)="openDeleteAccountConfirmation()"
+        [disabled]="deletingAccount">
+        <div class="setting-icon">
+          <mat-icon>delete_forever</mat-icon>
+        </div>
+        <div class="setting-content">
+          <div class="setting-title">
+            Delete account
+          </div>
+          <div class="setting-description">
+            Permanently delete your DayLivo account and all data
+          </div>
+        </div>
+        <mat-icon class="arrow">
+          chevron_right
+        </mat-icon>
+      </button>
     </div>
   </section>
   <!-- About -->
@@ -115,4 +136,47 @@
       Version 1.0.0
     </div>
   </div>
+@if (showDeleteConfirmation) {
+  <div
+    class="delete-modal-backdrop"
+    (click)="cancelDeleteAccount()">
+    <div
+      class="delete-modal"
+      (click)="$event.stopPropagation()">
+      <div class="delete-modal-icon">
+        <mat-icon>delete_forever</mat-icon>
+      </div>
+      <h3>Delete your account?</h3>
+      <p>
+        This will permanently delete your DayLivo account and everything
+        associated with it.
+      </p>
+      <ul>
+        <li>Your habits and completion history</li>
+        <li>Your tasks and notes</li>
+        <li>Your diary entries</li>
+        <li>Your profile and profile picture</li>
+      </ul>
+      <p class="delete-warning">
+        <strong>This action cannot be undone.</strong>
+      </p>
+      <div class="delete-modal-actions">
+        <button
+          type="button"
+          class="cancel-delete-button"
+          (click)="cancelDeleteAccount()"
+          [disabled]="deletingAccount">
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="confirm-delete-button"
+          (click)="confirmDeleteAccount()"
+          [disabled]="deletingAccount">
+          {{ deletingAccount ? 'Deleting account...' : 'Delete my account' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
 </div>

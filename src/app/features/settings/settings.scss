@@ -213,3 +213,299 @@
     border-radius: 10px;
   }
 }
+
+/* =========================================================
+   DELETE ACCOUNT
+   ========================================================= */
+
+.delete-account-row {
+    .setting-icon {
+        color: #dc3545;
+    }
+
+    .setting-title {
+        color: #dc3545;
+    }
+
+    &:hover {
+        background: rgba(220, 53, 69, 0.06);
+    }
+}
+
+.delete-account-row:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   DELETE ACCOUNT MODAL
+   ========================================================= */
+
+.delete-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(0, 0, 0, 0.55);
+
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+
+    animation: deleteBackdropIn 0.2s ease-out;
+}
+
+
+.delete-modal {
+    width: 100%;
+    max-width: 460px;
+
+    background: var(--surface);
+    color: var(--text-primary);
+
+    border: 1px solid var(--border);
+    border-radius: 16px;
+
+    padding: 30px;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.2);
+
+    animation: deleteModalIn 0.22s ease-out;
+}
+
+
+/* Icon */
+
+.delete-modal-icon {
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 18px;
+
+    border-radius: 50%;
+
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+
+    mat-icon {
+        font-size: 27px;
+        width: 27px;
+        height: 27px;
+    }
+}
+
+
+/* Heading */
+
+.delete-modal h3 {
+    margin: 0 0 10px;
+
+    font-size: 22px;
+    font-weight: 650;
+
+    color: var(--text-primary);
+}
+
+
+/* Description */
+
+.delete-modal > p {
+    margin: 0 0 18px;
+
+    font-size: 14px;
+    line-height: 1.6;
+
+    color: var(--text-secondary);
+}
+
+
+/* Data list */
+
+.delete-modal ul {
+    margin: 0 0 18px;
+    padding-left: 20px;
+
+    color: var(--text-secondary);
+
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.delete-modal li::marker {
+    color: #dc3545;
+}
+
+
+/* Warning */
+
+.delete-modal .delete-warning {
+    margin: 0;
+
+    padding: 12px 14px;
+
+    border-radius: 8px;
+
+    background: rgba(220, 53, 69, 0.07);
+
+    color: #dc3545;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+/* Buttons */
+
+.delete-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+
+    margin-top: 26px;
+}
+
+
+.cancel-delete-button,
+.confirm-delete-button {
+    height: 42px;
+
+    padding: 0 18px;
+
+    border-radius: 8px;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        opacity 0.2s ease,
+        transform 0.15s ease;
+}
+
+
+/* Cancel */
+
+.cancel-delete-button {
+    border: 1px solid var(--border);
+
+    background: var(--surface);
+
+    color: var(--text-primary);
+}
+
+.cancel-delete-button:hover {
+    background: var(--surface-hover);
+}
+
+
+/* Delete */
+
+.confirm-delete-button {
+    border: 1px solid #dc3545;
+
+    background: #dc3545;
+
+    color: #ffffff;
+}
+
+.confirm-delete-button:hover {
+    background: #c82333;
+    border-color: #c82333;
+}
+
+.confirm-delete-button:active {
+    transform: scale(0.98);
+}
+
+
+/* Disabled */
+
+.cancel-delete-button:disabled,
+.confirm-delete-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes deleteBackdropIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes deleteModalIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .delete-modal-backdrop {
+        align-items: flex-end;
+
+        padding: 12px;
+    }
+
+    .delete-modal {
+        max-width: none;
+
+        padding: 24px 20px;
+
+        border-radius: 16px;
+
+        margin-bottom: 0;
+    }
+
+    .delete-modal h3 {
+        font-size: 20px;
+    }
+
+    .delete-modal-actions {
+        flex-direction: column-reverse;
+
+        gap: 8px;
+
+        margin-top: 22px;
+    }
+
+    .cancel-delete-button,
+    .confirm-delete-button {
+        width: 100%;
+        height: 44px;
+    }
+}

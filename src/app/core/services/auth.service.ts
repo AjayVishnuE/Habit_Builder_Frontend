@@ -43,4 +43,9 @@ export class AuthService {
   isLoggedIn(): boolean {
     return !!this.getToken();
   }
+  deleteAccount() {
+    return this.api.delete<{ message: string }>(
+      API_ENDPOINTS.DELETE_ACCOUNT,
+    );
+  }
 }
