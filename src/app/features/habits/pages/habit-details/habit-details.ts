@@ -85,7 +85,9 @@ export class HabitDetails implements OnInit {
         this.periodAlreadyCompleted = false;
         this.periodExistingEntry = null;
 
-        if (entry && !entry.completed) {
+        // Future dates are view-only.
+        // Do not check period completion or allow historical completion.
+        if (entry && !entry.completed && !this.isFutureEntry(entry)) {
             this.checkExistingPeriodCompletion(entry.date);
         }
 
@@ -210,10 +212,9 @@ export class HabitDetails implements OnInit {
     }
 
     startCreatingEntry(): void {
-        if (!this.selectedEntry || this.selectedEntry.completed || this.periodAlreadyCompleted) {
+        if ( !this.selectedEntry || this.selectedEntry.completed || this.periodAlreadyCompleted || this.isSelectedEntryFuture()) {
             return;
         }
-
         this.resetCompletionForm();
         this.isEditingEntry = false;
         this.isCreatingEntry = true;
@@ -246,10 +247,10 @@ export class HabitDetails implements OnInit {
         }
 
         const selectedDate = new Date(this.selectedEntry.date);
-        const now = new Date();
-
-        if (selectedDate > now) {
-            this.completionError = 'Unable to record this completion. Please try again';
+        if (this.isFutureEntry(this.selectedEntry)) {
+            this.completionError =
+                'This date is in the future and cannot be completed yet.';
+            this.isSavingCompletion = false;
             return;
         }
 
@@ -715,6 +716,24 @@ export class HabitDetails implements OnInit {
             const completedAt = new Date(entry.completedAt);
             return completedAt >= start && completedAt <= end;
         }) ?? null;
+    }
+
+    private isFutureEntry(entry: any): boolean {
+        if (!entry?.date) {
+            return false;
+        }
+
+        const selectedDate = new Date(entry.date);
+        const today = new Date();
+
+        selectedDate.setHours(0, 0, 0, 0);
+        today.setHours(0, 0, 0, 0);
+
+        return selectedDate.getTime() > today.getTime();
+    }
+
+    isSelectedEntryFuture(): boolean {
+        return this.isFutureEntry(this.selectedEntry);
     }
 }
 

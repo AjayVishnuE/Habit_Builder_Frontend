@@ -325,176 +325,292 @@
                             }
                         }
                         <!-- ============================= -->
-                        <!-- MISSED ENTRY -->
+                        <!-- INCOMPLETE / MISSED / UPCOMING -->
                         <!-- ============================= -->
                         @else {
-                            <div class="missed-entry">
-                                <div class="missed-icon">
-                                    ○
-                                </div>
-                                <div class="missed-content">
-                                    <span class="completion-label">
-                                        NO COMPLETION RECORDED
-                                    </span>
-                                    <h3>
-                                        {{ selectedEntry.date | date:'fullDate' }}
-                                    </h3>
-                                    @if (periodAlreadyCompleted) {
-                                        <p class="period-completed-message">
-                                            This
-                                            {{
-                                                habit.frequency.toLowerCase()
-                                            }}
-                                            period has already been completed.
-                                            @if (periodExistingEntry) {
-                                                <br>
-                                                <span>
-                                                    Completed on
-                                                    {{
-                                                        periodExistingEntry.completedAt
-                                                            | date:'mediumDate'
-                                                    }}
-                                                </span>
-                                            }
-                                        </p>
-                                        <button
-                                            type="button"
-                                            class="secondary-action-button"
-                                            (click)="selectEntryForExistingPeriod()">
-                                            View Existing Completion
-                                        </button>
-                                    }
-                                    @else if (!isCreatingEntry) {
+
+                            @if (isSelectedEntryFuture()) {
+
+                                <!-- ============================= -->
+                                <!-- UPCOMING ENTRY -->
+                                <!-- ============================= -->
+                                <div class="missed-entry upcoming-entry">
+
+                                    <div class="missed-icon">
+                                        →
+                                    </div>
+
+                                    <div class="missed-content">
+
+                                        <span class="completion-label">
+                                            UPCOMING
+                                        </span>
+
+                                        <h3>
+                                            {{ selectedEntry.date | date:'fullDate' }}
+                                        </h3>
+
                                         <p>
-                                            You don't have a completion recorded
-                                            for this
+                                            This
                                             {{
                                                 habit.frequency === 'Daily'
                                                     ? 'day'
                                                     : habit.frequency === 'Weekly'
                                                         ? 'week'
                                                         : 'month'
-                                            }}.
-                                            Would you like to add one?
-                                        </p>
-                                        <button
-                                            type="button"
-                                            class="create-entry-button"
-                                            (click)="startCreatingEntry()">
-                                            <span>
-                                                +
-                                            </span>
-                                            {{
-                                                habit.frequency === 'Daily'
-                                                    ? 'Complete This Day'
-                                                    : habit.frequency === 'Weekly'
-                                                        ? 'Complete This Week'
-                                                        : 'Complete This Month'
                                             }}
-                                        </button>
-                                    }
+                                            hasn't started yet.
+                                        </p>
+
+                                    </div>
+
                                 </div>
-                            </div>
-                            <!-- Historical completion form -->
-                            @if (isCreatingEntry) {
-                                <form
-                                    class="completion-edit-form historical-form"
-                                    [formGroup]="completionEditForm"
-                                    (ngSubmit)="saveHistoricalCompletion()">
-                                    <div class="historical-date-note">
-                                        <span>
-                                            📅
+                            }
+                            @else {
+                                <!-- ============================= -->
+                                <!-- MISSED ENTRY -->
+                                <!-- ============================= -->
+                                <div class="missed-entry">
+
+                                    <div class="missed-icon">
+                                        ○
+                                    </div>
+
+                                    <div class="missed-content">
+
+                                        <span class="completion-label">
+                                            NO COMPLETION RECORDED
                                         </span>
-                                        <div>
-                                            <strong>
-                                                Adding completion for
-                                            </strong>
-                                            <span>
+
+                                        <h3>
+                                            {{ selectedEntry.date | date:'fullDate' }}
+                                        </h3>
+
+                                        @if (periodAlreadyCompleted) {
+
+                                            <p class="period-completed-message">
+
+                                                This
                                                 {{
-                                                    selectedEntry.date
-                                                        | date:'fullDate'
+                                                    habit.frequency.toLowerCase()
                                                 }}
+                                                period has already been completed.
+
+                                                @if (periodExistingEntry) {
+
+                                                    <br>
+
+                                                    <span>
+                                                        Completed on
+                                                        {{
+                                                            periodExistingEntry.completedAt
+                                                                | date:'mediumDate'
+                                                        }}
+                                                    </span>
+
+                                                }
+
+                                            </p>
+
+                                            <button
+                                                type="button"
+                                                class="secondary-action-button"
+                                                (click)="selectEntryForExistingPeriod()">
+
+                                                View Existing Completion
+
+                                            </button>
+
+                                        }
+
+                                        @else if (!isCreatingEntry) {
+
+                                            <p>
+
+                                                You don't have a completion recorded
+                                                for this
+                                                {{
+                                                    habit.frequency === 'Daily'
+                                                        ? 'day'
+                                                        : habit.frequency === 'Weekly'
+                                                            ? 'week'
+                                                            : 'month'
+                                                }}.
+
+                                                Would you like to add one?
+
+                                            </p>
+
+                                            <button
+                                                type="button"
+                                                class="create-entry-button"
+                                                (click)="startCreatingEntry()">
+
+                                                <span>
+                                                    +
+                                                </span>
+
+                                                {{
+                                                    habit.frequency === 'Daily'
+                                                        ? 'Complete This Day'
+                                                        : habit.frequency === 'Weekly'
+                                                            ? 'Complete This Week'
+                                                            : 'Complete This Month'
+                                                }}
+
+                                            </button>
+
+                                        }
+
+                                    </div>
+
+                                </div>
+                                <!-- ============================= -->
+                                <!-- HISTORICAL COMPLETION FORM -->
+                                <!-- ============================= -->
+                                @if (isCreatingEntry) {
+                                    <form
+                                        class="completion-edit-form historical-form"
+                                        [formGroup]="completionEditForm"
+                                        (ngSubmit)="saveHistoricalCompletion()">
+
+                                        <div class="historical-date-note">
+
+                                            <span>
+                                                📅
                                             </span>
+
+                                            <div>
+
+                                                <strong>
+                                                    Adding completion for
+                                                </strong>
+
+                                                <span>
+                                                    {{
+                                                        selectedEntry.date
+                                                            | date:'fullDate'
+                                                    }}
+                                                </span>
+
+                                            </div>
+
                                         </div>
-                                    </div>
-                                    <div class="edit-grid">
-                                        <mat-form-field appearance="outline">
+
+                                        <div class="edit-grid">
+
+                                            <mat-form-field appearance="outline">
+
+                                                <mat-label>
+                                                    Mood
+                                                </mat-label>
+
+                                                <mat-select
+                                                    formControlName="mood">
+
+                                                    <mat-option value="Excellent">
+                                                        😄 Excellent
+                                                    </mat-option>
+
+                                                    <mat-option value="Great">
+                                                        😊 Great
+                                                    </mat-option>
+
+                                                    <mat-option value="Good">
+                                                        🙂 Good
+                                                    </mat-option>
+
+                                                    <mat-option value="Okay">
+                                                        😐 Okay
+                                                    </mat-option>
+
+                                                    <mat-option value="Bad">
+                                                        😞 Bad
+                                                    </mat-option>
+
+                                                </mat-select>
+
+                                            </mat-form-field>
+
+                                            <mat-form-field appearance="outline">
+
+                                                <mat-label>
+                                                    Duration
+                                                </mat-label>
+
+                                                <input
+                                                    matInput
+                                                    type="number"
+                                                    min="0"
+                                                    formControlName="duration">
+
+                                                <span matSuffix>
+                                                    min
+                                                </span>
+
+                                            </mat-form-field>
+
+                                        </div>
+
+                                        <mat-form-field
+                                            appearance="outline"
+                                            class="remark-field">
+
                                             <mat-label>
-                                                Mood
+                                                Remark
                                             </mat-label>
-                                            <mat-select
-                                                formControlName="mood">
-                                                <mat-option value="Excellent">
-                                                    😄 Excellent
-                                                </mat-option>
-                                                <mat-option value="Great">
-                                                    😊 Great
-                                                </mat-option>
-                                                <mat-option value="Good">
-                                                    🙂 Good
-                                                </mat-option>
-                                                <mat-option value="Okay">
-                                                    😐 Okay
-                                                </mat-option>
-                                                <mat-option value="Bad">
-                                                    😞 Bad
-                                                </mat-option>
-                                            </mat-select>
-                                        </mat-form-field>
-                                        <mat-form-field appearance="outline">
-                                            <mat-label>
-                                                Duration
-                                            </mat-label>
-                                            <input
+
+                                            <textarea
                                                 matInput
-                                                type="number"
-                                                min="0"
-                                                formControlName="duration">
-                                            <span matSuffix>
-                                                min
-                                            </span>
+                                                rows="3"
+                                                maxlength="250"
+                                                formControlName="remark">
+                                            </textarea>
+
+                                            <mat-hint align="end">
+                                                {{
+                                                    completionEditForm.controls.remark.value.length
+                                                }}/250
+                                            </mat-hint>
+
                                         </mat-form-field>
-                                    </div>
-                                    <mat-form-field
-                                        appearance="outline"
-                                        class="remark-field">
-                                        <mat-label>
-                                            Remark
-                                        </mat-label>
-                                        <textarea
-                                            matInput
-                                            rows="3"
-                                            maxlength="250"
-                                            formControlName="remark"></textarea>
-                                        <mat-hint align="end">
-                                            {{
-                                                completionEditForm.controls.remark.value.length
-                                            }}/250
-                                        </mat-hint>
-                                    </mat-form-field>
-                                    <div class="edit-actions">
-                                        <button
-                                            type="button"
-                                            class="cancel-edit-button"
-                                            (click)="cancelCreatingEntry()">
-                                            Cancel
-                                        </button>
-                                        <button
-                                            type="submit"
-                                            class="save-edit-button"
-                                            [disabled]="
-                                                completionEditForm.invalid
-                                                || isSavingCompletion
-                                            ">
-                                            @if (isSavingCompletion) {
-                                                Saving...
-                                            }
-                                            @else {
-                                                ✓ Save Completion
-                                            }
-                                        </button>
-                                    </div>
-                                </form>
+
+                                        <div class="edit-actions">
+
+                                            <button
+                                                type="button"
+                                                class="cancel-edit-button"
+                                                (click)="cancelCreatingEntry()">
+
+                                                Cancel
+
+                                            </button>
+
+                                            <button
+                                                type="submit"
+                                                class="save-edit-button"
+                                                [disabled]="
+                                                    completionEditForm.invalid
+                                                    || isSavingCompletion
+                                                ">
+
+                                                @if (isSavingCompletion) {
+
+                                                    Saving...
+
+                                                }
+                                                @else {
+
+                                                    ✓ Save Completion
+
+                                                }
+
+                                            </button>
+
+                                        </div>
+
+                                    </form>
+                                }
                             }
                         }
                     </div>

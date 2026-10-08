@@ -1319,3 +1319,15 @@
         font-size: 0.9rem;
     }
 }
+
+.upcoming-entry {
+    opacity: 0.8;
+}
+
+.upcoming-entry .missed-icon {
+    opacity: 0.65;
+}
+
+.upcoming-entry .completion-label {
+    color: var(--text-secondary);
+}
