@@ -351,15 +351,7 @@
                                         </h3>
 
                                         <p>
-                                            This
-                                            {{
-                                                habit.frequency === 'Daily'
-                                                    ? 'day'
-                                                    : habit.frequency === 'Weekly'
-                                                        ? 'week'
-                                                        : 'month'
-                                            }}
-                                            hasn't started yet.
+                                            {{ getUpcomingMessage() }}
                                         </p>
 
                                     </div>

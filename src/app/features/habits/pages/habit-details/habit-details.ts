@@ -733,7 +733,67 @@ export class HabitDetails implements OnInit {
     }
 
     isSelectedEntryFuture(): boolean {
-        return this.isFutureEntry(this.selectedEntry);
+        if (!this.selectedEntry?.date) {
+            return false;
+        }
+
+        const selectedDate = new Date(this.selectedEntry.date);
+        const today = new Date();
+
+        selectedDate.setHours(0, 0, 0, 0);
+        today.setHours(0, 0, 0, 0);
+
+        return selectedDate.getTime() > today.getTime();
+    }
+
+    getUpcomingMessage(): string {
+        if (!this.selectedEntry?.date || !this.habit) {
+            return 'This date is upcoming.';
+        }
+
+        const selectedDate = new Date(this.selectedEntry.date);
+        const today = new Date();
+
+        selectedDate.setHours(0, 0, 0, 0);
+        today.setHours(0, 0, 0, 0);
+
+        // Daily habits always represent individual days.
+        if (this.habit.frequency === 'Daily') {
+            return "This day hasn't started yet.";
+        }
+
+        // Weekly habit:
+        // If the selected date belongs to the current week,
+        // it is simply a future day within that week.
+        if (this.habit.frequency === 'Weekly') {
+            const currentWeekStart = this.getWeekStart(today);
+            const selectedWeekStart = this.getWeekStart(selectedDate);
+
+            if (
+                selectedWeekStart.getTime() ===
+                currentWeekStart.getTime()
+            ) {
+                return "This day hasn't started yet.";
+            }
+
+            return "This week hasn't started yet.";
+        }
+
+        // Monthly habit:
+        // If the selected date belongs to the current month,
+        // it is simply a future day within that month.
+        if (this.habit.frequency === 'Monthly') {
+            if (
+                selectedDate.getFullYear() === today.getFullYear() &&
+                selectedDate.getMonth() === today.getMonth()
+            ) {
+                return "This day hasn't started yet.";
+            }
+
+            return "This month hasn't started yet.";
+        }
+
+        return "This date hasn't started yet.";
     }
 }
 
