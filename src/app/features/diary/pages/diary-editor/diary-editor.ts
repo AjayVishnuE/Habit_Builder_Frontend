@@ -44,6 +44,7 @@ export class DiaryEditor {
   error = '';
   writtenDates: Date[] = [];
   selectedDiaryDate: Date = new Date();
+  loadingDiary = false;
 
   constructor(
     private diaryService: DiaryService,
@@ -256,22 +257,30 @@ export class DiaryEditor {
     if (!this.diaryId) {
       return;
     }
+    this.loadingDiary = true;
+    this.error = '';
     this.diaryService.getDiaryById(this.diaryId).subscribe({
-        next: diary => {
-          this.title = diary.title;
-          this.content = diary.content;
-          setTimeout(() => {
-            if (this.editor) {
-              this.editor.nativeElement.innerHTML = this.content;
-            }
-          });
-          this.cdr.detectChanges();
-        },
-        error: error => {
-          this.error = error?.error?.message || 'Unable to load diary.';
-          this.router.navigate([ '/diary' ]);
-        }
-      });
+      next: diary => {
+        this.title = diary.title;
+        this.content = diary.content;
+        this.cdr.detectChanges();
+        // Populate the editor only after the diary data is available.
+        setTimeout(() => {
+          if (this.editor) {
+            this.editor.nativeElement.innerHTML = this.content;
+          }
+        });
+        this.loadingDiary = false;
+        this.cdr.detectChanges();
+      },
+      error: error => {
+        this.error =
+          error?.error?.message || 'Unable to load diary.';
+        this.loadingDiary = false;
+        this.cdr.detectChanges();
+        this.router.navigate(['/diary']);
+      }
+    });
   }
 
   loadWrittenDates(): void {
